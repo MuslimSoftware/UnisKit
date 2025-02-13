@@ -13,6 +13,7 @@ import { TextBody } from './typography'
 import { useTheme } from '@/hooks/theme'
 import { Spacing } from '@/constants/Spacing'
 import { Colors } from '@/constants/Colors'
+import { Typography } from '@/constants/Typography'
 
 interface ButtonProps extends TouchableOpacityProps {
   variant?: 'primary'
@@ -103,8 +104,8 @@ export function Button({
 
 const styles = StyleSheet.create({
   button: {
-    padding: Spacing.padding.button,
-    borderRadius: Spacing.borderRadius.button,
+    padding: Spacing.layout.section,
+    borderRadius: Spacing.radius.pill,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -114,12 +115,12 @@ const styles = StyleSheet.create({
   content: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.gap.sm,
+    gap: Spacing.spacing.small,
   },
   contentLeft: {
     width: '100%',
   },
   text: {
-    fontWeight: '600',
+    fontWeight: Typography.weights.semiBold,
   },
 })

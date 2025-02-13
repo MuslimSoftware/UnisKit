@@ -22,7 +22,7 @@ export function SocialButtons({
   appleStyles,
 }: SocialButtonsProps) {
   return (
-    <View style={styles.buttonsContainer}>
+    <View style={styles.container}>
       <Button
         icon="mail-outline"
         text="Continue with Email"
@@ -59,7 +59,7 @@ export function SocialButtons({
 }
 
 const styles = StyleSheet.create({
-  buttonsContainer: {
-    gap: Spacing.gap.sm,
+  container: {
+    gap: Spacing.spacing.medium,
   },
 })

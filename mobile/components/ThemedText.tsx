@@ -14,7 +14,7 @@ export function ThemedText({
   inverted,
   variant = 'primary',
   backgroundColor,
-  fontSize = Typography.sizes.body,
+  fontSize = Typography.sizes.medium,
   ...props
 }: ThemedTextProps) {
   const theme = useTheme()
@@ -46,11 +46,11 @@ export function ThemedText({
 
 const styles = StyleSheet.create({
   default: {
-    fontSize: Typography.sizes.body,
+    fontSize: Typography.sizes.medium,
     lineHeight: 24,
   },
   defaultSemiBold: {
-    fontSize: Typography.sizes.body,
+    fontSize: Typography.sizes.medium,
     lineHeight: 24,
     fontWeight: '600',
   },
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
   },
   link: {
     lineHeight: 30,
-    fontSize: Typography.sizes.body,
+    fontSize: Typography.sizes.medium,
     color: '#0a7ea4',
   },
 })

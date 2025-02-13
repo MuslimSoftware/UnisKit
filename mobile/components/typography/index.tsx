@@ -1,4 +1,4 @@
-import { StyleSheet, TextStyle } from 'react-native'
+import { StyleSheet } from 'react-native'
 import { ThemedText, ThemedTextProps } from '../ThemedText'
 import { Typography } from '@/constants/Typography'
 
@@ -23,22 +23,44 @@ export function TextSubtitle(props: ThemedTextProps) {
 }
 
 export function TextBody(props: ThemedTextProps) {
-  return <ThemedText {...props} fontSize={Typography.sizes.body} />
+  return <ThemedText {...props} fontSize={Typography.sizes.medium} />
 }
 
 export function TextSmall(props: ThemedTextProps) {
-  return <ThemedText {...props} fontSize={Typography.sizes.bodySmall} />
+  return <ThemedText {...props} fontSize={Typography.sizes.small} />
+}
+
+export function TextMedium(props: ThemedTextProps) {
+  return <ThemedText {...props} fontSize={Typography.sizes.medium} />
+}
+
+export function TextLarge(props: ThemedTextProps) {
+  return <ThemedText {...props} fontSize={Typography.sizes.large} />
+}
+
+export function TextXLarge(props: ThemedTextProps) {
+  return <ThemedText {...props} fontSize={Typography.sizes.xlarge} />
 }
 
 export function TextLink(props: ThemedTextProps) {
-  return <ThemedText {...props} fontSize={Typography.sizes.body} />
+  return <ThemedText {...props} fontSize={Typography.sizes.medium} />
 }
 
 export function TextSemiBold(props: ThemedTextProps) {
   return (
     <ThemedText
-      fontSize={Typography.sizes.body}
+      fontSize={Typography.sizes.medium}
       style={[{ fontWeight: '600' }, props.style]}
+      {...props}
+    />
+  )
+}
+
+export function TextBold(props: ThemedTextProps) {
+  return (
+    <ThemedText
+      fontSize={Typography.sizes.medium}
+      style={[{ fontWeight: 'bold' }, props.style]}
       {...props}
     />
   )

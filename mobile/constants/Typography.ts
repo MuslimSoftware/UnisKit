@@ -5,8 +5,10 @@ export const Typography = {
     subtitle: 20,
 
     // Body text
-    body: 16,
-    bodySmall: 14,
+    small: 14,
+    medium: 16,
+    large: 18,
+    xlarge: 20,
 
     // Special cases
     otpInput: 24,

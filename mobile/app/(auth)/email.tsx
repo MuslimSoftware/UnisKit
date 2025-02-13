@@ -38,7 +38,7 @@ export default function EmailScreen() {
       onButtonPress={handleContinue}
       buttonDisabled={!isValidEmail(email)}
     >
-      <View style={styles.inputContainer}>
+      <View style={styles.container}>
         <TextInput
           style={[
             styles.input,
@@ -63,14 +63,16 @@ export default function EmailScreen() {
 }
 
 const styles = StyleSheet.create({
-  inputContainer: {
-    gap: Spacing.gap.md,
-    marginBottom: Spacing.margin.xl,
+  container: {
+    gap: Spacing.spacing.medium,
+    marginBottom: Spacing.spacing.xlarge,
+    width: '100%',
   },
   input: {
-    padding: Spacing.padding.button,
-    borderRadius: Spacing.borderRadius.card,
-    fontSize: Typography.sizes.body,
+    padding: Spacing.layout.section,
+    borderRadius: Spacing.radius.card,
+    fontSize: Typography.sizes.medium,
+    width: '100%',
     borderWidth: 1,
   },
 })

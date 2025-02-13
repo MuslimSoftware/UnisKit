@@ -2,7 +2,12 @@ import React, { useState, useRef, useEffect } from 'react'
 import { StyleSheet, TextInput, View, Pressable } from 'react-native'
 import { router, useLocalSearchParams } from 'expo-router'
 import { useTheme } from '@/hooks/theme'
-import { TextSmall } from '@/components/typography'
+import {
+  TextBody,
+  TextLarge,
+  TextSmall,
+  TextXLarge,
+} from '@/components/typography'
 import { Typography } from '@/constants/Typography'
 import { Spacing } from '@/constants/Spacing'
 import { useAuth } from '@/context/AuthContext'
@@ -87,9 +92,9 @@ export default function OTPScreen() {
             },
           ]}
         >
-          <TextSmall style={[styles.otpText, { color: theme.input.text }]}>
+          <TextXLarge style={[styles.otpText, { color: theme.input.text }]}>
             {otp[i] || ''}
-          </TextSmall>
+          </TextXLarge>
         </Pressable>
       )
     }
@@ -104,60 +109,60 @@ export default function OTPScreen() {
       onButtonPress={handleVerify}
       buttonDisabled={otp.length !== 6}
     >
-      <View style={styles.inputContainer}>
-        <View style={styles.otpBoxesContainer}>
-          {renderOTPBoxes()}
-          <TextInput
-            ref={inputRef}
-            style={styles.hiddenInput}
-            value={otp}
-            onChangeText={setOtp}
-            keyboardType="number-pad"
-            maxLength={6}
-            caretHidden
-          />
-        </View>
-        <TextSmall variant="secondary">
-          Didn't receive the code?{' '}
-          <TextSmall style={[styles.link, { color: theme.colors.tint }]}>
-            Resend
+      <View style={styles.container}>
+        <View style={styles.inputContainer}>
+          <View style={styles.otpBoxesContainer}>
+            {renderOTPBoxes()}
+            <TextInput
+              ref={inputRef}
+              style={styles.hiddenInput}
+              value={otp}
+              onChangeText={setOtp}
+              keyboardType="number-pad"
+              maxLength={6}
+              caretHidden
+            />
+          </View>
+          <TextSmall variant="secondary">
+            Didn't receive the code?{' '}
+            <TextSmall style={[styles.link, { color: theme.colors.tint }]}>
+              Resend
+            </TextSmall>
           </TextSmall>
-        </TextSmall>
+        </View>
       </View>
     </AuthScreenLayout>
   )
 }
 
 const styles = StyleSheet.create({
+  container: {
+    gap: Spacing.spacing.medium,
+    marginBottom: Spacing.spacing.xlarge,
+  },
   inputContainer: {
-    gap: Spacing.gap.md,
-    marginBottom: Spacing.margin.xl,
+    gap: Spacing.spacing.medium,
   },
   otpBoxesContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    position: 'relative',
   },
   otpBox: {
-    width: 45,
-    height: 56,
-    borderRadius: Spacing.borderRadius.card,
+    width: 40,
+    height: 48,
+    borderRadius: Spacing.radius.card,
     borderWidth: 1,
-    justifyContent: 'center',
     alignItems: 'center',
+    justifyContent: 'center',
   },
-  otpText: {
-    fontSize: Typography.sizes.otpInput,
-    fontWeight: Typography.weights.medium,
-  },
+  otpText: {},
   hiddenInput: {
     position: 'absolute',
-    width: '100%',
-    height: '100%',
+    width: 1,
+    height: 1,
     opacity: 0,
   },
   link: {
-    textDecorationLine: 'underline',
     fontWeight: Typography.weights.medium,
   },
 })

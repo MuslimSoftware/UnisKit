@@ -87,7 +87,7 @@ export default function SettingsScreen() {
       <View style={styles.settingItemContent}>
         <IconSymbol
           name={icon}
-          size={Spacing.icon.lg}
+          size={Spacing.size.icon.large}
           color={theme.colors.tint}
           style={styles.icon}
         />
@@ -95,7 +95,7 @@ export default function SettingsScreen() {
       </View>
       <IconSymbol
         name="chevron.right"
-        size={Spacing.icon.sm}
+        size={Spacing.size.icon.small}
         color={theme.colors.secondaryText}
       />
     </Pressable>
@@ -111,12 +111,12 @@ export default function SettingsScreen() {
           styles.scrollContent,
           {
             paddingTop: insets.top,
-            paddingBottom: insets.bottom + Spacing.padding.content,
+            paddingBottom: insets.bottom + Spacing.layout.content,
           },
         ]}
       >
         <View style={styles.content}>
-          <View style={[styles.header, { paddingTop: Spacing.padding.screen }]}>
+          <View style={[styles.header, { paddingTop: Spacing.layout.screen }]}>
             <Pressable
               onPress={() => router.back()}
               style={[
@@ -124,15 +124,15 @@ export default function SettingsScreen() {
                 { backgroundColor: theme.colors.card },
               ]}
               hitSlop={{
-                top: Spacing.touchTarget.hitSlop,
-                bottom: Spacing.touchTarget.hitSlop,
-                left: Spacing.touchTarget.hitSlop,
-                right: Spacing.touchTarget.hitSlop,
+                top: Spacing.interactive.pressableArea,
+                bottom: Spacing.interactive.pressableArea,
+                left: Spacing.interactive.pressableArea,
+                right: Spacing.interactive.pressableArea,
               }}
             >
               <IconSymbol
                 name="chevron.right"
-                size={Spacing.icon.md}
+                size={Spacing.size.icon.medium}
                 color={theme.colors.text}
               />
             </Pressable>
@@ -199,32 +199,32 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    padding: Spacing.padding.screen,
-    gap: Spacing.gap.lg,
+    padding: Spacing.layout.screen,
+    gap: Spacing.spacing.large,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: Spacing.margin.lg,
+    marginBottom: Spacing.spacing.large,
   },
   backButton: {
-    marginRight: Spacing.margin.md,
-    width: Spacing.touchTarget.minSize,
-    height: Spacing.touchTarget.minSize,
-    borderRadius: Spacing.touchTarget.minSize / 2,
+    marginRight: Spacing.spacing.medium,
+    width: Spacing.size.element.small,
+    height: Spacing.size.element.small,
+    borderRadius: Spacing.size.element.small / 2,
     alignItems: 'center',
     justifyContent: 'center',
     transform: [{ scaleX: -1 }],
   },
   section: {
-    gap: Spacing.gap.sm,
+    gap: Spacing.spacing.small,
   },
   sectionContent: {
-    borderRadius: Spacing.borderRadius.card,
+    borderRadius: Spacing.radius.card,
     overflow: 'hidden',
   },
   sectionTitle: {
-    marginLeft: Spacing.margin.sm,
+    marginLeft: Spacing.spacing.small,
     textTransform: 'uppercase',
     letterSpacing: 1,
   },
@@ -232,29 +232,29 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: Spacing.padding.screen,
-    paddingVertical: Spacing.padding.button,
+    paddingHorizontal: Spacing.layout.screen,
+    paddingVertical: Spacing.layout.section,
   },
   settingItemContent: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.gap.sm,
+    gap: Spacing.spacing.small,
     flex: 1,
   },
   icon: {
-    width: Spacing.icon.lg,
+    width: Spacing.size.icon.large,
   },
   settingLabel: {
     flex: 1,
   },
   separator: {
     height: StyleSheet.hairlineWidth,
-    marginHorizontal: Spacing.padding.screen,
+    marginHorizontal: Spacing.layout.screen,
   },
   logoutButton: {
-    padding: Spacing.padding.screen,
-    borderRadius: Spacing.borderRadius.card,
+    padding: Spacing.layout.screen,
+    borderRadius: Spacing.radius.card,
     alignItems: 'center',
-    marginTop: Spacing.margin.md,
+    marginTop: Spacing.spacing.medium,
   },
 })

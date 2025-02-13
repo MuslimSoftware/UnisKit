@@ -1,6 +1,6 @@
 import { Tabs } from 'expo-router'
 import React from 'react'
-import { Platform, StyleSheet } from 'react-native'
+import { Platform } from 'react-native'
 import { useTheme } from '@/hooks/theme'
 
 import { HapticTab } from '@/components/HapticTab'
@@ -25,7 +25,7 @@ export default function TabLayout() {
           },
           android: {
             height: 60,
-            paddingVertical: Spacing.padding.button,
+            paddingVertical: Spacing.navigation.tabBarPadding,
           },
           default: {},
         }),

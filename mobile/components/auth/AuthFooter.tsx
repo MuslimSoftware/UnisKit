@@ -9,8 +9,8 @@ export function AuthFooter({ onEmailLogin }: { onEmailLogin: () => void }) {
   const theme = useTheme()
 
   return (
-    <View style={styles.footer}>
-      <View style={styles.signInContainer}>
+    <View style={styles.container}>
+      <View style={styles.textContainer}>
         <TextSmall variant="secondary">Already have an account?</TextSmall>
         <TouchableOpacity onPress={onEmailLogin}>
           <TextSmall style={[styles.link, { color: theme.colors.tint }]}>
@@ -40,15 +40,15 @@ export function AuthFooter({ onEmailLogin }: { onEmailLogin: () => void }) {
 }
 
 const styles = StyleSheet.create({
-  footer: {
-    gap: Spacing.gap.md,
-    paddingBottom: Spacing.padding.screen,
+  container: {
+    gap: Spacing.spacing.xlarge,
+    paddingBottom: Spacing.layout.screen,
   },
-  signInContainer: {
+  textContainer: {
     flexDirection: 'row',
-    gap: Spacing.gap.xs,
     justifyContent: 'center',
     alignItems: 'center',
+    gap: Spacing.spacing.xxsmall,
   },
   termsContainer: {
     flexDirection: 'row',

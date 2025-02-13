@@ -9,11 +9,11 @@ import {
 } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@/hooks/theme'
-import { Typography } from '@/constants/Typography'
 import { Spacing } from '@/constants/Spacing'
 import { Environment } from '@/constants/Environment'
 import { AuthScreenLayout } from '@/components/auth/AuthScreenLayout'
 import { useAuth } from '@/context/AuthContext'
+import { Typography } from '@/constants/Typography'
 
 export default function ResetPasswordScreen() {
   const [password, setPassword] = useState('')
@@ -66,7 +66,7 @@ export default function ResetPasswordScreen() {
       buttonDisabled={!isValidForm}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={styles.inputContainer}>
+        <View style={styles.container}>
           <View style={styles.passwordContainer}>
             <TextInput
               ref={passwordRef}
@@ -143,21 +143,23 @@ export default function ResetPasswordScreen() {
 }
 
 const styles = StyleSheet.create({
-  inputContainer: {
-    gap: Spacing.gap.md,
-    marginBottom: Spacing.margin.xl,
+  container: {
+    gap: Spacing.spacing.medium,
+    marginBottom: Spacing.spacing.xlarge,
+    width: '100%',
   },
   input: {
-    flex: 1,
-    padding: Spacing.padding.button,
-    borderRadius: Spacing.borderRadius.card,
-    fontSize: Typography.sizes.body,
+    padding: Spacing.layout.section,
+    borderRadius: Spacing.radius.card,
+    fontSize: Typography.sizes.medium,
+    width: '100%',
     borderWidth: 1,
   },
   passwordContainer: {
     position: 'relative',
     flexDirection: 'row',
     alignItems: 'center',
+    width: '100%',
   },
   passwordToggle: {
     position: 'absolute',

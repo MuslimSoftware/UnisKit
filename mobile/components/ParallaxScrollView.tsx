@@ -82,14 +82,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    height: Spacing.header.height,
+    height: Spacing.size.header,
     overflow: 'hidden',
   },
   content: {
-    flex: 1,
-    padding: Spacing.padding.content,
-    gap: Spacing.gap.md,
-    overflow: 'hidden',
+    padding: Spacing.layout.content,
+    gap: Spacing.spacing.medium,
   },
   scrollView: {
     flex: 1,

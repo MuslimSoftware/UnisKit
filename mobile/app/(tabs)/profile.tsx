@@ -1,4 +1,11 @@
-import { View, StyleSheet, ScrollView, Platform, Pressable } from 'react-native'
+import {
+  View,
+  StyleSheet,
+  ScrollView,
+  Platform,
+  Pressable,
+  Image,
+} from 'react-native'
 import {
   TextTitle,
   TextBody,
@@ -29,11 +36,12 @@ export default function ProfileScreen() {
         contentContainerStyle={[
           styles.scrollContent,
           {
-            paddingTop: insets.top + Spacing.padding.screen,
+            paddingTop: insets.top + Spacing.layout.screen,
             paddingBottom:
               Platform.OS === 'ios'
-                ? insets.bottom + Spacing.tabBar.height
-                : Spacing.padding.content + Spacing.tabBar.androidPadding,
+                ? insets.bottom + Spacing.navigation.tabBarHeight
+                : Spacing.layout.content +
+                  Spacing.navigation.androidTabBarPadding,
           },
         ]}
       >
@@ -50,15 +58,15 @@ export default function ProfileScreen() {
                 },
               ]}
               hitSlop={{
-                top: Spacing.touchTarget.hitSlop,
-                bottom: Spacing.touchTarget.hitSlop,
-                left: Spacing.touchTarget.hitSlop,
-                right: Spacing.touchTarget.hitSlop,
+                top: Spacing.interactive.pressableArea,
+                bottom: Spacing.interactive.pressableArea,
+                left: Spacing.interactive.pressableArea,
+                right: Spacing.interactive.pressableArea,
               }}
             >
               <IconSymbol
                 name="gearshape.fill"
-                size={Spacing.icon.md}
+                size={Spacing.size.icon.medium}
                 color={theme.colors.text}
               />
             </Pressable>
@@ -74,10 +82,9 @@ export default function ProfileScreen() {
                   { backgroundColor: theme.colors.border },
                 ]}
               >
-                <IconSymbol
-                  name="person.circle.fill"
-                  size={40}
-                  color={theme.colors.secondaryText}
+                <Image
+                  source={require('@/assets/images/profile_picture.png')}
+                  style={styles.avatar}
                 />
               </View>
               <View style={styles.nameContainer}>
@@ -95,7 +102,7 @@ export default function ProfileScreen() {
             <View style={styles.locationContainer}>
               <IconSymbol
                 name="location.fill"
-                size={Spacing.icon.sm}
+                size={Spacing.size.icon.small}
                 color={theme.colors.secondaryText}
               />
               <TextSmall
@@ -119,7 +126,7 @@ export default function ProfileScreen() {
               >
                 <IconSymbol
                   name="pencil"
-                  size={Spacing.icon.sm}
+                  size={Spacing.size.icon.small}
                   color={theme.colors.tint}
                 />
               </Pressable>
@@ -145,7 +152,7 @@ export default function ProfileScreen() {
               >
                 <IconSymbol
                   name="pencil"
-                  size={Spacing.icon.sm}
+                  size={Spacing.size.icon.small}
                   color={theme.colors.tint}
                 />
               </Pressable>
@@ -153,7 +160,7 @@ export default function ProfileScreen() {
             <View style={styles.contactItem}>
               <IconSymbol
                 name="envelope.fill"
-                size={Spacing.icon.sm}
+                size={Spacing.size.icon.small}
                 color={theme.colors.secondaryText}
               />
               <TextSmall
@@ -162,13 +169,13 @@ export default function ProfileScreen() {
                   { color: theme.colors.secondaryText },
                 ]}
               >
-                john.doe@example.com
+                me@younesbenketira.com
               </TextSmall>
             </View>
             <View style={styles.contactItem}>
               <IconSymbol
                 name="link"
-                size={Spacing.icon.sm}
+                size={Spacing.size.icon.small}
                 color={theme.colors.secondaryText}
               />
               <TextSmall
@@ -177,7 +184,7 @@ export default function ProfileScreen() {
                   { color: theme.colors.secondaryText },
                 ]}
               >
-                github.com/johndoe
+                github.com/younesbenketira
               </TextSmall>
             </View>
           </View>
@@ -196,8 +203,8 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    padding: Spacing.padding.screen,
-    gap: Spacing.gap.lg,
+    padding: Spacing.layout.screen,
+    gap: Spacing.spacing.large,
   },
   header: {
     flexDirection: 'row',
@@ -205,26 +212,31 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   settingsButton: {
-    width: Spacing.touchTarget.minSize,
-    height: Spacing.touchTarget.minSize,
-    borderRadius: Spacing.touchTarget.minSize / 2,
+    width: Spacing.size.element.small,
+    height: Spacing.size.element.small,
+    borderRadius: Spacing.size.element.small / 2,
     alignItems: 'center',
     justifyContent: 'center',
   },
+  avatar: {
+    width: Spacing.size.element.large,
+    height: Spacing.size.element.large,
+    borderRadius: Spacing.radius.circle,
+  },
   profileCard: {
-    padding: Spacing.padding.screen,
-    borderRadius: Spacing.borderRadius.card,
-    gap: Spacing.gap.md,
+    padding: Spacing.layout.screen,
+    borderRadius: Spacing.radius.card,
+    gap: Spacing.spacing.medium,
   },
   profileInfo: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.gap.md,
+    gap: Spacing.spacing.medium,
   },
   avatarPlaceholder: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
+    width: Spacing.size.element.large + 5,
+    height: Spacing.size.element.large + 5,
+    borderRadius: Spacing.radius.circle,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -232,7 +244,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   name: {
-    marginBottom: Spacing.margin.xs,
+    marginBottom: Spacing.spacing.xsmall,
   },
   username: {
     opacity: 0.7,
@@ -240,23 +252,23 @@ const styles = StyleSheet.create({
   locationContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.gap.inline,
+    gap: Spacing.spacing.xxsmall,
   },
   section: {
-    padding: Spacing.padding.screen,
-    borderRadius: Spacing.borderRadius.card,
+    padding: Spacing.layout.screen,
+    borderRadius: Spacing.radius.card,
   },
   sectionHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: Spacing.margin.md,
+    marginBottom: Spacing.spacing.medium,
   },
   sectionTitle: {
     fontSize: 18,
   },
   editButton: {
-    padding: 8,
+    padding: Spacing.spacing.small,
   },
   bio: {
     lineHeight: 24,
@@ -264,8 +276,8 @@ const styles = StyleSheet.create({
   contactItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: Spacing.margin.sm,
-    gap: Spacing.gap.inline,
+    marginBottom: Spacing.spacing.small,
+    gap: Spacing.spacing.xxsmall,
   },
   contactText: {
     flex: 1,

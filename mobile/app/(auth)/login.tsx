@@ -63,7 +63,7 @@ export default function LoginScreen() {
       onButtonPress={handleLogin}
       buttonDisabled={!isValidForm}
     >
-      <View style={styles.inputContainer}>
+      <View style={styles.container}>
         <TextInput
           style={[
             styles.input,
@@ -133,15 +133,16 @@ export default function LoginScreen() {
 }
 
 const styles = StyleSheet.create({
-  inputContainer: {
-    gap: Spacing.gap.md,
-    marginBottom: Spacing.margin.xl,
+  container: {
+    gap: Spacing.spacing.medium,
+    marginBottom: Spacing.spacing.xlarge,
+    width: '100%',
   },
   input: {
-    padding: Spacing.padding.button,
-    borderRadius: Spacing.borderRadius.card,
-    fontSize: Typography.sizes.body,
-    borderWidth: 1,
+    padding: Spacing.layout.section,
+    borderRadius: Spacing.radius.card,
+    fontSize: Typography.sizes.medium,
+    width: '100%',
   },
   passwordContainer: {
     position: 'relative',
@@ -149,7 +150,6 @@ const styles = StyleSheet.create({
   },
   passwordInput: {
     paddingRight: 50,
-    width: '100%',
   },
   passwordToggle: {
     position: 'absolute',
@@ -162,5 +162,6 @@ const styles = StyleSheet.create({
   forgotPassword: {
     textAlign: 'right',
     textDecorationLine: 'underline',
+    fontWeight: Typography.weights.medium,
   },
 })

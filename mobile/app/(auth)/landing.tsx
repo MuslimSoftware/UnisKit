@@ -1,7 +1,7 @@
 import React from 'react'
 import { StyleSheet, View, Animated } from 'react-native'
 import { ThemedView } from '@/components/ThemedView'
-import { useLogoAnimation } from '@/hooks/animation'
+import { LOGO_SIZE, useLogoAnimation } from '@/hooks/animation'
 import { TextBody, TextTitle } from '@/components/typography'
 import { Spacing } from '@/constants/Spacing'
 import { useLogin } from '@/hooks/auth/useLogin'
@@ -9,8 +9,7 @@ import { SocialButtons } from '@/components/auth/SocialButtons'
 import { AuthFooter } from '@/components/auth/AuthFooter'
 import { AnimatedLogo, INITIAL_POSITION } from '@/components/auth/AnimatedLogo'
 import { Brand } from '@/constants/Brand'
-
-const LOGO_SIZE = 160 // The size of the logo
+import { Typography } from '@/constants/Typography'
 
 export default function LandingScreen() {
   const { logoStyle, contentStyle } = useLogoAnimation()
@@ -69,10 +68,10 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    paddingHorizontal: Spacing.padding.screen,
-    paddingBottom: Spacing.margin.lg,
+    paddingHorizontal: Spacing.layout.screen,
+    paddingBottom: Spacing.spacing.large,
     justifyContent: 'flex-end',
-    gap: Spacing.margin.xl,
+    gap: Spacing.spacing.xlarge,
   },
   title: {
     textAlign: 'center',

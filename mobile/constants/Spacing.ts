@@ -1,68 +1,62 @@
 export const Spacing = {
-  // Padding
-  padding: {
-    screen: 20,
-    button: 16,
-    content: 24,
-    input: 15,
-    sm: 12,
-    md: 16,
-    lg: 24,
+  // Layout spacing
+  layout: {
+    screen: 20,      // Main screen padding
+    content: 24,     // Content section padding
+    section: 16,     // Section padding
+    input: 15,       // Input field padding
+    small: 12,       // Small padding
+    medium: 16,      // Medium padding
+    large: 24,       // Large padding
   },
 
-  // Margins
-  margin: {
-    xs: 6,
-    sm: 8,
-    md: 12,
-    lg: 16,
-    xl: 20,
-    xxl: 30,
+  // Element spacing
+  spacing: {
+    xxsmall: 4,     
+    xsmall: 6,      
+    small: 8,       
+    medium: 12,     
+    large: 16,      
+    xlarge: 20,     
+    xxlarge: 30,    
   },
 
-  // Border Radius
-  borderRadius: {
-    button: 28,
-    card: 8,
-    sm: 8,
-    md: 12,
-    lg: 16,
-    xl: 24,
-    full: 9999,
+  // Border radius
+  radius: {
+    small: 8,       
+    medium: 12,     
+    large: 16,      
+    xlarge: 24,     
+    pill: 28,       // Pill shape
+    card: 8,        // Card corners
+    circle: 9999,   
   },
 
-  // Gaps
-  gap: {
-    inline: 4,
-    xs: 6,
-    sm: 12,
-    md: 16,
-    lg: 24,
-  },
-
-  // Component specific
-  header: {
-    height: 250,
+  // Component sizes
+  size: {
+    icon: {
+      small: 16,    // Small icons
+      medium: 20,   // Medium icons
+      large: 24,    // Large icons
+      xlarge: 32,   // Extra large icons
+    },
+    element: {
+      small: 32,    // Small interactive elements
+      medium: 48,   // Medium interactive elements
+      large: 64,    // Large interactive elements
+    },
+    header: 250,    // Header height
   },
 
   // Navigation
-  tabBar: {
-    height: 80,
-    androidPadding: 60,
+  navigation: {
+    tabBarHeight: 80,
+    androidTabBarPadding: 60,
+    tabBarPadding: 16,  // Added for tab bar vertical padding
   },
 
-  // UI Elements
-  icon: {
-    sm: 16,
-    md: 20,
-    lg: 24,
-    xl: 32,
-  },
-
-  // Touch targets
-  touchTarget: {
-    minSize: 32,
-    mdSize: 48,
-    hitSlop: 10,
+  // Interactive
+  interactive: {
+    pressableArea: 10,  // Extra touch area
   },
 } as const 

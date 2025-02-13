@@ -19,11 +19,12 @@ export default function HomeScreen() {
         contentContainerStyle={[
           styles.scrollContent,
           {
-            paddingTop: insets.top + Spacing.padding.screen,
+            paddingTop: insets.top + Spacing.layout.screen,
             paddingBottom:
               Platform.OS === 'ios'
-                ? insets.bottom + 80 // Account for tab bar height
-                : Spacing.padding.content + 60, // Add extra padding for Android tab bar
+                ? insets.bottom + Spacing.navigation.tabBarHeight
+                : Spacing.layout.content +
+                  Spacing.navigation.androidTabBarPadding,
           },
         ]}
       >
@@ -90,31 +91,45 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    padding: Spacing.padding.screen,
-    gap: Spacing.gap.lg,
+    padding: Spacing.layout.screen,
+    gap: Spacing.spacing.large,
   },
   iconContainer: {
     alignItems: 'center',
-    marginBottom: Spacing.margin.lg,
+    marginBottom: Spacing.spacing.large,
   },
   section: {
-    padding: Spacing.padding.content,
-    borderRadius: Spacing.borderRadius.card,
-    gap: Spacing.gap.md,
+    padding: Spacing.layout.content,
+    borderRadius: Spacing.radius.card,
+    gap: Spacing.spacing.medium,
   },
   title: {
     textAlign: 'center',
-    marginBottom: Spacing.margin.sm,
+    marginBottom: Spacing.spacing.small,
   },
   description: {
     textAlign: 'center',
-    marginBottom: Spacing.margin.sm,
+    marginBottom: Spacing.spacing.small,
   },
   features: {
-    gap: Spacing.gap.sm,
+    gap: Spacing.spacing.small,
   },
   tip: {
     textAlign: 'center',
     lineHeight: 24,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: Spacing.spacing.large,
+  },
+  card: {
+    padding: Spacing.layout.content,
+    borderRadius: Spacing.radius.card,
+    gap: Spacing.spacing.medium,
+  },
+  buttonContainer: {
+    gap: Spacing.spacing.small,
   },
 })

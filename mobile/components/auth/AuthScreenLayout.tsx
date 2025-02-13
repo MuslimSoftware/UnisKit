@@ -164,26 +164,24 @@ const styles = StyleSheet.create({
   },
   header: {
     paddingTop: 60,
-    paddingHorizontal: Spacing.padding.screen,
-    paddingBottom: Spacing.padding.screen,
+    paddingHorizontal: Spacing.layout.screen,
+    paddingBottom: Spacing.layout.screen,
   },
   backButton: {
-    padding: Spacing.padding.button,
-    marginLeft: -Spacing.padding.button,
+    padding: Spacing.layout.section,
+    marginLeft: -Spacing.layout.section,
   },
   content: {
     flex: 1,
-    paddingHorizontal: Spacing.padding.screen,
-    marginTop: Spacing.margin.xl,
+    paddingHorizontal: Spacing.layout.screen,
+    marginTop: Spacing.spacing.xlarge,
   },
-  formContainer: {
-    flex: 1,
-  },
+  formContainer: {},
   title: {
-    marginBottom: Spacing.margin.sm,
+    marginBottom: Spacing.spacing.small,
   },
   subtitle: {
-    marginBottom: Spacing.margin.xl,
+    marginBottom: Spacing.spacing.xlarge,
   },
   buttonContainer: {
     ...(Platform.OS === 'ios'
@@ -195,9 +193,9 @@ const styles = StyleSheet.create({
         }
       : {
           position: 'absolute',
-          bottom: Spacing.padding.screen,
-          left: Spacing.padding.screen,
-          right: Spacing.padding.screen,
+          bottom: Spacing.layout.screen,
+          left: Spacing.layout.screen,
+          right: Spacing.layout.screen,
         }),
   },
 })
