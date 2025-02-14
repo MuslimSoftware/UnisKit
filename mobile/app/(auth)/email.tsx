@@ -6,6 +6,8 @@ import { Typography } from '@/constants/Typography'
 import { Spacing } from '@/constants/Spacing'
 import { Environment } from '@/constants/Environment'
 import { AuthScreenLayout } from '@/components/auth/AuthScreenLayout'
+import { useFetch } from '@/hooks/api/useFetch'
+import { authService } from '@/services/auth'
 
 export default function EmailScreen() {
   const [email, setEmail] = useState(
@@ -14,16 +16,30 @@ export default function EmailScreen() {
       : ''
   )
   const theme = useTheme()
+  const { fetch: requestOTP, loading } = useFetch(authService.requestOTP)
 
-  const handleContinue = () => {
+  const handleContinue = async () => {
     if (Environment.devMode.bypassAuth) {
-      // Even in dev mode, we should go to OTP screen
-      router.push('/otp')
+      router.push({
+        pathname: '/otp',
+        params: { email },
+      })
       return
     }
 
-    // TODO: Implement normal email verification flow
-    router.push('/otp')
+    try {
+      const response = await requestOTP(email)
+      if (response) {
+        // OTP has been sent, navigate to OTP screen
+        router.push({
+          pathname: '/otp',
+          params: { email },
+        })
+      }
+    } catch (error) {
+      console.error('Failed to send OTP:', error)
+      // TODO: Handle error (show error message, etc.)
+    }
   }
 
   const isValidEmail = (email: string) => {
@@ -34,9 +50,9 @@ export default function EmailScreen() {
     <AuthScreenLayout
       title="Enter Your Email"
       subtitle="We'll send you a verification code"
-      buttonText="Continue"
+      buttonText={loading ? 'Sending code...' : 'Continue'}
       onButtonPress={handleContinue}
-      buttonDisabled={!isValidEmail(email)}
+      buttonDisabled={!isValidEmail(email) || loading}
     >
       <View style={styles.container}>
         <TextInput
@@ -56,6 +72,7 @@ export default function EmailScreen() {
           autoComplete="email"
           autoCorrect={false}
           placeholderTextColor={theme.input.placeholder}
+          editable={!loading}
         />
       </View>
     </AuthScreenLayout>
