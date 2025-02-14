@@ -15,6 +15,7 @@ export function useTheme() {
     secondaryText: isDark ? Colors.gray400 : Colors.gray500,
     card: isDark ? Colors.gray700 : Colors.gray100,
     border: isDark ? Colors.gray600 : Colors.gray200,
+    error: Colors.error,
   }
 
   const getContrastText = (bgColor: string): string => {

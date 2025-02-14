@@ -6,13 +6,22 @@ interface FetchState<T> {
   loading: boolean
 }
 
+interface RequestConfig {
+  url: string
+  options?: RequestInit
+}
+
+interface APIError {
+  detail: string
+}
+
 interface UseFetchResult<T> extends FetchState<T> {
   fetch: (params?: any) => Promise<T | null>
   reset: () => void
 }
 
 export function useFetch<T>(
-  fetchFn: (params?: any) => Promise<T>,
+  requestFn: (params?: any) => RequestConfig,
   initialData: T | null = null
 ): UseFetchResult<T> {
   const [state, setState] = useState<FetchState<T>>({
@@ -34,19 +43,29 @@ export function useFetch<T>(
       setState((prev) => ({ ...prev, loading: true, error: null }))
 
       try {
-        const result = await fetchFn(params)
-        setState({ data: result, error: null, loading: false })
-        return result
+        const { url, options } = requestFn(params)
+        const response = await window.fetch(url, options)
+        const text = await response.text()
+        const data = text ? JSON.parse(text) : null
+
+        if (!response.ok) {
+          const errorMessage = data?.detail || `Request failed with status ${response.status}`
+          throw new Error(errorMessage)
+        }
+
+        setState({ data, error: null, loading: false })
+        return data
       } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : 'An error occurred'
         setState({
           data: null,
-          error: error instanceof Error ? error : new Error('An error occurred'),
+          error: new Error(errorMessage),
           loading: false,
         })
         return null
       }
     },
-    [fetchFn]
+    [requestFn]
   )
 
   return {

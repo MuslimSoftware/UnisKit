@@ -21,12 +21,15 @@ export function ThemedText({
 
   const getTextColor = () => {
     if (inverted) return '#FFFFFF'
+
     if (backgroundColor) {
       return theme.getContrastText(backgroundColor)
     }
+
     if (variant === 'secondary') {
       return theme.isDark ? '#999999' : '#666666'
     }
+
     return theme.isDark ? '#FFFFFF' : '#000000'
   }
 
@@ -43,29 +46,3 @@ export function ThemedText({
     />
   )
 }
-
-const styles = StyleSheet.create({
-  default: {
-    fontSize: Typography.sizes.medium,
-    lineHeight: 24,
-  },
-  defaultSemiBold: {
-    fontSize: Typography.sizes.medium,
-    lineHeight: 24,
-    fontWeight: '600',
-  },
-  title: {
-    fontSize: Typography.sizes.title,
-    fontWeight: 'bold',
-    lineHeight: 32,
-  },
-  subtitle: {
-    fontSize: Typography.sizes.subtitle,
-    fontWeight: 'bold',
-  },
-  link: {
-    lineHeight: 30,
-    fontSize: Typography.sizes.medium,
-    color: '#0a7ea4',
-  },
-})

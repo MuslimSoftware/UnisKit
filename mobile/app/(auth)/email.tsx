@@ -6,6 +6,7 @@ import { Typography } from '@/constants/Typography'
 import { Spacing } from '@/constants/Spacing'
 import { Environment } from '@/constants/Environment'
 import { AuthScreenLayout } from '@/components/auth/AuthScreenLayout'
+import { ErrorMessage } from '@/components/ErrorMessage'
 import { useFetch } from '@/hooks/api/useFetch'
 import { authService } from '@/services/auth'
 
@@ -16,7 +17,7 @@ export default function EmailScreen() {
       : ''
   )
   const theme = useTheme()
-  const { fetch: requestOTP, loading } = useFetch(authService.requestOTP)
+  const { fetch: requestOTP, loading, error } = useFetch(authService.requestOTP)
 
   const handleContinue = async () => {
     if (Environment.devMode.bypassAuth) {
@@ -38,7 +39,6 @@ export default function EmailScreen() {
       }
     } catch (error) {
       console.error('Failed to send OTP:', error)
-      // TODO: Handle error (show error message, etc.)
     }
   }
 
@@ -61,7 +61,7 @@ export default function EmailScreen() {
             {
               backgroundColor: theme.input.background,
               color: theme.input.text,
-              borderColor: theme.colors.border,
+              borderColor: error ? theme.colors.error : theme.colors.border,
             },
           ]}
           placeholder="email@example.com"
@@ -73,6 +73,10 @@ export default function EmailScreen() {
           autoCorrect={false}
           placeholderTextColor={theme.input.placeholder}
           editable={!loading}
+        />
+        <ErrorMessage
+          message={error?.message}
+          fallback="Failed to send verification code. Please try again."
         />
       </View>
     </AuthScreenLayout>
