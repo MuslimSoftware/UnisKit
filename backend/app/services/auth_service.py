@@ -43,10 +43,6 @@ class AuthService:
 
     async def request_otp(self, email: str) -> RequestOTPResponse:
         """Request an OTP for authentication."""
-        user = await self.repository.find_by_email(email)
-        if not user:
-            raise HTTPException(status_code=400, detail="User not found")
-
         # Generate and store OTP
         otp = self._generate_otp()
         self._store_otp(email, otp)
