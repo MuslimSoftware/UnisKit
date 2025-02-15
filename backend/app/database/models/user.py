@@ -3,9 +3,6 @@ from pydantic import EmailStr
 
 class User(Document):
     email: EmailStr = Indexed(EmailStr, unique=True)
-    hashed_password: str
-    is_active: bool = True
-    is_superuser: bool = False
 
     class Settings:
         name = "users"
@@ -13,8 +10,6 @@ class User(Document):
     class Config:
         json_schema_extra = {
             "example": {
-                "email": "user@example.com",
-                "is_active": True,
-                "is_superuser": False,
+                "email": "user@example.com"
             }
         } 

@@ -5,8 +5,19 @@ class Token(BaseModel):
     access_token: str
     token_type: str = "bearer"
 
+class LoginRequest(BaseModel):
+    email: EmailStr
+    otp: str
+
+class LoginResponse(Token):
+    pass
+
+class RegisterRequest(BaseModel):
+    email: EmailStr
+    otp: str
+
 class RegisterResponse(BaseModel):
-    email: str
+    access_token: str
 
 class RequestOTPRequest(BaseModel):
     email: EmailStr = Field(..., description="Email address to send OTP to")
@@ -29,8 +40,7 @@ class VerifyOTPRequest(BaseModel):
     otp: str
 
 class VerifyOTPResponse(BaseModel):
-    access_token: str
-    token_type: str = "bearer"
+    success: bool
 
 class LoginResponse(Token):
     pass

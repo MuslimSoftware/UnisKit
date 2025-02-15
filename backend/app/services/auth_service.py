@@ -7,6 +7,7 @@ from datetime import datetime, timedelta
 from app.utils.security.jwt import create_access_token
 from app.repositories.user_repository import UserRepository
 from app.schemas.auth_schema import Token, RegisterResponse, RequestOTPResponse, VerifyOTPResponse
+from app.database.models.user import User
 
 class AuthService:
     def __init__(self):
@@ -78,23 +79,26 @@ class AuthService:
                 status_code=400,
                 detail="Invalid or expired OTP"
             )
+        
+        return VerifyOTPResponse(success=True)
 
-        # OTP is valid, create access token
-        access_token = create_access_token(email)
-        return VerifyOTPResponse(access_token=access_token)
-
-    async def authenticate_user(self, email: str, password: str) -> Optional[Token]:
+    async def authenticate_user(self, email: str, otp: str) -> Optional[Token]:
         user = await self.repository.find_by_email(email)
-        if not user or not await self.repository.verify_password(user, password):
-            raise HTTPException(status_code=400, detail="Incorrect email or password")
+        if not user:
+            raise HTTPException(status_code=400, detail="Incorrect email or OTP")
+        
+        result = await self.verify_otp(email, otp)
+        if not result.success:
+            raise HTTPException(status_code=400, detail="Invalid or expired OTP")
         
         access_token = create_access_token(user.email)
+        
         return Token(access_token=access_token, token_type="bearer")
 
-    async def register_user(self, email: str, password: str) -> RegisterResponse:
+    async def register_user(self, email: str) -> User:
         existing_user = await self.repository.find_by_email(email)
         if existing_user:
             raise HTTPException(status_code=400, detail="Email already registered")
         
-        user = await self.repository.create(email=email, password=password)
-        return RegisterResponse(email=user.email)
+        user = await self.repository.create(email=email)
+        return user

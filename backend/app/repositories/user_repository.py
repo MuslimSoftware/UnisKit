@@ -12,9 +12,8 @@ class UserRepository:
         return await User.find_all().to_list()
     
     @staticmethod
-    async def create(email: str, password: str) -> User:
-        hashed_password = get_password_hash(password)
-        user = User(email=email, hashed_password=hashed_password)
+    async def create(email: str) -> User:
+        user = User(email=email)
         await user.save()
         return user
     
