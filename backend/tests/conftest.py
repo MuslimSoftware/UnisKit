@@ -6,18 +6,29 @@ import pytest
 from typing import AsyncGenerator, Generator
 from fastapi.testclient import TestClient
 from motor.motor_asyncio import AsyncIOMotorClient
+from beanie import init_beanie
 
+from app.core.settings import settings
 from app.main import app
-from app.config.settings import settings
-from app.database.connection.mongodb import init_mongodb
+from app.database.models.user import User
 
-@pytest.fixture(scope="session")
-def test_client() -> Generator:
-    """
-    Create a test client for the FastAPI application.
-    """
-    with TestClient(app) as client:
-        yield client
+@pytest.fixture
+def test_client():
+    """Create a test client for the FastAPI app."""
+    return TestClient(app)
+
+@pytest.fixture
+async def mongodb():
+    """Set up a test MongoDB database."""
+    client = AsyncIOMotorClient(settings.mongodb_url)
+    await init_beanie(
+        database=client[settings.mongodb_db_name + "_test"],
+        document_models=[User]
+    )
+    yield client
+    # Clean up after tests
+    await client.drop_database(settings.mongodb_db_name + "_test")
+    client.close()
 
 @pytest.fixture(autouse=True)
 async def setup_test_db() -> AsyncGenerator:
@@ -34,7 +45,10 @@ async def setup_test_db() -> AsyncGenerator:
     
     # Initialize test database
     settings.MONGODB_DB_NAME = test_db_name
-    await init_mongodb()
+    await init_beanie(
+        database=client[test_db_name],
+        document_models=[User]
+    )
     
     yield
     

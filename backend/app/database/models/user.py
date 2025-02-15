@@ -3,7 +3,7 @@ from pydantic import EmailStr
 
 class User(Document):
     email: EmailStr = Indexed(EmailStr, unique=True)
-
+    hashed_password: str
     class Settings:
         name = "users"
         

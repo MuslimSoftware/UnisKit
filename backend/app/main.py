@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 
-from app.config.settings import settings
+from app.core.settings import settings
 from app.routes import user_routes, auth_routes
 from app.database.connection.mongodb import init_mongodb
 from app.middlewares.request_logger import RequestLoggingMiddleware
@@ -13,9 +13,9 @@ async def lifespan(app: FastAPI):
     yield
 
 app = FastAPI(
-    title=settings.PROJECT_NAME,
+    title=settings.project_name,
     version="1.0.0",
-    openapi_url=f"{settings.API_V1_STR}/openapi.json",
+    openapi_url=f"{settings.api_v1_str}/openapi.json",
     lifespan=lifespan
 )
 
@@ -25,12 +25,12 @@ app = FastAPI(
 # Set up CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # In production, replace with specific origins
+    allow_origins=settings.backend_cors_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 # Include routers
-app.include_router(user_routes.router, prefix=f"{settings.API_V1_STR}/users", tags=["users"])
-app.include_router(auth_routes.router, prefix=f"{settings.API_V1_STR}/auth", tags=["auth"]) 
+app.include_router(user_routes.router, prefix=f"{settings.api_v1_str}/users", tags=["users"])
+app.include_router(auth_routes.router, prefix=f"{settings.api_v1_str}/auth", tags=["auth"]) 

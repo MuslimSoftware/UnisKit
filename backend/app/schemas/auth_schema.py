@@ -4,6 +4,7 @@ from typing import Literal
 class Token(BaseModel):
     access_token: str
     token_type: str = "bearer"
+    refresh_token: str
 
 class LoginRequest(BaseModel):
     email: EmailStr
@@ -12,12 +13,13 @@ class LoginRequest(BaseModel):
 class LoginResponse(Token):
     pass
 
-class RegisterRequest(BaseModel):
+class VerifyEmailRequest(BaseModel):
     email: EmailStr
-    otp: str
 
-class RegisterResponse(BaseModel):
-    access_token: str
+class VerifyEmailResponse(BaseModel):
+    email: str
+    exists: bool
+    message: str
 
 class RequestOTPRequest(BaseModel):
     email: EmailStr = Field(..., description="Email address to send OTP to")
@@ -40,7 +42,12 @@ class VerifyOTPRequest(BaseModel):
     otp: str
 
 class VerifyOTPResponse(BaseModel):
-    success: bool
+    signup_token: str
+    expires_in: int  # seconds until expiration
 
-class LoginResponse(Token):
+class CompleteSignupRequest(BaseModel):
+    signup_token: str
+    password: str
+
+class CompleteSignupResponse(Token):
     pass
