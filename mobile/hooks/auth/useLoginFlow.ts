@@ -54,6 +54,8 @@ export function useLoginFlow() {
     router.push('/forgot-password')
   }
 
+  const isValidForm = identifier.length > 0
+
   return {
     identifier,
     setIdentifier,
@@ -61,5 +63,6 @@ export function useLoginFlow() {
     error,
     handleLogin,
     handleForgotPassword,
+    isValidForm,
   }
 } 

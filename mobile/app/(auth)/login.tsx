@@ -17,9 +17,8 @@ export default function LoginScreen() {
     error,
     handleLogin,
     handleForgotPassword,
+    isValidForm,
   } = useLoginFlow()
-
-  const isValidForm = identifier.length > 0
 
   return (
     <AuthScreenLayout

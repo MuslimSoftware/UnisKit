@@ -14,37 +14,20 @@ export default function OTPScreen() {
     otp,
     setOtp,
     inputRef,
-    loading,
-    error,
+    verifyLoading,
+    verifyError,
+    registerLoading,
+    registerError,
+    loginLoading,
+    loginError,
     handleVerify,
     focusInput,
     getScreenTitle,
     getScreenSubtitle,
   } = useOTPVerification()
 
-  const renderOTPBoxes = () => {
-    const boxes = []
-    for (let i = 0; i < 6; i++) {
-      boxes.push(
-        <Pressable
-          key={i}
-          onPress={focusInput}
-          style={[
-            styles.otpBox,
-            {
-              backgroundColor: theme.input.background,
-              borderColor: theme.colors.border,
-            },
-          ]}
-        >
-          <TextXLarge style={[styles.otpText, { color: theme.input.text }]}>
-            {otp[i] || ''}
-          </TextXLarge>
-        </Pressable>
-      )
-    }
-    return boxes
-  }
+  const loading = verifyLoading || registerLoading || loginLoading
+  const error = verifyError || registerError || loginError
 
   return (
     <AuthScreenLayout
@@ -57,7 +40,26 @@ export default function OTPScreen() {
       <View style={styles.container}>
         <View style={styles.inputContainer}>
           <View style={styles.otpBoxesContainer}>
-            {renderOTPBoxes()}
+            {/** Render the OTP boxes */}
+            {Array.from({ length: 6 }).map((_, index) => (
+              <Pressable
+                key={index}
+                style={[
+                  styles.otpBox,
+                  {
+                    backgroundColor: theme.input.background,
+                    borderColor: theme.colors.border,
+                  },
+                ]}
+              >
+                <TextXLarge
+                  style={[styles.otpText, { color: theme.input.text }]}
+                >
+                  {otp[index] || ''}
+                </TextXLarge>
+              </Pressable>
+            ))}
+            {/** The hidden input */}
             <TextInput
               ref={inputRef}
               style={styles.hiddenInput}

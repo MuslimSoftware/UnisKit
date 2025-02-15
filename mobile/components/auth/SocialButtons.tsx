@@ -2,25 +2,16 @@ import React from 'react'
 import { StyleSheet, View, Image } from 'react-native'
 import { Button } from '@/components/Button'
 import { Spacing } from '@/constants/Spacing'
-
-interface ButtonStyles {
-  background: string
-  text: string
-  icon: string
-  border?: string
-}
+import { Colors } from '@/constants/Colors'
+import { useTheme } from '@/hooks/theme'
 
 interface SocialButtonsProps {
   onEmailSignup: () => void
-  googleStyles: ButtonStyles
-  appleStyles: ButtonStyles
 }
 
-export function SocialButtons({
-  onEmailSignup,
-  googleStyles,
-  appleStyles,
-}: SocialButtonsProps) {
+export function SocialButtons({ onEmailSignup }: SocialButtonsProps) {
+  const theme = useTheme()
+
   return (
     <View style={styles.container}>
       <Button
@@ -40,9 +31,9 @@ export function SocialButtons({
         text="Continue with Google"
         onPress={() => {}}
         align="left"
-        backgroundColor={googleStyles.background}
-        borderColor={googleStyles.border}
-        textColor={googleStyles.text}
+        backgroundColor={Colors.white}
+        borderColor={theme.colors.border}
+        textColor={Colors.black}
       />
 
       <Button
@@ -50,9 +41,9 @@ export function SocialButtons({
         text="Continue with Apple"
         onPress={() => {}}
         align="left"
-        backgroundColor={appleStyles.background}
-        textColor={appleStyles.text}
-        iconColor={appleStyles.icon}
+        backgroundColor={theme.isDark ? Colors.white : Colors.black}
+        textColor={theme.isDark ? Colors.black : Colors.white}
+        iconColor={theme.isDark ? Colors.black : Colors.white}
       />
     </View>
   )

@@ -9,27 +9,13 @@ import { AuthFooter } from '@/components/auth/AuthFooter'
 import { AnimatedLogo, INITIAL_POSITION } from '@/components/auth/AnimatedLogo'
 import { Brand } from '@/constants/Brand'
 import { useLandingPage } from '@/hooks/auth/useLandingPage'
-import { Colors } from '@/constants/Colors'
 import { useTheme } from '@/hooks/theme'
+
 export default function LandingScreen() {
   const { logoStyle, contentStyle } = useLogoAnimation()
 
   const theme = useTheme()
   const { handleEmailSignup, handleEmailLogin } = useLandingPage()
-
-  const socialButtonStyles = {
-    google: {
-      background: Colors.white,
-      text: Colors.black,
-      icon: Colors.black,
-      border: theme.colors.border,
-    },
-    apple: {
-      background: theme.isDark ? Colors.white : Colors.black,
-      text: theme.isDark ? Colors.black : Colors.white,
-      icon: theme.isDark ? Colors.black : Colors.white,
-    },
-  }
 
   return (
     <ThemedView style={styles.container}>
@@ -49,11 +35,7 @@ export default function LandingScreen() {
           Choose how you'd like to continue
         </TextBody>
 
-        <SocialButtons
-          onEmailSignup={handleEmailSignup}
-          googleStyles={socialButtonStyles.google}
-          appleStyles={socialButtonStyles.apple}
-        />
+        <SocialButtons onEmailSignup={handleEmailSignup} />
 
         <AuthFooter onEmailLogin={handleEmailLogin} />
       </Animated.View>

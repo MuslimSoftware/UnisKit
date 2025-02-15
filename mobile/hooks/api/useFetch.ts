@@ -11,10 +11,6 @@ interface RequestConfig {
   options?: RequestInit
 }
 
-interface APIError {
-  detail: string
-}
-
 interface UseFetchResult<T> extends FetchState<T> {
   fetch: (params?: any) => Promise<T | null>
   reset: () => void

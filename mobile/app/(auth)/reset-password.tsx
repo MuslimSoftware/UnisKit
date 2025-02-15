@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React from 'react'
 import {
   StyleSheet,
   TextInput,
@@ -10,60 +10,36 @@ import {
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@/hooks/theme'
 import { Spacing } from '@/constants/Spacing'
-import { Environment } from '@/constants/Environment'
 import { AuthScreenLayout } from '@/components/auth/AuthScreenLayout'
-import { useAuth } from '@/context/AuthContext'
 import { Typography } from '@/constants/Typography'
+import { ErrorMessage } from '@/components/ErrorMessage'
+import { useResetPasswordFlow } from '@/hooks/auth/useResetPasswordFlow'
 
 export default function ResetPasswordScreen() {
-  const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
-  const [showPasswords, setShowPasswords] = useState(false)
-  const passwordRef = useRef<TextInput>(null)
-  const confirmPasswordRef = useRef<TextInput>(null)
   const theme = useTheme()
-  const { signIn } = useAuth()
-
-  const handleResetPassword = () => {
-    if (Environment.devMode.bypassAuth) {
-      signIn()
-      return
-    }
-
-    // TODO: Implement password reset API call
-    signIn()
-  }
-
-  const togglePasswords = () => {
-    setShowPasswords(!showPasswords)
-    // Re-focus inputs to prevent text selection
-    setTimeout(() => {
-      passwordRef.current?.blur()
-      confirmPasswordRef.current?.blur()
-    }, 100)
-  }
-
-  const handlePasswordChange = (text: string) => {
-    setPassword(text)
-  }
-
-  const handleConfirmPasswordChange = (text: string) => {
-    setConfirmPassword(text)
-  }
-
-  const handlePasswordSubmit = () => {
-    confirmPasswordRef.current?.focus()
-  }
-
-  const isValidForm = password.length >= 6 && password === confirmPassword
+  const {
+    password,
+    confirmPassword,
+    showPasswords,
+    passwordRef,
+    confirmPasswordRef,
+    loading,
+    error,
+    handleResetPassword,
+    togglePasswords,
+    handlePasswordChange,
+    handleConfirmPasswordChange,
+    handlePasswordSubmit,
+    isValidForm,
+  } = useResetPasswordFlow()
 
   return (
     <AuthScreenLayout
       title="Create New Password"
       subtitle="Enter your new password below"
-      buttonText="Reset Password"
+      buttonText={loading ? 'Resetting...' : 'Reset Password'}
       onButtonPress={handleResetPassword}
-      buttonDisabled={!isValidForm}
+      buttonDisabled={!isValidForm || loading}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
@@ -75,7 +51,7 @@ export default function ResetPasswordScreen() {
                 {
                   backgroundColor: theme.input.background,
                   color: theme.input.text,
-                  borderColor: theme.colors.border,
+                  borderColor: error ? theme.colors.error : theme.colors.border,
                 },
               ]}
               placeholder="New password"
@@ -87,18 +63,20 @@ export default function ResetPasswordScreen() {
               autoComplete="new-password"
               textContentType="newPassword"
               returnKeyType="next"
-              blurOnSubmit={false}
               placeholderTextColor={theme.input.placeholder}
+              editable={!loading}
             />
             <TouchableOpacity
               style={styles.passwordToggle}
               onPress={togglePasswords}
               hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+              disabled={loading}
             >
               <Ionicons
                 name={showPasswords ? 'eye-off-outline' : 'eye-outline'}
                 size={24}
                 color={theme.colors.text}
+                style={{ opacity: loading ? 0.5 : 1 }}
               />
             </TouchableOpacity>
           </View>
@@ -111,7 +89,7 @@ export default function ResetPasswordScreen() {
                 {
                   backgroundColor: theme.input.background,
                   color: theme.input.text,
-                  borderColor: theme.colors.border,
+                  borderColor: error ? theme.colors.error : theme.colors.border,
                 },
               ]}
               placeholder="Confirm new password"
@@ -123,19 +101,27 @@ export default function ResetPasswordScreen() {
               textContentType="newPassword"
               returnKeyType="done"
               placeholderTextColor={theme.input.placeholder}
+              editable={!loading}
             />
             <TouchableOpacity
               style={styles.passwordToggle}
               onPress={togglePasswords}
               hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+              disabled={loading}
             >
               <Ionicons
                 name={showPasswords ? 'eye-off-outline' : 'eye-outline'}
                 size={24}
                 color={theme.colors.text}
+                style={{ opacity: loading ? 0.5 : 1 }}
               />
             </TouchableOpacity>
           </View>
+
+          <ErrorMessage
+            message={error?.message}
+            fallback="Failed to reset password. Please try again."
+          />
         </View>
       </TouchableWithoutFeedback>
     </AuthScreenLayout>

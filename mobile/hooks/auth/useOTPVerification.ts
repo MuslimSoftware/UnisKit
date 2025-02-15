@@ -7,6 +7,30 @@ import { useAuth } from '@/context/AuthContext'
 
 type VerificationType = 'login' | 'signup' | 'reset-password'
 
+interface LoginRequest {
+  email: string
+  otp: string
+}
+
+interface LoginResponse {
+  access_token: string
+}
+
+interface RegisterRequest {
+  email: string
+  otp: string
+}
+
+interface RegisterResponse {
+  access_token: string
+}
+
+interface VerifyOTPRequest {
+  email: string
+  otp: string
+  type: VerificationType
+}
+
 interface VerifyOTPResponse {
   access_token: string
   token_type: string
@@ -26,10 +50,40 @@ export function useOTPVerification() {
 
   const {
     fetch: verifyOTP,
-    loading,
-    error,
-  } = useFetch<VerifyOTPResponse>((params) => ({
+    loading: verifyLoading,
+    error: verifyError,
+  } = useFetch<VerifyOTPResponse>((params: VerifyOTPRequest) => ({
     url: `${Environment.apiUrl}/auth/verify-otp`,
+    options: {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(params),
+    },
+  }))
+
+  const {
+    fetch: register,
+    loading: registerLoading,
+    error: registerError,
+  } = useFetch<RegisterResponse>((params: RegisterRequest) => ({
+    url: `${Environment.apiUrl}/auth/register`,
+    options: {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(params),
+    },
+  }))
+
+  const {
+    fetch: login,
+    loading: loginLoading,
+    error: loginError,
+  } = useFetch<LoginResponse>((params: LoginRequest) => ({
+    url: `${Environment.apiUrl}/auth/login`,
     options: {
       method: 'POST',
       headers: {
@@ -65,9 +119,21 @@ export function useOTPVerification() {
     }
 
     try {
-      const response = await verifyOTP({ email, otp })
-      if (response?.access_token) {
-        handleVerificationSuccess()
+      if (verificationType === 'login') {
+        const response = await login({ email, otp })
+        if (response?.access_token) {
+          handleVerificationSuccess()
+        }
+      } else if (verificationType === 'signup') {
+        const response = await register({ email, otp })
+        if (response?.access_token) {
+          handleVerificationSuccess()
+        }
+      } else {
+        const response = await verifyOTP({ email, otp, type: verificationType })
+        if (response?.access_token) {
+          handleVerificationSuccess()
+        }
       }
     } catch (error) {
       console.error('Failed to verify OTP:', error)
@@ -115,8 +181,12 @@ export function useOTPVerification() {
     otp,
     setOtp,
     inputRef,
-    loading,
-    error,
+    verifyLoading,
+    verifyError,
+    registerLoading,
+    registerError,
+    loginLoading,
+    loginError,
     handleVerify,
     focusInput,
     getScreenTitle,
