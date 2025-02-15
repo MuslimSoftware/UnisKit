@@ -4,16 +4,32 @@ import { ThemedView } from '@/components/ThemedView'
 import { LOGO_SIZE, useLogoAnimation } from '@/hooks/animation'
 import { TextBody, TextTitle } from '@/components/typography'
 import { Spacing } from '@/constants/Spacing'
-import { useLogin } from '@/hooks/auth/useLogin'
 import { SocialButtons } from '@/components/auth/SocialButtons'
 import { AuthFooter } from '@/components/auth/AuthFooter'
 import { AnimatedLogo, INITIAL_POSITION } from '@/components/auth/AnimatedLogo'
 import { Brand } from '@/constants/Brand'
-import { Typography } from '@/constants/Typography'
-
+import { useLandingPage } from '@/hooks/auth/useLandingPage'
+import { Colors } from '@/constants/Colors'
+import { useTheme } from '@/hooks/theme'
 export default function LandingScreen() {
   const { logoStyle, contentStyle } = useLogoAnimation()
-  const { handleEmailSignup, handleEmailLogin, socialButtons } = useLogin()
+
+  const theme = useTheme()
+  const { handleEmailSignup, handleEmailLogin } = useLandingPage()
+
+  const socialButtonStyles = {
+    google: {
+      background: Colors.white,
+      text: Colors.black,
+      icon: Colors.black,
+      border: theme.colors.border,
+    },
+    apple: {
+      background: theme.isDark ? Colors.white : Colors.black,
+      text: theme.isDark ? Colors.black : Colors.white,
+      icon: theme.isDark ? Colors.black : Colors.white,
+    },
+  }
 
   return (
     <ThemedView style={styles.container}>
@@ -35,8 +51,8 @@ export default function LandingScreen() {
 
         <SocialButtons
           onEmailSignup={handleEmailSignup}
-          googleStyles={socialButtons.google}
-          appleStyles={socialButtons.apple}
+          googleStyles={socialButtonStyles.google}
+          appleStyles={socialButtonStyles.apple}
         />
 
         <AuthFooter onEmailLogin={handleEmailLogin} />

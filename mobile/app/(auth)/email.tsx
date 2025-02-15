@@ -1,50 +1,16 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { StyleSheet, TextInput, View } from 'react-native'
-import { router } from 'expo-router'
 import { useTheme } from '@/hooks/theme'
 import { Typography } from '@/constants/Typography'
 import { Spacing } from '@/constants/Spacing'
-import { Environment } from '@/constants/Environment'
 import { AuthScreenLayout } from '@/components/auth/AuthScreenLayout'
 import { ErrorMessage } from '@/components/ErrorMessage'
-import { useFetch } from '@/hooks/api/useFetch'
-import { authService } from '@/services/auth'
+import { useEmailSignup } from '@/hooks/auth/useEmailSignup'
 
 export default function EmailScreen() {
-  const [email, setEmail] = useState(
-    Environment.devMode.autoFillCredentials.enabled
-      ? Environment.devMode.autoFillCredentials.email
-      : ''
-  )
   const theme = useTheme()
-  const { fetch: requestOTP, loading, error } = useFetch(authService.requestOTP)
-
-  const handleContinue = async () => {
-    if (Environment.devMode.bypassAuth) {
-      router.push({
-        pathname: '/otp',
-        params: { email },
-      })
-      return
-    }
-
-    try {
-      const response = await requestOTP(email)
-      if (response) {
-        // OTP has been sent, navigate to OTP screen
-        router.push({
-          pathname: '/otp',
-          params: { email },
-        })
-      }
-    } catch (error) {
-      console.error('Failed to send OTP:', error)
-    }
-  }
-
-  const isValidEmail = (email: string) => {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
-  }
+  const { email, setEmail, loading, error, handleContinue, isValidEmail } =
+    useEmailSignup()
 
   return (
     <AuthScreenLayout

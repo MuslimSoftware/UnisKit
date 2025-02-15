@@ -1,81 +1,26 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React from 'react'
 import { StyleSheet, TextInput, View, Pressable } from 'react-native'
-import { router, useLocalSearchParams } from 'expo-router'
 import { useTheme } from '@/hooks/theme'
-import {
-  TextBody,
-  TextLarge,
-  TextSmall,
-  TextXLarge,
-} from '@/components/typography'
+import { TextSmall, TextXLarge } from '@/components/typography'
 import { Typography } from '@/constants/Typography'
 import { Spacing } from '@/constants/Spacing'
-import { useAuth } from '@/context/AuthContext'
-import { Environment } from '@/constants/Environment'
 import { AuthScreenLayout } from '@/components/auth/AuthScreenLayout'
-
-type VerificationType = 'signup' | 'reset-password'
+import { ErrorMessage } from '@/components/ErrorMessage'
+import { useOTPVerification } from '@/hooks/auth/useOTPVerification'
 
 export default function OTPScreen() {
-  const [otp, setOtp] = useState('')
-  const inputRef = useRef<TextInput>(null)
   const theme = useTheme()
-  const { signIn } = useAuth()
-  const params = useLocalSearchParams<{ type?: VerificationType }>()
-  const verificationType = params.type || 'signup'
-
-  useEffect(() => {
-    if (Environment.devMode.bypassAuth) {
-      // Auto-fill OTP in dev mode
-      setOtp('123456')
-    }
-  }, [])
-
-  const handleVerify = () => {
-    if (Environment.devMode.bypassAuth) {
-      handleVerificationSuccess()
-      return
-    }
-
-    // TODO: Implement normal OTP verification
-    handleVerificationSuccess()
-  }
-
-  const handleVerificationSuccess = () => {
-    switch (verificationType) {
-      case 'reset-password':
-        router.push('/reset-password')
-        break
-      case 'signup':
-      default:
-        signIn()
-        break
-    }
-  }
-
-  const focusInput = () => {
-    inputRef.current?.focus()
-  }
-
-  const getScreenTitle = () => {
-    switch (verificationType) {
-      case 'reset-password':
-        return 'Reset Password'
-      case 'signup':
-      default:
-        return 'Verify Your Email'
-    }
-  }
-
-  const getScreenSubtitle = () => {
-    switch (verificationType) {
-      case 'reset-password':
-        return 'Enter the 6-digit code we sent to reset your password'
-      case 'signup':
-      default:
-        return 'Enter the 6-digit code we sent to your email'
-    }
-  }
+  const {
+    otp,
+    setOtp,
+    inputRef,
+    loading,
+    error,
+    handleVerify,
+    focusInput,
+    getScreenTitle,
+    getScreenSubtitle,
+  } = useOTPVerification()
 
   const renderOTPBoxes = () => {
     const boxes = []
@@ -105,9 +50,9 @@ export default function OTPScreen() {
     <AuthScreenLayout
       title={getScreenTitle()}
       subtitle={getScreenSubtitle()}
-      buttonText="Verify"
+      buttonText={loading ? 'Verifying...' : 'Verify'}
       onButtonPress={handleVerify}
-      buttonDisabled={otp.length !== 6}
+      buttonDisabled={otp.length !== 6 || loading}
     >
       <View style={styles.container}>
         <View style={styles.inputContainer}>
@@ -121,8 +66,13 @@ export default function OTPScreen() {
               keyboardType="number-pad"
               maxLength={6}
               caretHidden
+              editable={!loading}
             />
           </View>
+          <ErrorMessage
+            message={error?.message}
+            fallback="Failed to verify code. Please try again."
+          />
           <TextSmall variant="secondary">
             Didn't receive the code?{' '}
             <TextSmall style={[styles.link, { color: theme.colors.tint }]}>
@@ -146,6 +96,7 @@ const styles = StyleSheet.create({
   otpBoxesContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    position: 'relative',
   },
   otpBox: {
     width: 40,
@@ -155,12 +106,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  otpText: {},
+  otpText: {
+    fontSize: Typography.sizes.otpInput,
+  },
   hiddenInput: {
     position: 'absolute',
-    width: 1,
-    height: 1,
+    width: '100%',
+    height: '100%',
     opacity: 0,
+    zIndex: 1,
   },
   link: {
     fontWeight: Typography.weights.medium,

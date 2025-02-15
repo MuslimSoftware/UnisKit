@@ -1,42 +1,24 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { StyleSheet, TextInput, View } from 'react-native'
-import { router } from 'expo-router'
 import { useTheme } from '@/hooks/theme'
 import { Typography } from '@/constants/Typography'
 import { Spacing } from '@/constants/Spacing'
-import { Environment } from '@/constants/Environment'
 import { AuthScreenLayout } from '@/components/auth/AuthScreenLayout'
+import { ErrorMessage } from '@/components/ErrorMessage'
+import { useForgotPasswordFlow } from '@/hooks/auth/useForgotPasswordFlow'
 
 export default function ForgotPasswordScreen() {
-  const [email, setEmail] = useState(
-    Environment.devMode.autoFillCredentials.enabled
-      ? Environment.devMode.autoFillCredentials.email
-      : ''
-  )
   const theme = useTheme()
-
-  const handleResetPassword = () => {
-    if (Environment.devMode.bypassAuth) {
-      // In dev mode, go straight to OTP verification
-      router.push('/otp?type=reset-password')
-      return
-    }
-
-    // TODO: Implement password reset flow
-    router.push('/otp?type=reset-password')
-  }
-
-  const isValidEmail = (email: string) => {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
-  }
+  const { email, setEmail, loading, error, handleResetPassword, isValidEmail } =
+    useForgotPasswordFlow()
 
   return (
     <AuthScreenLayout
       title="Reset Password"
       subtitle="Enter your email and we'll send you a code to reset your password"
-      buttonText="Send Reset Code"
+      buttonText={loading ? 'Sending code...' : 'Send Reset Code'}
       onButtonPress={handleResetPassword}
-      buttonDisabled={!isValidEmail(email)}
+      buttonDisabled={!isValidEmail(email) || loading}
     >
       <View style={styles.container}>
         <TextInput
@@ -45,7 +27,7 @@ export default function ForgotPasswordScreen() {
             {
               backgroundColor: theme.input.background,
               color: theme.input.text,
-              borderColor: theme.colors.border,
+              borderColor: error ? theme.colors.error : theme.colors.border,
             },
           ]}
           placeholder="email@example.com"
@@ -56,6 +38,11 @@ export default function ForgotPasswordScreen() {
           autoComplete="email"
           autoCorrect={false}
           placeholderTextColor={theme.input.placeholder}
+          editable={!loading}
+        />
+        <ErrorMessage
+          message={error?.message}
+          fallback="Failed to send reset code. Please try again."
         />
       </View>
     </AuthScreenLayout>

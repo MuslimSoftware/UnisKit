@@ -21,6 +21,7 @@ export const Environment = {
     autoFillCredentials: {
       enabled: Constants.expoConfig?.extra?.autoFillCredentials || false,
       email: Constants.expoConfig?.extra?.autoFillEmail || '',
+      password: Constants.expoConfig?.extra?.autoFillPassword || '',
     },
   },
 } as const
@@ -28,4 +29,6 @@ export const Environment = {
 // Type guard to ensure environment is properly configured
 if (!Environment.apiUrl) {
   throw new Error('API URL is not configured in environment')
-} 
+}
+
+export type Environment = typeof Environment 

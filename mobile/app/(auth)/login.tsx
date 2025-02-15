@@ -1,67 +1,33 @@
-import React, { useState, useRef } from 'react'
+import React from 'react'
 import { StyleSheet, TextInput, View, TouchableOpacity } from 'react-native'
-import { router } from 'expo-router'
-import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@/hooks/theme'
 import { TextSmall } from '@/components/typography'
 import { Typography } from '@/constants/Typography'
 import { Spacing } from '@/constants/Spacing'
-import { Environment } from '@/constants/Environment'
 import { AuthScreenLayout } from '@/components/auth/AuthScreenLayout'
+import { ErrorMessage } from '@/components/ErrorMessage'
+import { useLoginFlow } from '@/hooks/auth/useLoginFlow'
 
 export default function LoginScreen() {
-  const [identifier, setIdentifier] = useState(
-    Environment.devMode.autoFillCredentials.enabled
-      ? Environment.devMode.autoFillCredentials.email
-      : ''
-  )
-  const [password, setPassword] = useState(
-    Environment.devMode.autoFillCredentials.enabled
-      ? Environment.devMode.autoFillCredentials.password
-      : ''
-  )
-  const [showPassword, setShowPassword] = useState(false)
   const theme = useTheme()
-  const passwordRef = useRef<TextInput>(null)
+  const {
+    identifier,
+    setIdentifier,
+    loading,
+    error,
+    handleLogin,
+    handleForgotPassword,
+  } = useLoginFlow()
 
-  const handleLogin = () => {
-    if (Environment.devMode.bypassAuth) {
-      router.push('/otp')
-      return
-    }
-
-    // TODO: Implement normal login flow
-  }
-
-  const handleForgotPassword = () => {
-    router.push('/forgot-password')
-  }
-
-  const isValidForm = identifier.length > 0 && password.length >= 6
-
-  const handlePasswordChange = (text: string) => {
-    setPassword(text)
-  }
-
-  const togglePassword = () => {
-    setShowPassword(!showPassword)
-    // Re-focus input to prevent text selection
-    setTimeout(() => {
-      passwordRef.current?.blur()
-    }, 100)
-  }
-
-  const handleEmailSubmitEditing = () => {
-    passwordRef.current?.focus()
-  }
+  const isValidForm = identifier.length > 0
 
   return (
     <AuthScreenLayout
       title="Welcome Back"
-      subtitle="Login to your account"
-      buttonText="Login"
+      subtitle="Enter your email to continue"
+      buttonText={loading ? 'Sending code...' : 'Continue'}
       onButtonPress={handleLogin}
-      buttonDisabled={!isValidForm}
+      buttonDisabled={!isValidForm || loading}
     >
       <View style={styles.container}>
         <TextInput
@@ -70,59 +36,34 @@ export default function LoginScreen() {
             {
               backgroundColor: theme.input.background,
               color: theme.input.text,
-              borderColor: theme.colors.border,
+              borderColor: error ? theme.colors.error : theme.colors.border,
             },
           ]}
           placeholder="Email or phone number"
           value={identifier}
           onChangeText={setIdentifier}
-          onSubmitEditing={handleEmailSubmitEditing}
-          returnKeyType="next"
+          returnKeyType="done"
           autoCapitalize="none"
           autoComplete="email"
           autoCorrect={false}
           placeholderTextColor={theme.input.placeholder}
+          editable={!loading}
         />
 
-        <View style={styles.passwordContainer}>
-          <TextInput
-            ref={passwordRef}
+        <ErrorMessage
+          message={error?.message}
+          fallback="Failed to send verification code. Please try again."
+        />
+
+        <TouchableOpacity onPress={handleForgotPassword} disabled={loading}>
+          <TextSmall
             style={[
-              styles.input,
-              styles.passwordInput,
+              styles.forgotPassword,
               {
-                backgroundColor: theme.input.background,
-                color: theme.input.text,
-                borderColor: theme.colors.border,
+                color: theme.colors.tint,
+                opacity: loading ? 0.5 : 1,
               },
             ]}
-            placeholder="Password"
-            value={password}
-            onChangeText={handlePasswordChange}
-            secureTextEntry={!showPassword}
-            autoCapitalize="none"
-            autoComplete="current-password"
-            textContentType="password"
-            returnKeyType="done"
-            enablesReturnKeyAutomatically
-            placeholderTextColor={theme.input.placeholder}
-          />
-          <TouchableOpacity
-            style={styles.passwordToggle}
-            onPress={togglePassword}
-            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-          >
-            <Ionicons
-              name={showPassword ? 'eye-off-outline' : 'eye-outline'}
-              size={24}
-              color={theme.colors.text}
-            />
-          </TouchableOpacity>
-        </View>
-
-        <TouchableOpacity onPress={handleForgotPassword}>
-          <TextSmall
-            style={[styles.forgotPassword, { color: theme.colors.tint }]}
           >
             Forgot Password?
           </TextSmall>
@@ -143,21 +84,7 @@ const styles = StyleSheet.create({
     borderRadius: Spacing.radius.card,
     fontSize: Typography.sizes.medium,
     width: '100%',
-  },
-  passwordContainer: {
-    position: 'relative',
-    width: '100%',
-  },
-  passwordInput: {
-    paddingRight: 50,
-  },
-  passwordToggle: {
-    position: 'absolute',
-    right: 12,
-    top: '50%',
-    transform: [{ translateY: -12 }],
-    padding: 4,
-    zIndex: 1,
+    borderWidth: 1,
   },
   forgotPassword: {
     textAlign: 'right',
