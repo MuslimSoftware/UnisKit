@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Request
 from fastapi.security import OAuth2PasswordRequestForm
 
 from app.services.auth_service import AuthService
@@ -25,7 +25,7 @@ async def register(email: str, password: str):
 @router.post("/request-otp", response_model=RequestOTPResponse)
 async def request_otp(request: RequestOTPRequest) -> RequestOTPResponse:
     """Request an OTP for authentication."""
-    return await service.request_otp(request.email)
+    return await service.request_otp(request.email, request.type)
 
 @router.post("/verify-otp", response_model=VerifyOTPResponse)
 async def verify_otp(request: VerifyOTPRequest) -> VerifyOTPResponse:

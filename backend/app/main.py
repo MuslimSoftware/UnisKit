@@ -20,7 +20,7 @@ app = FastAPI(
 )
 
 # Add request logging middleware
-app.add_middleware(RequestLoggingMiddleware)
+# app.add_middleware(RequestLoggingMiddleware)
 
 # Set up CORS
 app.add_middleware(

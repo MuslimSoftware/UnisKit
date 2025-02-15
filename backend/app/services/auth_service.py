@@ -41,8 +41,26 @@ class AuthService:
             del self._otp_store[email]
         return is_valid
 
-    async def request_otp(self, email: str) -> RequestOTPResponse:
+    async def request_otp(self, email: str, type: str) -> RequestOTPResponse:
         """Request an OTP for authentication."""
+        # For login attempts, verify user exists
+        if type == 'login' or type == 'reset-password':
+            user = await self.repository.find_by_email(email)
+            if not user:
+                raise HTTPException(
+                    status_code=400,
+                    detail="No account found with this email"
+                )
+            
+        # For signup attempts, verify user does not exist
+        if type == 'signup':
+            user = await self.repository.find_by_email(email)
+            if user:
+                raise HTTPException(
+                    status_code=400,
+                    detail="Account already exists with this email"
+                )
+        
         # Generate and store OTP
         otp = self._generate_otp()
         self._store_otp(email, otp)
