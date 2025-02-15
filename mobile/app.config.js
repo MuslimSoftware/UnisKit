@@ -41,7 +41,7 @@ module.exports = {
   web: {
     favicon: './assets/images/favicon.png'
   },
-  plugins: ['expo-router'],
+  plugins: ['expo-router', 'expo-secure-store'],
   experiments: {
     typedRoutes: true
   },
@@ -55,6 +55,7 @@ module.exports = {
     bypassAuth: process.env.BYPASS_AUTH === 'true',
     autoFillCredentials: process.env.AUTO_FILL_CREDENTIALS === 'true',
     autoFillEmail: process.env.AUTO_FILL_EMAIL,
+    autoFillPassword: process.env.AUTO_FILL_PASSWORD,
     eas: {
       projectId: 'your-project-id'
     }

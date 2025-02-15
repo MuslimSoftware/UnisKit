@@ -4,36 +4,19 @@ import { router, useLocalSearchParams } from 'expo-router'
 import { useFetch } from '@/hooks/api/useFetch'
 import { Environment } from '@/constants/Environment'
 import { useAuth } from '@/context/AuthContext'
+import * as SecureStore from 'expo-secure-store'
 
 type VerificationType = 'login' | 'signup' | 'reset-password'
 
-interface LoginRequest {
-  email: string
-  otp: string
-}
-
 interface LoginResponse {
   access_token: string
-}
-
-interface RegisterRequest {
-  email: string
-  otp: string
-}
-
-interface RegisterResponse {
-  access_token: string
-}
-
-interface VerifyOTPRequest {
-  email: string
-  otp: string
-  type: VerificationType
+  refresh_token: string
+  token_type: string
 }
 
 interface VerifyOTPResponse {
-  access_token: string
-  token_type: string
+  signup_token: string
+  expires_in: number
 }
 
 export function useOTPVerification() {
@@ -49,32 +32,17 @@ export function useOTPVerification() {
   const email = params.email
 
   const {
-    fetch: verifyOTP,
+    fetch: verifySignupOTP,
     loading: verifyLoading,
     error: verifyError,
-  } = useFetch<VerifyOTPResponse>((params: VerifyOTPRequest) => ({
-    url: `${Environment.apiUrl}/auth/verify-otp`,
+  } = useFetch<VerifyOTPResponse>(() => ({
+    url: `${Environment.apiUrl}/auth/verify-signup-otp`,
     options: {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(params),
-    },
-  }))
-
-  const {
-    fetch: register,
-    loading: registerLoading,
-    error: registerError,
-  } = useFetch<RegisterResponse>((params: RegisterRequest) => ({
-    url: `${Environment.apiUrl}/auth/register`,
-    options: {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(params),
+      body: JSON.stringify({ email, otp }),
     },
   }))
 
@@ -82,14 +50,14 @@ export function useOTPVerification() {
     fetch: login,
     loading: loginLoading,
     error: loginError,
-  } = useFetch<LoginResponse>((params: LoginRequest) => ({
+  } = useFetch<LoginResponse>(() => ({
     url: `${Environment.apiUrl}/auth/login`,
     options: {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(params),
+      body: JSON.stringify({ email, otp }),
     },
   }))
 
@@ -120,20 +88,27 @@ export function useOTPVerification() {
 
     try {
       if (verificationType === 'login') {
-        const response = await login({ email, otp })
+        const response = await login()
         if (response?.access_token) {
-          handleVerificationSuccess()
+          // Store tokens in secure storage
+          await SecureStore.setItemAsync('access_token', response.access_token)
+          await SecureStore.setItemAsync('refresh_token', response.refresh_token)
+          signIn()
         }
       } else if (verificationType === 'signup') {
-        const response = await register({ email, otp })
-        if (response?.access_token) {
-          handleVerificationSuccess()
+        const response = await verifySignupOTP()
+        if (response?.signup_token) {
+          router.push({
+            pathname: '/password',
+            params: { 
+              email,
+              signup_token: response.signup_token,
+            }
+          })
         }
-      } else {
-        const response = await verifyOTP({ email, otp, type: verificationType })
-        if (response?.access_token) {
-          handleVerificationSuccess()
-        }
+      } else if (verificationType === 'reset-password') {
+        // TODO: Implement reset password flow
+        router.push('/reset-password')
       }
     } catch (error) {
       console.error('Failed to verify OTP:', error)
@@ -146,6 +121,8 @@ export function useOTPVerification() {
         router.push('/reset-password')
         break
       case 'signup':
+        router.push('/password')
+        break
       case 'login':
       default:
         signIn()
@@ -183,8 +160,6 @@ export function useOTPVerification() {
     inputRef,
     verifyLoading,
     verifyError,
-    registerLoading,
-    registerError,
     loginLoading,
     loginError,
     handleVerify,
