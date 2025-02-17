@@ -19,8 +19,14 @@ interface VerifyOTPResponse {
   expires_in: number
 }
 
+interface RequestOTPResponse {
+  email: string
+  message: string
+}
+
 export function useOTPVerification() {
   const [otp, setOtp] = useState('')
+  const [error, setError] = useState<Error | null>(null)
   const inputRef = useRef<TextInput>(null)
   const { signIn } = useAuth()
 
@@ -30,6 +36,24 @@ export function useOTPVerification() {
   }>()
   const verificationType = params.type || 'signup'
   const email = params.email
+
+  const {
+    fetch: requestOTP,
+    loading: requestLoading,
+    error: requestOTPError,
+  } = useFetch<RequestOTPResponse>(() => ({
+    url: `${Environment.apiUrl}/auth/request-otp`,
+    options: {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ 
+        email, 
+        type: verificationType 
+      }),
+    },
+  }))
 
   const {
     fetch: verifySignupOTP,
@@ -70,26 +94,61 @@ export function useOTPVerification() {
     if (Environment.devMode.bypassAuth) {
       // Auto-fill OTP in dev mode
       setOtp('123456')
+      return () => clearTimeout(timer)
     }
 
+    // Request OTP when component mounts
+    const sendOTP = async () => {
+      setError(null)
+      try {
+        if (!email) {
+          throw new Error('Email is required')
+        }
+        const response = await requestOTP()
+        if (!response) {
+          throw new Error('Failed to send verification code')
+        }
+      } catch (err) {
+        setError(err instanceof Error ? err : new Error('Failed to send verification code'))
+      }
+    }
+
+    sendOTP()
     return () => clearTimeout(timer)
-  }, [])
+  }, [email, verificationType])
+
+  const handleResendOTP = async () => {
+    setError(null)
+    try {
+      const response = await requestOTP()
+      if (!response) {
+        throw new Error('Failed to resend verification code')
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err : new Error('Failed to resend verification code'))
+    }
+  }
 
   const handleVerify = async () => {
+    setError(null)
+
     if (Environment.devMode.bypassAuth) {
       handleVerificationSuccess()
       return
     }
 
     if (!email) {
-      console.error('Email is required for OTP verification')
+      setError(new Error('Email is required for OTP verification'))
       return
     }
 
     try {
       if (verificationType === 'login') {
         const response = await login()
-        if (response?.access_token) {
+        if (!response) {
+          throw new Error('Failed to verify OTP')
+        }
+        if (response.access_token) {
           // Store tokens in secure storage
           await SecureStore.setItemAsync('access_token', response.access_token)
           await SecureStore.setItemAsync('refresh_token', response.refresh_token)
@@ -97,7 +156,11 @@ export function useOTPVerification() {
         }
       } else if (verificationType === 'signup') {
         const response = await verifySignupOTP()
-        if (response?.signup_token) {
+        console.log('response', response)
+        if (!response) {
+          throw new Error('Failed to verify OTP')
+        }
+        if (response.signup_token) {
           router.push({
             pathname: '/password',
             params: { 
@@ -110,8 +173,8 @@ export function useOTPVerification() {
         // TODO: Implement reset password flow
         router.push('/reset-password')
       }
-    } catch (error) {
-      console.error('Failed to verify OTP:', error)
+    } catch (err) {
+      setError(err instanceof Error ? err : new Error('Failed to verify code'))
     }
   }
 
@@ -158,11 +221,10 @@ export function useOTPVerification() {
     otp,
     setOtp,
     inputRef,
-    verifyLoading,
-    verifyError,
-    loginLoading,
-    loginError,
+    error: verifyError || loginError || requestOTPError || error,
+    loading: verifyLoading || loginLoading || requestLoading,
     handleVerify,
+    handleResendOTP,
     focusInput,
     getScreenTitle,
     getScreenSubtitle,

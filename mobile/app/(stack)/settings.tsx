@@ -6,7 +6,7 @@ import { IconSymbol, IconSymbolName } from '@/components/ui/IconSymbol'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useRouter } from 'expo-router'
 import { Colors } from '@/constants/Colors'
-
+import * as SecureStore from 'expo-secure-store'
 const SETTINGS_SECTIONS = [
   {
     title: 'Account',
@@ -56,7 +56,9 @@ export default function SettingsScreen() {
   const insets = useSafeAreaInsets()
   const router = useRouter()
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await SecureStore.deleteItemAsync('refresh_token')
+    await SecureStore.deleteItemAsync('access_token')
     router.replace('/(auth)/landing')
   }
 

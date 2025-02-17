@@ -3,32 +3,35 @@ import { router } from 'expo-router'
 import { useFetch } from '@/hooks/api/useFetch'
 import { Environment } from '@/constants/Environment'
 
-interface RequestOTPResponse {
+interface VerifyEmailResponse {
+  exists: boolean
   message: string
-  email: string
 }
 
 export function useEmailSignup() {
   const [email, setEmail] = useState(
     Environment.devMode.autoFillCredentials?.email || ''
   )
+  const [error, setError] = useState<Error | null>(null)
 
   const {
-    fetch: requestOTP,
+    fetch: verifyEmail,
     loading,
-    error,
-  } = useFetch<RequestOTPResponse>((params) => ({
-    url: `${Environment.apiUrl}/auth/request-otp`,
+    error: verifyError,
+  } = useFetch<VerifyEmailResponse>(() => ({
+    url: `${Environment.apiUrl}/auth/verify-email`,
     options: {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(params),
+      body: JSON.stringify({ email }),
     },
   }))
 
   const handleContinue = async () => {
+    setError(null)
+
     if (Environment.devMode.bypassAuth) {
       router.push({
         pathname: '/otp',
@@ -38,18 +41,25 @@ export function useEmailSignup() {
     }
 
     try {
-      const response = await requestOTP({ email, type: 'signup' })
-      if (response?.email) {
-        router.push({
-          pathname: '/otp',
-          params: { 
-            email: response.email,
-            type: 'signup',
-          },
-        })
+      const response = await verifyEmail()
+      if (!response) {
+        throw new Error('Failed to verify email')
       }
-    } catch (error) {
-      console.error('Failed to send OTP:', error)
+
+      if (response.exists) {
+        throw new Error(response.message)
+      }
+
+      // Email is available, proceed to OTP page
+      router.push({
+        pathname: '/otp',
+        params: { 
+          email,
+          type: 'signup',
+        },
+      })
+    } catch (err) {
+      setError(err instanceof Error ? err : new Error('Failed to verify email'))
     }
   }
 
@@ -61,7 +71,7 @@ export function useEmailSignup() {
     email,
     setEmail,
     loading,
-    error,
+    error: error || verifyError,
     handleContinue,
     isValidEmail,
   }

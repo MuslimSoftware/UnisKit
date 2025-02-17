@@ -14,20 +14,13 @@ export default function OTPScreen() {
     otp,
     setOtp,
     inputRef,
-    verifyLoading,
-    verifyError,
-    registerLoading,
-    registerError,
-    loginLoading,
-    loginError,
+    loading,
+    error,
     handleVerify,
     focusInput,
     getScreenTitle,
     getScreenSubtitle,
   } = useOTPVerification()
-
-  const loading = verifyLoading || registerLoading || loginLoading
-  const error = verifyError || registerError || loginError
 
   return (
     <AuthScreenLayout

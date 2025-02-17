@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { Animated } from 'react-native'
 import { router } from 'expo-router'
-
+import * as SecureStore from 'expo-secure-store'
 export function useSplashAnimation(onFontsLoaded: Promise<void>) {
   const scaleAnim = new Animated.Value(0.3)
   const opacityAnim = new Animated.Value(0)
@@ -63,8 +63,14 @@ export function useSplashAnimation(onFontsLoaded: Promise<void>) {
           }
           
           // Do one final complete breath before transitioning
-          createBreathingAnimation().start(() => {
-            router.replace('/(auth)/landing')
+          createBreathingAnimation().start(async () => {
+            // Login if user is already logged in
+            const refreshToken = await SecureStore.getItemAsync('refresh_token')
+            if (refreshToken) {
+              router.replace('/(tabs)')
+            } else {
+              router.replace('/(auth)/landing')
+            }
           })
         }, 100)
       })
