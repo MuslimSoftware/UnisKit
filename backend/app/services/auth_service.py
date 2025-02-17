@@ -80,23 +80,35 @@ class AuthService:
         """Verify if OTP is valid and not expired."""
         stored = self._otp_store.get(email)
         if not stored:
-            return False
+            raise HTTPException(
+                status_code=400,
+                detail="No OTP found for this email"
+            )
         
         if datetime.utcnow() > stored['expires_at']:
             del self._otp_store[email]
-            return False
+            raise HTTPException(
+                status_code=400,
+                detail="OTP has expired"
+            )
         
         is_valid = stored['otp'] == otp
-        if is_valid:
-            del self._otp_store[email]
-        return is_valid
+        if not is_valid:
+            raise HTTPException(
+                status_code=400,
+                detail="Invalid OTP"
+            )
+            
+        # Clean up used OTP
+        del self._otp_store[email]
+        return True
 
     async def verify_email(self, email: str) -> VerifyEmailResponse:
         """Check if email exists and return appropriate message."""
         user = await self.repository.find_by_email(email)
         exists = user is not None
-        message = "Account already exists" if exists else "Email available for signup"
-        return VerifyEmailResponse(email=email, exists=exists, message=message)
+        message = "Email already in use" if exists else "Email available for registration"
+        return VerifyEmailResponse(exists=exists, message=message)
 
     async def request_otp(self, email: str, type: str) -> RequestOTPResponse:
         """Request an OTP for authentication."""
@@ -130,19 +142,23 @@ class AuthService:
 
     async def verify_signup_otp(self, email: str, otp: str) -> VerifyOTPResponse:
         """Verify OTP for signup and return temporary signup token."""
-        if not self._verify_otp(email, otp):
-            raise HTTPException(
-                status_code=400,
-                detail="Invalid or expired OTP"
+        try:
+            self._verify_otp(email, otp)
+            
+            # Generate temporary signup token
+            signup_token = self._generate_signup_token(email)
+            
+            return VerifyOTPResponse(
+                signup_token=signup_token,
+                expires_in=self._signup_token_expiry * 60  # convert to minutes to seconds
             )
-        
-        # Generate temporary signup token
-        signup_token = self._generate_signup_token(email)
-        
-        return VerifyOTPResponse(
-            signup_token=signup_token,
-            expires_in=self._signup_token_expiry * 60  # convert to seconds
-        )
+        except HTTPException as e:
+            raise e
+        except Exception as e:
+            raise HTTPException(
+                status_code=500,
+                detail="Failed to verify OTP"
+            )
 
     async def complete_signup(self, signup_token: str, password: str) -> CompleteSignupResponse:
         """Complete signup with temporary token and password."""

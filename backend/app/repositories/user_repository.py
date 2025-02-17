@@ -5,7 +5,8 @@ from app.utils.security.password import get_password_hash, verify_password
 class UserRepository:
     @staticmethod
     async def find_by_email(email: str) -> Optional[User]:
-        return await User.find_one({"email": email})
+        """Find a user by email."""
+        return await User.find_one(User.email == email)
     
     @staticmethod
     async def find_all():
@@ -13,9 +14,10 @@ class UserRepository:
     
     @staticmethod
     async def create(email: str, password: str) -> User:
-        user = User(email=email, hashed_password=get_password_hash(password))
-        await user.save()
-        return user
+        """Create a new user."""
+        hashed_password = get_password_hash(password)
+        user = User(email=email, hashed_password=hashed_password)
+        return await user.insert()
     
     @staticmethod
     async def verify_password(user: User, password: str) -> bool:

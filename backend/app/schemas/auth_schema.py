@@ -17,7 +17,6 @@ class VerifyEmailRequest(BaseModel):
     email: EmailStr
 
 class VerifyEmailResponse(BaseModel):
-    email: str
     exists: bool
     message: str
 
