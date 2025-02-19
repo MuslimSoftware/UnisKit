@@ -1,5 +1,5 @@
 from typing import Optional
-from app.database.models.user import User
+from app.models.user_model import User
 from app.utils.security.password import get_password_hash, verify_password
 
 class UserRepository:
@@ -20,5 +20,9 @@ class UserRepository:
         return await user.insert()
     
     @staticmethod
-    async def verify_password(user: User, password: str) -> bool:
-        return verify_password(password, user.hashed_password)
+    async def update_password(email: str, password: str) -> User:
+        """Update a user's password."""
+        hashed_password = get_password_hash(password)
+        return await User.find_one_and_update(User.email == email, {"$set": {"hashed_password": hashed_password}})
+    
+    

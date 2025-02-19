@@ -8,9 +8,9 @@ from fastapi.testclient import TestClient
 from motor.motor_asyncio import AsyncIOMotorClient
 from beanie import init_beanie
 
-from app.core.settings import settings
+from app.config.env import settings
 from app.main import app
-from app.database.models.user import User
+from app.models.user_model import User
 
 @pytest.fixture
 def test_client():

@@ -2,7 +2,7 @@
 import pytest
 from typing import Dict, Any
 
-from app.database.models.user import User
+from app.models.user_model import User
 from app.utils.security.password import get_password_hash
 
 @pytest.fixture

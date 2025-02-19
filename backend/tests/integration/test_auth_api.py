@@ -2,7 +2,7 @@
 import pytest
 from fastapi.testclient import TestClient
 
-from app.database.models.user import User
+from app.models.user_model import User
 
 def test_register_user(test_client: TestClient):
     """Test user registration endpoint."""
