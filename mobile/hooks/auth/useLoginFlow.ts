@@ -3,50 +3,69 @@ import { router } from 'expo-router'
 import { useFetch } from '@/hooks/api/useFetch'
 import { Environment } from '@/constants/Environment'
 
-interface RequestOTPResponse {
+interface VerifyCredentialsResponse {
+  valid: boolean
   message: string
-  email: string
 }
 
 export function useLoginFlow() {
-  const [identifier, setIdentifier] = useState(
+  const [email, setEmail] = useState(
     Environment.devMode.autoFillCredentials?.email || ''
   )
+  const [password, setPassword] = useState(
+    Environment.devMode.autoFillCredentials?.password || ''
+  )
+  const [error, setError] = useState<Error | null>(null)
 
   const {
-    fetch: requestOTP,
+    fetch: verifyCredentials,
     loading,
-    error,
-  } = useFetch<RequestOTPResponse>((params) => ({
-    url: `${Environment.apiUrl}/auth/request-otp`,
+    error: verifyError,
+  } = useFetch<VerifyCredentialsResponse>(() => ({
+    url: `${Environment.apiUrl}/auth/verify-credentials`,
     options: {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(params),
+      body: JSON.stringify({ email, password }),
     },
   }))
 
   const handleLogin = async () => {
     if (Environment.devMode.bypassAuth) {
-      router.push('/otp')
+      router.push({
+        pathname: '/otp',
+        params: { email, type: 'login' }
+      })
+      return
+    }
+
+    // Validate email format
+    if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+      setError(new Error('Please enter a valid email address'))
+      return
+    }
+
+    // Validate password
+    if (password.length < 6) {
+      setError(new Error('Password must be at least 6 characters'))
       return
     }
 
     try {
-      const response = await requestOTP({ email: identifier, type: 'login' })
-      if (response?.email) {
-        router.push({
-          pathname: '/otp',
-          params: { 
-            email: response.email,
-            type: 'login',
-          },
-        })
+      const response = await verifyCredentials()
+      if (!response || !response.valid) {
+        throw new Error(response?.message || 'Failed to verify credentials')
       }
-    } catch (error) {
-      console.error('Failed to request OTP:', error)
+
+      // Credentials verified, proceed to OTP page
+      router.push({
+        pathname: '/otp',
+        params: { email, type: 'login' }
+      })
+    } catch (err) {
+      setError(err instanceof Error ? err : new Error('Failed to verify credentials'))
     }
   }
 
@@ -54,15 +73,17 @@ export function useLoginFlow() {
     router.push('/forgot-password')
   }
 
-  const isValidForm = identifier.length > 0
+  const isValidForm = email.length > 0 && password.length >= 6
 
   return {
-    identifier,
-    setIdentifier,
+    email,
+    setEmail,
+    password,
+    setPassword,
     loading,
-    error,
+    error: verifyError || error,
     handleLogin,
     handleForgotPassword,
     isValidForm,
   }
-} 
+}

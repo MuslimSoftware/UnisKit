@@ -17,9 +17,11 @@ export default function OTPScreen() {
     loading,
     error,
     handleVerify,
+    handleResendOTP,
     focusInput,
     getScreenTitle,
     getScreenSubtitle,
+    resendCooldown,
   } = useOTPVerification()
 
   return (
@@ -32,16 +34,18 @@ export default function OTPScreen() {
     >
       <View style={styles.container}>
         <View style={styles.inputContainer}>
-          <View style={styles.otpBoxesContainer}>
+          <Pressable style={styles.otpBoxesContainer} onPress={focusInput}>
             {/** Render the OTP boxes */}
             {Array.from({ length: 6 }).map((_, index) => (
-              <Pressable
+              <View
                 key={index}
                 style={[
                   styles.otpBox,
                   {
                     backgroundColor: theme.input.background,
-                    borderColor: theme.colors.border,
+                    borderColor: error
+                      ? theme.colors.error
+                      : theme.colors.border,
                   },
                 ]}
               >
@@ -50,28 +54,41 @@ export default function OTPScreen() {
                 >
                   {otp[index] || ''}
                 </TextXLarge>
-              </Pressable>
+              </View>
             ))}
             {/** The hidden input */}
             <TextInput
               ref={inputRef}
               style={styles.hiddenInput}
               value={otp}
-              onChangeText={setOtp}
+              onChangeText={(text) => {
+                // Only allow numbers and limit to 6 digits
+                const cleanText = text.replace(/[^0-9]/g, '').slice(0, 6)
+                setOtp(cleanText)
+              }}
               keyboardType="number-pad"
               maxLength={6}
               caretHidden
               editable={!loading}
             />
-          </View>
+          </Pressable>
           <ErrorMessage
             message={error?.message}
             fallback="Failed to verify code. Please try again."
           />
           <TextSmall variant="secondary">
             Didn't receive the code?{' '}
-            <TextSmall style={[styles.link, { color: theme.colors.tint }]}>
-              Resend
+            <TextSmall
+              onPress={resendCooldown > 0 ? undefined : handleResendOTP}
+              style={[
+                styles.link,
+                {
+                  color: theme.colors.tint,
+                  opacity: loading || resendCooldown > 0 ? 0.5 : 1,
+                },
+              ]}
+            >
+              {resendCooldown > 0 ? `Resend in ${resendCooldown}s` : 'Resend'}
             </TextSmall>
           </TextSmall>
         </View>

@@ -45,6 +45,16 @@ export function useFetch<T>(
         const data = text ? JSON.parse(text) : null
 
         if (!response.ok) {
+          // FastAPI validation errors come in this format
+          if (response.status === 422 && data?.detail) {
+            console.log('Validation Error:', data.detail)
+            // FastAPI validation errors are an array of errors
+            const errors = Array.isArray(data.detail) 
+              ? data.detail[0].msg
+              : data.detail
+            throw new Error(errors)
+          }
+          
           const errorMessage = data?.detail || `Request failed with status ${response.status}`
           throw new Error(errorMessage)
         }
