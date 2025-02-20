@@ -34,15 +34,16 @@ export function useSignupPasswordFlow() {
     loading,
     error: apiError,
   } = useFetch<CompleteSignupResponse>(() => ({
-    url: `${Environment.apiUrl}/auth/complete-signup`,
+    url: `${Environment.apiUrl}/auth/signup`,
     options: {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ 
-        signup_token: signupToken,
+        email,
         password,
+        completion_token: signupToken,
       }),
     },
   }))
@@ -67,6 +68,8 @@ export function useSignupPasswordFlow() {
     try {
       const response = await completeSignup()
       if (!response) throw new Error('Failed to complete signup')
+
+      // TODO HANDLE failures
 
       // Store tokens in secure storage
       await SecureStore.setItemAsync('access_token', response.access_token)

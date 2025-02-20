@@ -4,8 +4,9 @@ import { useFetch } from '@/hooks/api/useFetch'
 import { Environment } from '@/constants/Environment'
 
 interface VerifyEmailResponse {
-  exists: boolean
-  message: string
+    exists: boolean
+    message: string
+    verify_token: string
 }
 
 export function useEmailSignup() {
@@ -19,7 +20,7 @@ export function useEmailSignup() {
     loading,
     error: verifyError,
   } = useFetch<VerifyEmailResponse>(() => ({
-    url: `${Environment.apiUrl}/auth/verify-email`,
+    url: `${Environment.apiUrl}/auth/check-email`,
     options: {
       method: 'POST',
       headers: {
@@ -56,6 +57,7 @@ export function useEmailSignup() {
         params: { 
           email,
           type: 'signup',
+          token: response.verify_token,
         },
       })
     } catch (err) {

@@ -15,8 +15,9 @@ interface LoginResponse {
 }
 
 interface VerifyOTPResponse {
-  signup_token: string
-  expires_in: number
+  valid: boolean
+  message: string
+  completion_token: string
 }
 
 interface RequestOTPResponse {
@@ -34,9 +35,12 @@ export function useOTPVerification() {
   const params = useLocalSearchParams<{
     type?: VerificationType
     email?: string
+    token?: string
   }>()
   const verificationType = params.type || 'signup'
   const email = params.email
+  const token = params.token
+
 
   // Start cooldown timer when component mounts
   useEffect(() => {
@@ -69,25 +73,7 @@ export function useOTPVerification() {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ 
-        email, 
-        type: verificationType 
-      }),
-    },
-  }))
-
-  const {
-    fetch: verifySignupOTP,
-    loading: signupVerifyLoading,
-    error: signupVerifyError,
-  } = useFetch<VerifyOTPResponse>(() => ({
-    url: `${Environment.apiUrl}/auth/verify-signup-otp`,
-    options: {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email, otp }),
+      body: JSON.stringify({ email, otp_token: token }),
     },
   }))
 
@@ -111,7 +97,7 @@ export function useOTPVerification() {
     loading: otpVerifyLoading,
     error: otpVerifyError,
   } = useFetch<VerifyOTPResponse>(() => ({
-    url: `${Environment.apiUrl}/auth/verify-otp`,
+    url: `${Environment.apiUrl}/auth/validate-otp`,
     options: {
       method: 'POST',
       headers: {
@@ -139,6 +125,9 @@ export function useOTPVerification() {
       try {
         if (!email) {
           throw new Error('Email is required')
+        }
+        if (!token) {
+          throw new Error('Token is required')
         }
         const response = await requestOTP()
         if (!response) {
@@ -201,16 +190,12 @@ export function useOTPVerification() {
           signIn()
         }
       } else if (verificationType === 'signup') {
-        const response = await verifySignupOTP()
-        if (!response) {
-          throw new Error('Failed to verify OTP')
-        }
-        if (response.signup_token) {
+        if (verifyResponse.valid) {
           router.push({
             pathname: '/password',
             params: { 
               email,
-              signup_token: response.signup_token,
+              signup_token: verifyResponse.completion_token,
             }
           })
         }
@@ -265,8 +250,8 @@ export function useOTPVerification() {
     otp,
     setOtp,
     inputRef,
-    error: otpVerifyError || signupVerifyError || loginError || requestOTPError || error,
-    loading: otpVerifyLoading || signupVerifyLoading || loginLoading || requestLoading,
+    error: otpVerifyError || loginError || requestOTPError || error,
+    loading: otpVerifyLoading || loginLoading || requestLoading,
     handleVerify,
     handleResendOTP,
     focusInput,
