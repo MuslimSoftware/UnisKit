@@ -4,8 +4,9 @@ import { useFetch } from '@/hooks/api/useFetch'
 import { Environment } from '@/constants/Environment'
 
 interface VerifyCredentialsResponse {
-  valid: boolean
-  message: string
+    valid: boolean
+    message: string
+    otp_token: string | null
 }
 
 export function useLoginFlow() {
@@ -36,7 +37,7 @@ export function useLoginFlow() {
     if (Environment.devMode.bypassAuth) {
       router.push({
         pathname: '/otp',
-        params: { email, type: 'login' }
+        params: { email, type: 'login'}
       })
       return
     }
@@ -62,7 +63,7 @@ export function useLoginFlow() {
       // Credentials verified, proceed to OTP page
       router.push({
         pathname: '/otp',
-        params: { email, type: 'login' }
+        params: { email, type: 'login', token: response.otp_token }
       })
     } catch (err) {
       setError(err instanceof Error ? err : new Error('Failed to verify credentials'))

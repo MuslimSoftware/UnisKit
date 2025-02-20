@@ -88,7 +88,7 @@ export function useOTPVerification() {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ email, otp }),
+      body: JSON.stringify({ email, completion_token: token }),
     },
   }))
 
