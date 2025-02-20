@@ -8,8 +8,6 @@ class TokenType:
     """Enum for token types."""
     ACCESS = "access"
     REFRESH = "refresh"
-    TEMP_SIGNUP = "temp_signup"
-    TEMP_VERIFY = "temp_verify"
     TEMP_OTP = "temp_otp"
 
 class JWTService:
@@ -177,16 +175,3 @@ class JWTService:
             "token_type": "bearer",
             "expires_in": self.access_token_expire_minutes * 60
         }
-
-    # Convenience methods for specific flows
-    def create_signup_verification_token(self, email: str) -> str:
-        """Create token for email verification during signup."""
-        return self.create_temporary_token(email, TokenType.TEMP_VERIFY)
-    
-    def create_otp_verification_token(self, email: str) -> str:
-        """Create token after OTP verification."""
-        return self.create_temporary_token(email, TokenType.TEMP_OTP)
-    
-    def create_signup_completion_token(self, email: str) -> str:
-        """Create token for completing signup after OTP verification."""
-        return self.create_temporary_token(email, TokenType.TEMP_SIGNUP)

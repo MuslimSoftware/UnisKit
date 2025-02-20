@@ -30,7 +30,6 @@ class VerifyCredentialsRequest(BaseModel):
     Verifies user's password before proceeding to OTP authentication."""
     email: EmailStr
     password: str
-    verify_token: str
 
 class VerifyCredentialsResponse(BaseModel):
     """Response for credential verification.

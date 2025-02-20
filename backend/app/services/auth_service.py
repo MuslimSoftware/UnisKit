@@ -31,7 +31,7 @@ class AuthService:
         if not exists:
             verify_token = self.jwt_service.create_temporary_token(
                 email,
-                TokenType.TEMP_VERIFY
+                TokenType.temp_otp
             )
         else:
             verify_token = None
@@ -48,19 +48,9 @@ class AuthService:
     async def verify_credentials(
         self,
         email: str,
-        password: str,
-        verify_token: str
+        password: str
     ) -> AuthResult:
         """Verify user credentials and return OTP token."""
-        # Verify the token from previous step
-        try:
-            self.jwt_service.verify_token(verify_token, TokenType.TEMP_VERIFY)
-        except HTTPException:
-            return AuthResult(
-                success=False,
-                message="Invalid verification token"
-            )
-
         user = await self.user_repository.find_by_email(email)
         if not user:
             return AuthResult(
@@ -104,7 +94,7 @@ class AuthService:
         # Create completion token
         completion_token = self.jwt_service.create_temporary_token(
             email,
-            TokenType.TEMP_SIGNUP
+            TokenType.TEMP_OTP
         )
 
         return AuthResult(
@@ -121,7 +111,7 @@ class AuthService:
         """Complete login and return access/refresh tokens."""
         # Verify completion token
         try:
-            self.jwt_service.verify_token(completion_token, TokenType.TEMP_SIGNUP)
+            self.jwt_service.verify_token(completion_token, TokenType.TEMP_OTP)
         except HTTPException:
             return AuthResult(
                 success=False,
@@ -154,7 +144,7 @@ class AuthService:
         """Complete signup and return access/refresh tokens."""
         # Verify completion token
         try:
-            self.jwt_service.verify_token(completion_token, TokenType.TEMP_SIGNUP)
+            self.jwt_service.verify_token(completion_token, TokenType.TEMP_OTP)
         except HTTPException:
             return AuthResult(
                 success=False,

@@ -46,8 +46,7 @@ async def verify_credentials(request: VerifyCredentialsRequest) -> VerifyCredent
     """Verify credentials and get OTP token."""
     result = await auth_service.verify_credentials(
         request.email,
-        request.password,
-        request.verify_token
+        request.password
     )
     if not result.success:
         raise HTTPException(status_code=401, detail=result.message)
@@ -63,7 +62,7 @@ async def request_otp(request: RequestOTPRequest) -> RequestOTPResponse:
     """Request OTP using OTP token."""
     # Verify OTP token before proceeding
     try:
-        jwt_service.verify_token(request.otp_token, TokenType.TEMP_VERIFY)
+        jwt_service.verify_token(request.otp_token, TokenType.TEMP_OTP)
     except HTTPException as e:
         raise HTTPException(status_code=401, detail="Invalid OTP token")
     
@@ -93,7 +92,7 @@ async def validate_otp(request: ValidateOTPRequest) -> ValidateOTPResponse:
 @router.post("/login", response_model=LoginResponse)
 async def login(request: LoginRequest) -> LoginResponse:
     """Complete login and get access/refresh tokens."""
-    result = await auth_service.complete_login(
+    result = await auth_service.login(
         request.email,
         request.completion_token
     )
