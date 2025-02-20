@@ -20,7 +20,7 @@ class OTPService:
         self._otp_store = {}
         self._otp_length = 6
         self._otp_expiry = 10  # minutes
-        
+    
     def _generate_otp(self) -> str:
         """Generate a random OTP."""
         return ''.join(random.choices(string.digits, k=self._otp_length))
@@ -55,7 +55,7 @@ class OTPService:
         
         return OTPResult(
             success=True,
-            message="OTP sent successfully",
+            message="Verification code sent",
             expires_in=self._otp_expiry * 60  # convert to seconds
         )
     
@@ -75,14 +75,14 @@ class OTPService:
         if not stored:
             return OTPResult(
                 success=False,
-                message="No OTP found for this email"
+                message="No verification code found for this email"
             )
         
         if self._is_expired(stored):
             del self._otp_store[email]
             return OTPResult(
                 success=False,
-                message="OTP has expired"
+                message="Verification code has expired"
             )
         
         is_valid = stored['otp'] == otp
@@ -93,7 +93,7 @@ class OTPService:
             
         return OTPResult(
             success=is_valid,
-            message="OTP verified successfully" if is_valid else "Invalid OTP"
+            message="Code verified successfully" if is_valid else "Invalid code"
         )
     
     def clear_otp(self, email: str) -> None:

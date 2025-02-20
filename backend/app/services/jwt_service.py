@@ -2,161 +2,191 @@ from datetime import datetime, timedelta
 from typing import Optional, Dict, Tuple
 from jose import jwt, JWTError
 from app.config.env import settings
+from fastapi import HTTPException
+
+class TokenType:
+    """Enum for token types."""
+    ACCESS = "access"
+    REFRESH = "refresh"
+    TEMP_SIGNUP = "temp_signup"
+    TEMP_VERIFY = "temp_verify"
+    TEMP_OTP = "temp_otp"
 
 class JWTService:
-    """Service for handling JWT tokens."""
+    """Service for handling JWT tokens and authentication flows."""
 
     def __init__(self):
         self.secret_key = settings.JWT_SECRET_KEY
         self.algorithm = settings.JWT_ALGORITHM
+        
+        # Token expiration times
         self.access_token_expire_minutes = settings.ACCESS_TOKEN_EXPIRE_MINUTES
-        # 7 days for refresh token
-        self.refresh_token_expire_days = 7
-        # 15 minutes for signup token
-        self.signup_token_expire_minutes = 15
+        self.refresh_token_expire_days = settings.REFRESH_TOKEN_EXPIRE_DAYS
+        self.temp_token_expire_minutes = 15  # Temporary tokens expire in 15 minutes
 
     def _create_token(
         self,
         subject: str,
-        expires_delta: timedelta,
         token_type: str,
+        expires_delta: timedelta,
         additional_data: Optional[Dict] = None
     ) -> str:
         """
-        Create a JWT token with the given subject and expiration.
-
+        Create a JWT token with standard claims and optional additional data.
+        
         Args:
-            subject: The subject of the token (usually user email)
+            subject: The subject (usually user email)
+            token_type: Type of token (access, refresh, temp)
             expires_delta: Token expiration time
-            token_type: Type of token (access, refresh, signup)
-            additional_data: Additional claims to include in the token
-
+            additional_data: Additional claims to include
+            
         Returns:
-            str: The encoded JWT token
+            Encoded JWT token
         """
+        expires_at = datetime.utcnow() + expires_delta
+        
         to_encode = {
-            "sub": str(subject),
+            "sub": subject,
             "type": token_type,
             "iat": datetime.utcnow(),
-            "exp": datetime.utcnow() + expires_delta
+            "exp": expires_at
         }
         
         if additional_data:
             to_encode.update(additional_data)
-
+            
         return jwt.encode(to_encode, self.secret_key, algorithm=self.algorithm)
 
-    def create_access_token(self, subject: str) -> str:
+    def create_tokens(self, subject: str) -> Dict[str, str]:
         """
-        Create a new access token.
-
+        Create both access and refresh tokens for a user.
+        Used after successful login/signup.
+        
         Args:
-            subject: The subject of the token (usually user email)
-
+            subject: User identifier (usually email)
+            
         Returns:
-            str: The encoded access token
+            Dict containing access and refresh tokens with their expiry
         """
-        expires_delta = timedelta(minutes=self.access_token_expire_minutes)
-        return self._create_token(subject, expires_delta, "access")
+        access_token = self._create_token(
+            subject=subject,
+            token_type=TokenType.ACCESS,
+            expires_delta=timedelta(minutes=self.access_token_expire_minutes)
+        )
+        
+        refresh_token = self._create_token(
+            subject=subject,
+            token_type=TokenType.REFRESH,
+            expires_delta=timedelta(days=self.refresh_token_expire_days)
+        )
+        
+        return {
+            "access_token": access_token,
+            "refresh_token": refresh_token,
+            "token_type": "bearer",
+            "expires_in": self.access_token_expire_minutes * 60  # in seconds
+        }
 
-    def create_refresh_token(self, subject: str) -> str:
+    def create_temporary_token(
+        self,
+        subject: str,
+        token_type: str,
+        additional_data: Optional[Dict] = None
+    ) -> str:
         """
-        Create a new refresh token.
-
+        Create a temporary token for intermediate authentication steps.
+        
         Args:
-            subject: The subject of the token (usually user email)
-
+            subject: User identifier (usually email)
+            token_type: Specific temporary token type
+            additional_data: Additional claims to include
+            
         Returns:
-            str: The encoded refresh token
+            Temporary JWT token
         """
-        expires_delta = timedelta(days=self.refresh_token_expire_days)
-        return self._create_token(subject, expires_delta, "refresh")
-
-    def create_signup_token(self, email: str, otp_verified: bool = True) -> str:
-        """
-        Create a temporary token for completing signup.
-
-        Args:
-            email: The email address of the signing up user
-            otp_verified: Whether OTP has been verified
-
-        Returns:
-            str: The encoded signup token
-        """
-        expires_delta = timedelta(minutes=self.signup_token_expire_minutes)
-        additional_data = {"otp_verified": otp_verified}
-        return self._create_token(email, expires_delta, "signup", additional_data)
-
-    def create_token_pair(self, subject: str) -> Tuple[str, str]:
-        """
-        Create both access and refresh tokens.
-
-        Args:
-            subject: The subject of the tokens (usually user email)
-
-        Returns:
-            Tuple[str, str]: A tuple of (access_token, refresh_token)
-        """
-        access_token = self.create_access_token(subject)
-        refresh_token = self.create_refresh_token(subject)
-        return access_token, refresh_token
+        return self._create_token(
+            subject=subject,
+            token_type=token_type,
+            expires_delta=timedelta(minutes=self.temp_token_expire_minutes),
+            additional_data=additional_data
+        )
 
     def verify_token(
         self,
         token: str,
         expected_type: Optional[str] = None
-    ) -> Optional[Dict]:
+    ) -> Dict:
         """
-        Verify a JWT token and return its payload.
-
+        Verify and decode a JWT token.
+        
         Args:
             token: The JWT token to verify
-            expected_type: The expected token type (access, refresh, signup)
-
+            expected_type: Expected token type
+            
         Returns:
-            Optional[Dict]: The token payload if valid, None otherwise
+            Decoded token payload
+            
+        Raises:
+            HTTPException: If token is invalid or expired
         """
         try:
-            payload = jwt.decode(token, self.secret_key, algorithms=[self.algorithm])
+            payload = jwt.decode(
+                token,
+                self.secret_key,
+                algorithms=[self.algorithm]
+            )
             
-            # Verify token type if expected_type is provided
+            # Verify token type if specified
             if expected_type and payload.get("type") != expected_type:
-                return None
+                raise HTTPException(
+                    status_code=401,
+                    detail=f"Invalid token type. Expected {expected_type}"
+                )
                 
             return payload
-        except JWTError:
-            return None
+            
+        except JWTError as e:
+            raise HTTPException(
+                status_code=401,
+                detail=f"Invalid or expired token: {str(e)}"
+            )
 
-    def refresh_access_token(self, refresh_token: str) -> Optional[str]:
+    def refresh_access_token(self, refresh_token: str) -> Dict[str, str]:
         """
         Create a new access token using a refresh token.
-
+        
         Args:
-            refresh_token: The refresh token to use
-
+            refresh_token: Valid refresh token
+            
         Returns:
-            Optional[str]: A new access token if the refresh token is valid,
-                          None otherwise
+            Dict with new access token and expiry
+            
+        Raises:
+            HTTPException: If refresh token is invalid
         """
-        payload = self.verify_token(refresh_token, "refresh")
-        if not payload:
-            return None
+        payload = self.verify_token(refresh_token, TokenType.REFRESH)
+        
+        access_token = self._create_token(
+            subject=payload["sub"],
+            token_type=TokenType.ACCESS,
+            expires_delta=timedelta(minutes=self.access_token_expire_minutes)
+        )
+        
+        return {
+            "access_token": access_token,
+            "token_type": "bearer",
+            "expires_in": self.access_token_expire_minutes * 60
+        }
 
-        return self.create_access_token(payload["sub"])
-
-    def verify_signup_token(self, token: str) -> Optional[Dict]:
-        """
-        Verify a signup token and return its payload.
-
-        Args:
-            token: The signup token to verify
-
-        Returns:
-            Optional[Dict]: The token payload if valid and OTP was verified,
-                           None otherwise
-        """
-        payload = self.verify_token(token, "signup")
-        if not payload or not payload.get("otp_verified"):
-            return None
-
-        return payload 
+    # Convenience methods for specific flows
+    def create_signup_verification_token(self, email: str) -> str:
+        """Create token for email verification during signup."""
+        return self.create_temporary_token(email, TokenType.TEMP_VERIFY)
+    
+    def create_otp_verification_token(self, email: str) -> str:
+        """Create token after OTP verification."""
+        return self.create_temporary_token(email, TokenType.TEMP_OTP)
+    
+    def create_signup_completion_token(self, email: str) -> str:
+        """Create token for completing signup after OTP verification."""
+        return self.create_temporary_token(email, TokenType.TEMP_SIGNUP)

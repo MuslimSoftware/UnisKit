@@ -1,4 +1,5 @@
 from pydantic import BaseModel, EmailStr
+from typing import Optional
 
 class TokenResponse(BaseModel):
     """Base response schema for authentication tokens.
@@ -21,6 +22,7 @@ class UserExistsResponse(BaseModel):
     signup (exists=false) flow."""
     exists: bool
     message: str
+    verify_token: Optional[str] = None
 
 # Credential verification   
 class VerifyCredentialsRequest(BaseModel):
@@ -28,20 +30,20 @@ class VerifyCredentialsRequest(BaseModel):
     Verifies user's password before proceeding to OTP authentication."""
     email: EmailStr
     password: str
+    verify_token: str
 
 class VerifyCredentialsResponse(BaseModel):
     """Response for credential verification.
     If valid=true, returns a temporary token used for requesting OTP."""
     valid: bool
-    token: str
     message: str
+    otp_token: Optional[str] = None  # Token for requesting OTP
 
 # OTP request
 class RequestOTPRequest(BaseModel):
-    """Second step in authentication flow.
-    Requests OTP using token from credential verification."""
+    """Request OTP using token from credential verification."""
     email: EmailStr
-    token: str
+    otp_token: str  # Token from credential verification
 
 class RequestOTPResponse(BaseModel):
     """Response after OTP is sent.
@@ -62,14 +64,14 @@ class ValidateOTPResponse(BaseModel):
     If valid=true, provides token for final login/signup step."""
     valid: bool
     message: str
-    token: str
+    completion_token: Optional[str] = None  # Token for completing auth
 
 # Login completion
 class LoginRequest(BaseModel):
     """Final step in login flow.
     Exchanges validated OTP token for permanent access tokens."""
     email: EmailStr
-    token: str
+    completion_token: str  # Token from OTP validation
 
 class LoginResponse(TokenResponse):
     """Successful login response.
@@ -81,7 +83,8 @@ class SignupRequest(BaseModel):
     """Final step in signup flow.
     Creates new user account and returns authentication tokens."""
     email: EmailStr
-    token: str
+    password: str
+    completion_token: str  # Token from OTP validation
 
 class SignupResponse(TokenResponse):
     """Successful signup response.
