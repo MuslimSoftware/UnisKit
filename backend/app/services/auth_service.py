@@ -1,173 +1,151 @@
-from dataclasses import dataclass
-from typing import Optional, Dict
 from fastapi import HTTPException
 
 from app.services.jwt_service import JWTService, TokenType
-from app.services.otp_service import OTPService, OTPResult
+from app.services.otp_service import OTPService, OTPType
 from app.repositories.user_repository import UserRepository
-from app.models.user_model import User
-from app.config.env import settings
 from passlib.context import CryptContext
+from app.schemas.auth_dtos import AuthResult
+from app.exceptions import DatabaseConnectionError, DatabaseQueryError
+from app.services.base_service import BaseService
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-@dataclass
-class AuthResult:
-    """Standard result for auth operations."""
-    success: bool
-    message: str
-    data: Optional[Dict] = None
-
-class AuthService:
+class AuthService(BaseService):
     def __init__(self):
         self.user_repository = UserRepository()
         self.jwt_service = JWTService()
         self.otp_service = OTPService()
 
-    async def check_email_exists(self, email: str) -> AuthResult:
-        """Check if email exists and return verify token."""
-        exists = await self.user_repository.find_by_email(email) is not None
-
-        if not exists:
-            verify_token = self.jwt_service.create_temporary_token(
-                email,
-                TokenType.temp_otp
-            )
-        else:
-            verify_token = None
-
+    async def check_email_availability(self, email: str) -> AuthResult:
+        """Check if user with email exists."""
+        result = await self.user_repository.find_by_email(email) is not None
         return AuthResult(
-            success=True,
-            message="User exists" if exists else "User does not exist",
-            data={
-                "exists": exists,
-                "verify_token": verify_token
-            }
+            success=result,
+            message="Email exists" if result else "Email does not exist"
         )
 
     async def verify_credentials(
         self,
         email: str,
         password: str
-    ) -> AuthResult:
+    ) -> bool:
         """Verify user credentials and return OTP token."""
         user = await self.user_repository.find_by_email(email)
         if not user:
-            return AuthResult(
-                success=False,
-                message="User not found"
-            )
+            return False
 
         if not pwd_context.verify(password, user.hashed_password):
+            return False
+
+        return True
+
+    async def request_otp(self, email: str, token: str) -> AuthResult:
+        """Request OTP based on the verification token type."""
+        try:
+            self.jwt_service.verify_token(token, token_type=TokenType.AUTH)
+            result = self.otp_service.request_otp(email)
+            return AuthResult(
+                success=result.success,
+                message=result.message,
+                data={"expires_in": result.expires_in}
+            )
+        except HTTPException:
             return AuthResult(
                 success=False,
-                message="Invalid password"
+                message="Invalid verification token"
             )
-
-        # Create token for OTP request
-        otp_token = self.jwt_service.create_temporary_token(
-            email,
-            TokenType.TEMP_OTP
-        )
-
-        return AuthResult(
-            success=True,
-            message="Credentials verified",
-            data={"otp_token": otp_token}
-        )
 
     async def validate_otp(
         self,
         email: str,
         otp: str
-    ) -> AuthResult:
+    ) -> bool:
         """Validate OTP and return completion token."""
-
         # Verify the OTP
-        result = self.otp_service.verify_otp(email, otp)
-        if not result.success:
-            return AuthResult(
-                success=False,
-                message=result.message
-            )
+        isValid = self.otp_service.verify_otp(email, otp)
+        if not isValid:
+            return False
 
-        # Create completion token
-        completion_token = self.jwt_service.create_temporary_token(
-            email,
-            TokenType.TEMP_OTP
-        )
-
-        return AuthResult(
-            success=True,
-            message="OTP verified",
-            data={"completion_token": completion_token}
-        )
+        return True
 
     async def login(
         self,
         email: str,
-        completion_token: str
+        password: str,
+        token: str
     ) -> AuthResult:
         """Complete login and return access/refresh tokens."""
-        # Verify completion token
         try:
-            self.jwt_service.verify_token(completion_token, TokenType.TEMP_OTP)
+            self.jwt_service.verify_token(token, token_type=TokenType.AUTH)
+
+            # Verify password
+            user = await self.user_repository.find_by_email(email)
+            if not user or not pwd_context.verify(password, user.hashed_password):
+                return AuthResult(
+                    success=False,
+                    message="Invalid credentials"
+                )
+
+            # Create final tokens
+            tokens = self.jwt_service.create_tokens(email)
+
+            return AuthResult(
+                success=True,
+                message="Login successful",
+                data=tokens
+            )
         except HTTPException:
             return AuthResult(
                 success=False,
                 message="Invalid completion token"
             )
-
-        user = await self.user_repository.find_by_email(email)
-        if not user:
-            return AuthResult(
-                success=False,
-                message="User not found"
-            )
-
-        # Create final tokens
-        tokens = self.jwt_service.create_tokens(email)
-        tokens["user_id"] = str(user.id)
-
-        return AuthResult(
-            success=True,
-            message="Login successful",
-            data=tokens
-        )
 
     async def signup(
         self,
         email: str,
         password: str,
-        completion_token: str
+        token: str
     ) -> AuthResult:
         """Complete signup and return access/refresh tokens."""
-        # Verify completion token
         try:
-            self.jwt_service.verify_token(completion_token, TokenType.TEMP_OTP)
+            self.jwt_service.verify_token(token, token_type=TokenType.AUTH)
+
+            # Create user
+            user = await self.user_repository.create(email, password)
+            if not user:
+                return AuthResult(
+                    success=False,
+                    message="Failed to create user"
+                )
+
+            # Create final tokens
+            tokens = self.jwt_service.create_tokens(email)
+            tokens["user_id"] = str(user.id)
+
+            return AuthResult(
+                success=True,
+                message="Signup successful",
+                data=tokens
+            )
         except HTTPException:
             return AuthResult(
                 success=False,
                 message="Invalid completion token"
             )
-
-        # Create user
-        user = await self.user_repository.create(email, password)
-        if not user:
-            return AuthResult(
-                success=False,
-                message="Failed to create user"
-            )
-
-        # Create final tokens
-        tokens = self.jwt_service.create_tokens(email)
-        tokens["user_id"] = str(user.id)
-
-        return AuthResult(
-            success=True,
-            message="Signup successful",
-            data=tokens
-        )
+        
+    async def reset_password(
+        self,
+        email: str,
+        password: str,
+        token: str
+    ) -> AuthResult:
+        """Reset password and return success message."""
+        try:
+            self.jwt_service.verify_token(token, token_type=TokenType.AUTH)
+            await self.user_repository.update_password(email, password)
+            return AuthResult(success=True, message="Password reset successful")
+        except HTTPException:
+            return AuthResult(success=False, message="Invalid completion token")
     
     
     

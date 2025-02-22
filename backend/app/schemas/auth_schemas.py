@@ -22,7 +22,6 @@ class UserExistsResponse(BaseModel):
     signup (exists=false) flow."""
     exists: bool
     message: str
-    verify_token: Optional[str] = None
 
 # Credential verification   
 class VerifyCredentialsRequest(BaseModel):
@@ -36,13 +35,11 @@ class VerifyCredentialsResponse(BaseModel):
     If valid=true, returns a temporary token used for requesting OTP."""
     valid: bool
     message: str
-    otp_token: Optional[str] = None  # Token for requesting OTP
 
 # OTP request
 class RequestOTPRequest(BaseModel):
     """Request OTP using token from credential verification."""
     email: EmailStr
-    otp_token: str  # Token from credential verification
 
 class RequestOTPResponse(BaseModel):
     """Response after OTP is sent.
@@ -70,6 +67,7 @@ class LoginRequest(BaseModel):
     """Final step in login flow.
     Exchanges validated OTP token for permanent access tokens."""
     email: EmailStr
+    password: str
     completion_token: str  # Token from OTP validation
 
 class LoginResponse(TokenResponse):
@@ -96,8 +94,10 @@ class ResetPasswordRequest(BaseModel):
     Requires email and new password."""
     email: EmailStr
     password: str
+    completion_token: str  # Token from OTP validation
 
 class ResetPasswordResponse(BaseModel):
     """Response after password reset.
     Confirms that password has been updated successfully."""
+    success: bool
     message: str

@@ -1,6 +1,5 @@
 from fastapi import APIRouter, HTTPException
 from app.services.auth_service import AuthService
-from app.services.user_service import UserService
 from app.schemas.auth_schemas import (
     UserExistsRequest,
     UserExistsResponse,
@@ -19,6 +18,7 @@ from app.schemas.auth_schemas import (
 )
 from app.services.otp_service import OTPService
 from app.services.jwt_service import JWTService, TokenType
+from app.schemas.auth_dtos import AuthResult
 
 prefix = "/auth"
 tags = ["Authentication"]
@@ -32,74 +32,81 @@ otp_service = OTPService()
 jwt_service = JWTService()
 
 @router.post("/check-email", response_model=UserExistsResponse)
-async def check_email(request: UserExistsRequest) -> UserExistsResponse:
+async def check_email_availability(request: UserExistsRequest) -> UserExistsResponse:
     """Check if email exists and get verification token."""
-    result = await auth_service.check_email_exists(request.email)
+    result: AuthResult = await auth_service.check_email_availability(request.email)
+
     return UserExistsResponse(
-        exists=result.data["exists"],
-        message=result.message,
-        verify_token=result.data["verify_token"]
+        exists=result.success,
+        message=result.message
     )
 
 @router.post("/verify-credentials", response_model=VerifyCredentialsResponse)
 async def verify_credentials(request: VerifyCredentialsRequest) -> VerifyCredentialsResponse:
     """Verify credentials and get OTP token."""
-    result = await auth_service.verify_credentials(
+    isValid = await auth_service.verify_credentials(
         request.email,
         request.password
     )
-    if not result.success:
-        raise HTTPException(status_code=401, detail=result.message)
+    if not isValid:
+        raise HTTPException(status_code=401, detail="Invalid credentials")
     
     return VerifyCredentialsResponse(
-        valid=result.success,
-        message=result.message,
-        otp_token=result.data["otp_token"]
+        valid=isValid,
+        message="Credentials verified"
     )
 
 @router.post("/request-otp", response_model=RequestOTPResponse)
 async def request_otp(request: RequestOTPRequest) -> RequestOTPResponse:
-    """Request OTP using OTP token."""
-    # Verify OTP token before proceeding
-    try:
-        jwt_service.verify_token(request.otp_token, TokenType.TEMP_OTP)
-    except HTTPException as e:
-        raise HTTPException(status_code=401, detail="Invalid OTP token")
+    """Request OTP using verification token."""
+    result = await auth_service.request_otp(request.email, request.otp_token)
+    if not result.success:
+        raise HTTPException(status_code=401, detail=result.message)
     
-    result = auth_service.otp_service.request_otp(request.email)
     return RequestOTPResponse(
         message=result.message,
-        expires_in=result.expires_in,
+        expires_in=result.data["expires_in"],
         email=request.email
     )
 
 @router.post("/validate-otp", response_model=ValidateOTPResponse)
 async def validate_otp(request: ValidateOTPRequest) -> ValidateOTPResponse:
     """Validate OTP and get completion token."""
-    result = await auth_service.validate_otp(
+    isValid = await auth_service.validate_otp(
         request.email,
         request.otp
     )
-    if not result.success:
-        raise HTTPException(status_code=401, detail=result.message)
+
+    if not isValid:
+        raise HTTPException(status_code=401, detail="Invalid OTP")
+
+    completion_token = jwt_service.create_auth_token(request.email)
     
     return ValidateOTPResponse(
-        valid=result.success,
-        message=result.message,
-        completion_token=result.data["completion_token"]
+        valid=isValid,
+        message="OTP verified successfully",
+        completion_token=completion_token
     )
 
+# TODO: De-couple auth service functions
 @router.post("/login", response_model=LoginResponse)
 async def login(request: LoginRequest) -> LoginResponse:
     """Complete login and get access/refresh tokens."""
     result = await auth_service.login(
         request.email,
+        request.password,
         request.completion_token
     )
     if not result.success:
         raise HTTPException(status_code=401, detail=result.message)
     
-    return LoginResponse(**result.data)
+    return LoginResponse(
+        access_token=result.data["access_token"],
+        refresh_token=result.data["refresh_token"],
+        token_type=result.data["token_type"],
+        expires_in=result.data["expires_in"],
+        user_id=result.data["user_id"]
+    )
 
 @router.post("/signup", response_model=SignupResponse)
 async def signup(request: SignupRequest) -> SignupResponse:
@@ -112,8 +119,26 @@ async def signup(request: SignupRequest) -> SignupResponse:
     if not result.success:
         raise HTTPException(status_code=401, detail=result.message)
     
-    return SignupResponse(**result.data)
+    return SignupResponse(
+        access_token=result.data["access_token"],
+        refresh_token=result.data["refresh_token"],
+        token_type=result.data["token_type"],
+        expires_in=result.data["expires_in"],
+        user_id=result.data["user_id"]
+    )
 
 @router.post("/reset-password", response_model=ResetPasswordResponse)
 async def reset_password(request: ResetPasswordRequest):
-    return await auth_service.reset_password(request.email, request.password)
+    result = await auth_service.reset_password(
+        request.email,
+        request.password,
+        request.completion_token
+    )
+
+    if not result.success:
+        raise HTTPException(status_code=401, detail=result.message)
+    
+    return ResetPasswordResponse(
+        success=result.success,
+        message=result.message
+    )

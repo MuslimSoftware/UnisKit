@@ -1,9 +1,13 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from app.config.env import settings
 from app.config.db_config import init_db
 from app.controllers import auth_controller, user_controller
+from backend.app.schemas.common_dtos import Result
+import logging
 
+logger = logging.getLogger(__name__)
 
 async def lifespan(app: FastAPI):
     await init_db()
@@ -15,6 +19,14 @@ app = FastAPI(
     version=settings.PROJECT_VERSION,
     lifespan=lifespan,
 )
+
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    logger.error(f"An unexpected error occurred: {exc} on {request}")
+    return JSONResponse(
+        status_code=500,
+        content={"success": False, "message": "An unexpected error occurred"}
+    )
 
 # Configure CORS
 app.add_middleware(

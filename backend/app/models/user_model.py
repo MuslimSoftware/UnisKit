@@ -1,6 +1,5 @@
 from beanie import Document
 from pydantic import EmailStr, Field
-from typing import Optional
 from datetime import datetime
 
 class User(Document):
@@ -20,6 +19,8 @@ class User(Document):
             "example": {
                 "email": "user@example.com",
                 "hashed_password": "hashedpassword123",
-                "is_active": True
+                "is_active": True,
+                "created_at": "2021-01-01T00:00:00Z",
+                "updated_at": "2021-01-01T00:00:00Z"
             }
         } 

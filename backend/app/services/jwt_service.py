@@ -3,14 +3,18 @@ from typing import Optional, Dict, Tuple
 from jose import jwt, JWTError
 from app.config.env import settings
 from fastapi import HTTPException
+from app.services.base_service import BaseService
 
 class TokenType:
-    """Enum for token types."""
+    """Token types for different stages of authentication."""
+    # Permanent tokens
     ACCESS = "access"
     REFRESH = "refresh"
-    TEMP_OTP = "temp_otp"
 
-class JWTService:
+    # Used for auth flow
+    AUTH = "auth"
+
+class JWTService(BaseService):
     """Service for handling JWT tokens and authentication flows."""
 
     def __init__(self):
@@ -85,26 +89,17 @@ class JWTService:
             "expires_in": self.access_token_expire_minutes * 60  # in seconds
         }
 
-    def create_temporary_token(
+    def create_auth_token(
         self,
         subject: str,
-        token_type: str,
         additional_data: Optional[Dict] = None
     ) -> str:
         """
         Create a temporary token for intermediate authentication steps.
-        
-        Args:
-            subject: User identifier (usually email)
-            token_type: Specific temporary token type
-            additional_data: Additional claims to include
-            
-        Returns:
-            Temporary JWT token
         """
         return self._create_token(
             subject=subject,
-            token_type=token_type,
+            token_type=TokenType.AUTH,
             expires_delta=timedelta(minutes=self.temp_token_expire_minutes),
             additional_data=additional_data
         )
@@ -112,14 +107,13 @@ class JWTService:
     def verify_token(
         self,
         token: str,
-        expected_type: Optional[str] = None
+        token_type: Optional[str] = None
     ) -> Dict:
         """
         Verify and decode a JWT token.
         
         Args:
             token: The JWT token to verify
-            expected_type: Expected token type
             
         Returns:
             Decoded token payload
@@ -134,15 +128,12 @@ class JWTService:
                 algorithms=[self.algorithm]
             )
             
-            # Verify token type if specified
-            if expected_type and payload.get("type") != expected_type:
+            if token_type and payload.get("type") != token_type:
                 raise HTTPException(
                     status_code=401,
-                    detail=f"Invalid token type. Expected {expected_type}"
+                    detail="Invalid token type"
                 )
-                
             return payload
-            
         except JWTError as e:
             raise HTTPException(
                 status_code=401,

@@ -1,8 +1,10 @@
 from typing import Optional
 from app.models.user_model import User
-from app.utils.security.password import get_password_hash, verify_password
 from fastapi import HTTPException
-class UserRepository:
+from app.repositories.base_repository import BaseRepository
+from app.utils.security.password import get_password_hash
+
+class UserRepository(BaseRepository):
     @staticmethod
     async def find_by_email(email: str) -> Optional[User]:
         """Find a user by email."""
