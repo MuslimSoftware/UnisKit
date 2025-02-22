@@ -3,8 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from app.config.env import settings
 from app.config.db_config import init_db
-from app.controllers import auth_controller, user_controller
-from backend.app.schemas.common_dtos import Result
+from app.features.user.controllers import user_controller
+from app.features.auth.controllers import auth_controller
 import logging
 
 logger = logging.getLogger(__name__)

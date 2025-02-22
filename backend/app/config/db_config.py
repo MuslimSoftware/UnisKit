@@ -1,6 +1,6 @@
 from motor.motor_asyncio import AsyncIOMotorClient
 from beanie import init_beanie
-from app.models import User
+from app.features.user.models.user_model import User
 from .env import settings
 
 async def init_db():
