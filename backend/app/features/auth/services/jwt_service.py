@@ -3,7 +3,7 @@ from typing import Optional, Dict
 from jose import jwt, JWTError
 from app.config.env import settings
 from fastapi import HTTPException
-from app.features.common.services.base_service import BaseService
+from app.features.common.base.base_service import BaseService
 
 class TokenType:
     """Token types for different stages of authentication."""

@@ -1,3 +1,4 @@
+from typing import Optional
 from fastapi import HTTPException
 
 from app.features.auth.services.jwt_service import JWTService, TokenType
@@ -5,7 +6,8 @@ from app.features.common.services.otp_service import OTPService
 from app.features.user.repositories.user_repository import UserRepository
 from passlib.context import CryptContext
 from app.features.auth.schemas.auth_dtos import AuthResult
-from app.features.common.services.base_service import BaseService
+from app.features.common.base.base_service import BaseService
+from backend.app.features.user.models.user_model import User
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -17,26 +19,35 @@ class AuthService(BaseService):
 
     async def check_email_availability(self, email: str) -> AuthResult:
         """Check if user with email exists."""
-        result = await self.user_repository.find_by_email(email) is not None
+        exists: bool = await self.user_repository.find_by_email(email) is not None
         return AuthResult(
-            success=result,
-            message="Email exists" if result else "Email does not exist"
+            success=exists,
+            message="Email exists" if exists else "Email does not exist"
         )
 
     async def verify_credentials(
         self,
         email: str,
         password: str
-    ) -> bool:
+    ) -> AuthResult:
         """Verify user credentials and return OTP token."""
-        user = await self.user_repository.find_by_email(email)
+        user: Optional[User] = await self.user_repository.find_by_email(email)
         if not user:
-            return False
+            return AuthResult(
+                success=False,
+                message="Email or password is incorrect"
+            )
 
         if not pwd_context.verify(password, user.hashed_password):
-            return False
+            return AuthResult(
+                success=False,
+                message="Email or password is incorrect"
+            )
 
-        return True
+        return AuthResult(
+            success=True,
+            message="Credentials verified"
+        )
 
     async def request_otp(self, email: str, token: str) -> AuthResult:
         """Request OTP based on the verification token type."""

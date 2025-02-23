@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from typing import Optional, Literal
 import random
 import string
-from app.features.common.services.base_service import BaseService
+from app.features.common.base.base_service import BaseService
 
 OTPType = Literal["signup", "login", "reset"]
 

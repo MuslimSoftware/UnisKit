@@ -17,7 +17,7 @@ from app.features.auth.schemas.auth_schemas import (
     ResetPasswordResponse,
 )
 from app.features.common.services.otp_service import OTPService
-from app.features.auth.services.jwt_service import JWTService, TokenType
+from app.features.auth.services.jwt_service import JWTService
 from app.features.auth.schemas.auth_dtos import AuthResult
 
 prefix = "/auth"
@@ -44,22 +44,22 @@ async def check_email_availability(request: UserExistsRequest) -> UserExistsResp
 @router.post("/verify-credentials", response_model=VerifyCredentialsResponse)
 async def verify_credentials(request: VerifyCredentialsRequest) -> VerifyCredentialsResponse:
     """Verify credentials and get OTP token."""
-    isValid = await auth_service.verify_credentials(
+    result: AuthResult = await auth_service.verify_credentials(
         request.email,
         request.password
     )
-    if not isValid:
-        raise HTTPException(status_code=401, detail="Invalid credentials")
+    if not result.success:
+        raise HTTPException(status_code=401, detail=result.message)
     
     return VerifyCredentialsResponse(
-        valid=isValid,
-        message="Credentials verified"
+        success=result.success,
+        message=result.message
     )
 
 @router.post("/request-otp", response_model=RequestOTPResponse)
 async def request_otp(request: RequestOTPRequest) -> RequestOTPResponse:
     """Request OTP using verification token."""
-    result = await auth_service.request_otp(request.email, request.otp_token)
+    result: AuthResult = await auth_service.request_otp(request.email, request.otp_token)
     if not result.success:
         raise HTTPException(status_code=401, detail=result.message)
     

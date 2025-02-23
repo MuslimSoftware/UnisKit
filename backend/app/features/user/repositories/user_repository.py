@@ -1,7 +1,7 @@
 from typing import Optional
 from app.features.user.models.user_model import User
 from fastapi import HTTPException
-from app.features.common.repositories.base_repository import BaseRepository
+from app.features.common.base.base_repository import BaseRepository
 from passlib.context import CryptContext
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
