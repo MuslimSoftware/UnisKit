@@ -1,5 +1,5 @@
 from functools import wraps
-from app.features.common.schemas.common_dtos import Result
+from app.features.common.schemas.common_dtos import ServiceResult
 import logging
 
 logger = logging.getLogger(__name__)
@@ -12,7 +12,7 @@ def handle_service_exceptions(func):
             return func(*args, **kwargs)
         except Exception as e:
             logger.error(f"Service exception: {e}")
-            return Result(
+            return ServiceResult(
                 success=False,
                 message=str(e)
             )

@@ -2,8 +2,8 @@ from dataclasses import dataclass
 from typing import Optional, Dict
 
 @dataclass
-class Result:
-    """Standard result for operations."""
+class ServiceResult():
+    """Result for service operations."""
     success: bool
     message: str
     data: Optional[Dict] = None

@@ -10,30 +10,17 @@ class TokenResponse(BaseModel):
     expires_in: int  # in seconds
 
 # Email verification
-class UserExistsRequest(BaseModel):
+class CheckEmailRequest(BaseModel):
     """First step in both login and signup flows.
     Used to check if an email is already registered, determining whether to proceed
     with login or signup flow."""
     email: EmailStr
 
-class UserExistsResponse(BaseModel):
+class CheckEmailResponse(BaseModel):
     """Response for email existence check.
     Informs frontend whether to proceed with login (exists=true) or
     signup (exists=false) flow."""
     exists: bool
-    message: str
-
-# Credential verification   
-class VerifyCredentialsRequest(BaseModel):
-    """First step in login flow for existing users.
-    Verifies user's password before proceeding to OTP authentication."""
-    email: EmailStr
-    password: str
-
-class VerifyCredentialsResponse(BaseModel):
-    """Response for credential verification.
-    If valid=true, returns a temporary token used for requesting OTP."""
-    valid: bool
     message: str
 
 # OTP request
@@ -60,32 +47,17 @@ class ValidateOTPResponse(BaseModel):
     If valid=true, provides token for final login/signup step."""
     valid: bool
     message: str
-    completion_token: Optional[str] = None  # Token for completing auth
+    token: Optional[str] = None  # Token for completing auth
 
-# Login completion
-class LoginRequest(BaseModel):
-    """Final step in login flow.
-    Exchanges validated OTP token for permanent access tokens."""
-    email: EmailStr
-    password: str
-    completion_token: str  # Token from OTP validation
+# Auth Completion (login or signup)
+class AuthRequest(BaseModel):
+    """Final step in authentication flow.
+    Verifies token and either logs in or signs up."""
+    token: str
 
-class LoginResponse(TokenResponse):
-    """Successful login response.
-    Provides access/refresh tokens and basic user information."""
-    user_id: str
-    
-# Signup completion
-class SignupRequest(BaseModel):
-    """Final step in signup flow.
-    Creates new user account and returns authentication tokens."""
-    email: EmailStr
-    password: str
-    completion_token: str  # Token from OTP validation
-
-class SignupResponse(TokenResponse):
-    """Successful signup response.
-    Provides access/refresh tokens and new user's ID."""
+class AuthResponse(TokenResponse):
+    """Response after authentication completion.
+    Provides access/refresh tokens and user ID."""
     user_id: str
 
 # Reset password

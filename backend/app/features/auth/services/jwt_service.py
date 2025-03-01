@@ -4,6 +4,7 @@ from jose import jwt, JWTError
 from app.config.env import settings
 from fastapi import HTTPException
 from app.features.common.base.base_service import BaseService
+from app.features.common.schemas.common_dtos import ServiceResult
 
 class TokenType:
     """Token types for different stages of authentication."""
@@ -28,7 +29,7 @@ class JWTService(BaseService):
 
     def _create_token(
         self,
-        subject: str,
+        email: str,
         token_type: str,
         expires_delta: timedelta,
         additional_data: Optional[Dict] = None
@@ -48,7 +49,7 @@ class JWTService(BaseService):
         expires_at = datetime.utcnow() + expires_delta
         
         to_encode = {
-            "sub": subject,
+            "email": email,
             "type": token_type,
             "iat": datetime.utcnow(),
             "exp": expires_at
@@ -89,7 +90,7 @@ class JWTService(BaseService):
             "expires_in": self.access_token_expire_minutes * 60  # in seconds
         }
 
-    def create_auth_token(
+    def create_auth_flow_token(
         self,
         subject: str,
         additional_data: Optional[Dict] = None
@@ -107,19 +108,10 @@ class JWTService(BaseService):
     def verify_token(
         self,
         token: str,
-        token_type: Optional[str] = None
-    ) -> Dict:
+        data: Optional[Dict] = None
+    ) -> ServiceResult:
         """
         Verify and decode a JWT token.
-        
-        Args:
-            token: The JWT token to verify
-            
-        Returns:
-            Decoded token payload
-            
-        Raises:
-            HTTPException: If token is invalid or expired
         """
         try:
             payload = jwt.decode(
@@ -128,16 +120,28 @@ class JWTService(BaseService):
                 algorithms=[self.algorithm]
             )
             
-            if token_type and payload.get("type") != token_type:
-                raise HTTPException(
-                    status_code=401,
-                    detail="Invalid token type"
-                )
-            return payload
+            # Check if all required data is present and matches
+            for key in data.keys():
+                if key not in payload:
+                    return ServiceResult(
+                        success=False,
+                        message="Token is missing required data"
+                    )
+                if payload.get(key) != data.get(key):
+                    return ServiceResult(
+                        success=False,
+                        message="Token data does not match required data"
+                    )
+            
+            return ServiceResult(
+                success=True,
+                message="Token verified successfully",
+                data=payload
+            )
         except JWTError as e:
-            raise HTTPException(
-                status_code=401,
-                detail=f"Invalid or expired token: {str(e)}"
+            return ServiceResult(
+                success=False,
+                message=f"Invalid or expired token: {str(e)}"
             )
 
     def refresh_access_token(self, refresh_token: str) -> Dict[str, str]:
