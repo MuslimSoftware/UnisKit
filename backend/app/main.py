@@ -5,9 +5,9 @@ from app.config.env import settings
 from app.config.db_config import init_db
 from app.features.user.controllers import user_controller
 from app.features.auth.controllers import auth_controller
-import logging
-
-logger = logging.getLogger(__name__)
+from app.features.common.exceptions.exceptions import AppException
+from app.middlewares.exception_handler import app_exception_handler, global_exception_handler
+from app.config.logging import setup_logging
 
 async def lifespan(app: FastAPI):
     await init_db()
@@ -20,13 +20,13 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-@app.exception_handler(Exception)
-async def global_exception_handler(request: Request, exc: Exception):
-    logger.error(f"An unexpected error occurred: {exc} on {request}")
-    return JSONResponse(
-        status_code=500,
-        content={"success": False, "message": "An unexpected error occurred"}
-    )
+setup_logging()
+
+# Handler for custom app exceptions
+app.add_exception_handler(AppException, app_exception_handler)
+
+# Handler for all other unhandled exceptions
+app.add_exception_handler(Exception, global_exception_handler)
 
 # Configure CORS
 app.add_middleware(
@@ -46,3 +46,12 @@ app.include_router(user_controller.router, prefix=api_prefix)
 async def root():
     """Root endpoint."""
     return {"message": "Welcome to the API"} 
+
+# TODO: Implement test controller with test endpoints
+@app.get("/test-app-exception")
+async def test():
+    raise AppException(message="Test error", error_code="TEST_ERROR", status_code=400)
+
+@app.get("/test-global-exception")
+async def test():
+    raise Exception("Test error")

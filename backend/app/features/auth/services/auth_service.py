@@ -1,23 +1,22 @@
-from typing import Optional
 from fastapi import HTTPException
-
 from app.features.auth.services.jwt_service import JWTService, TokenType
 from app.features.common.services.otp_service import OTPService
-from app.features.user.repositories.user_repository import UserRepository
 from passlib.context import CryptContext
 from app.features.common.schemas.common_dtos import ServiceResult
-from app.features.common.base.base_service import BaseService
-from app.features.user.models.user_model import User
 from app.features.user.services.user_service import UserService
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-class AuthService(BaseService):
-    def __init__(self):
-        self.user_repository = UserRepository()
-        self.user_service = UserService()
-        self.jwt_service = JWTService()
-        self.otp_service = OTPService()
+class AuthService:
+    def __init__(
+        self,
+        user_service: UserService,
+        jwt_service: JWTService,
+        otp_service: OTPService
+    ):
+        self.user_service = user_service
+        self.jwt_service = jwt_service
+        self.otp_service = otp_service
 
     async def check_email_availability(self, email: str) -> ServiceResult:
         """Check if user with email exists."""
@@ -66,10 +65,10 @@ class AuthService(BaseService):
         # Handle authentication based on existence
         if user_exists_result.success:
             message = "User logged in successfully"
-            user = await self.user_repository.find_by_email(email)
+            user = await self.user_service.get_user(email)
         else:
             message = "User created successfully"
-            user = await self.user_repository.create(email)
+            user = await self.user_service.create_user(email)
         
         if not user:
             return ServiceResult(

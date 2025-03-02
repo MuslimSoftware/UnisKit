@@ -1,12 +1,13 @@
 from typing import Optional
+
+import pymongo.errors
 from app.features.user.models.user_model import User
-from fastapi import HTTPException
-from app.features.common.base.base_repository import BaseRepository
+from app.features.common.exceptions.exceptions import AppException
 from passlib.context import CryptContext
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-class UserRepository(BaseRepository):
+class UserRepository():
     @staticmethod
     async def find_by_email(email: str) -> Optional[User]:
         """Find a user by email."""
@@ -15,13 +16,24 @@ class UserRepository(BaseRepository):
     @staticmethod
     async def create(email: str) -> Optional[User]:
         """Create a new user."""
-        # Check if user already exists
-        user = await User.find_one(User.email == email)
-        if user:
-            raise HTTPException(status_code=400, detail="User already exists")
-    
-        user = User(email=email)
-        await user.insert()
-
-        return user
+        try:
+            user = await User.find_one(User.email == email)
+            if user:
+                raise AppException(message="User already exists", error_code="USER_ALREADY_EXISTS", status_code=400)
+            
+            user = User(email=email)
+            await user.insert()
+            return user
+        except pymongo.errors.DuplicateKeyError:
+            raise AppException(
+                message="User already exists",
+                error_code="USER_ALREADY_EXISTS",
+                status_code=400
+            )
+        except pymongo.errors.PyMongoError as e:
+            raise AppException(
+                message=f"Database error creating user: {str(e)}",
+                error_code="DB_USER_CREATE_FAILED",
+                status_code=500
+            )
     

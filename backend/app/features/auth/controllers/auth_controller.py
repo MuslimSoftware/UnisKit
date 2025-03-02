@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from app.features.auth.services.auth_service import AuthService
 from app.features.auth.schemas.auth_schemas import (
     CheckEmailRequest,
@@ -12,10 +12,9 @@ from app.features.auth.schemas.auth_schemas import (
     AuthRequest,
     AuthResponse
 )
-from app.features.common.services.otp_service import OTPService
-from app.features.auth.services.jwt_service import JWTService, TokenType
-from app.features.user.services.user_service import UserService
 from app.features.common.schemas.common_dtos import ServiceResult
+from app.config.dependencies import AuthServiceDep, JWTServiceDep
+from app.features.auth.services.jwt_service import JWTService
 
 prefix = "/auth"
 tags = ["Authentication"]
@@ -24,13 +23,12 @@ router = APIRouter(
     prefix=prefix,
     tags=tags
 )
-auth_service = AuthService()
-user_service = UserService()
-otp_service = OTPService()
-jwt_service = JWTService()
 
 @router.post("/check-email", response_model=CheckEmailResponse)
-async def check_email_availability(request: CheckEmailRequest) -> CheckEmailResponse:
+async def check_email_availability(
+    request: CheckEmailRequest,
+    auth_service: AuthService = Depends(AuthServiceDep)
+) -> CheckEmailResponse:
     """Check if email exists and get verification token."""
     result = await auth_service.check_email_availability(request.email)
 
@@ -39,9 +37,11 @@ async def check_email_availability(request: CheckEmailRequest) -> CheckEmailResp
         message=result.message
     )
 
-
 @router.post("/request-otp", response_model=RequestOTPResponse)
-async def request_otp(request: RequestOTPRequest) -> RequestOTPResponse:
+async def request_otp(
+    request: RequestOTPRequest,
+    auth_service: AuthService = Depends(AuthServiceDep)
+) -> RequestOTPResponse:
     """Request OTP using verification token."""
     result: ServiceResult = await auth_service.request_otp(request.email, request.otp_token)
     if not result.success:
@@ -54,7 +54,11 @@ async def request_otp(request: RequestOTPRequest) -> RequestOTPResponse:
     )
 
 @router.post("/validate-otp", response_model=ValidateOTPResponse)
-async def validate_otp(request: ValidateOTPRequest) -> ValidateOTPResponse:
+async def validate_otp(
+    request: ValidateOTPRequest,
+    auth_service: AuthService = Depends(AuthServiceDep),
+    jwt_service: JWTService = Depends(JWTServiceDep)
+) -> ValidateOTPResponse:
     """Validate OTP and get completion token."""
     result = await auth_service.validate_otp(
         request.email,
@@ -75,7 +79,10 @@ async def validate_otp(request: ValidateOTPRequest) -> ValidateOTPResponse:
         token=token
     )
 @router.post("/auth", response_model=AuthResponse)
-async def auth(request: AuthRequest) -> AuthResponse:
+async def auth(
+    request: AuthRequest,
+    auth_service: AuthService = Depends(AuthServiceDep)
+) -> AuthResponse:
     """Verify token and either login or signup"""
     # Use auth_service to handle the entire authentication flow
     result: ServiceResult = await auth_service.authenticate_with_token(request.token)
@@ -94,7 +101,10 @@ async def auth(request: AuthRequest) -> AuthResponse:
     )
 
 @router.post("/reset-password", response_model=ResetPasswordResponse)
-async def reset_password(request: ResetPasswordRequest):
+async def reset_password(
+    request: ResetPasswordRequest,
+    auth_service: AuthService = Depends(AuthServiceDep)
+) -> ResetPasswordResponse:
     result = await auth_service.reset_password(
         request.email,
         request.password,

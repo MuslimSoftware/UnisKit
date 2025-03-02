@@ -1,9 +1,9 @@
 from datetime import datetime, timedelta
 import random
 import string
-from app.features.common.base.base_service import BaseService
 from app.features.common.schemas.common_dtos import ServiceResult
-class OTPService(BaseService):
+
+class OTPService:
     """Service for handling OTP operations."""
     
     def __init__(self):

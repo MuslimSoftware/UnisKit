@@ -2,8 +2,6 @@ from datetime import datetime, timedelta
 from typing import Optional, Dict
 from jose import jwt, JWTError
 from app.config.env import settings
-from fastapi import HTTPException
-from app.features.common.base.base_service import BaseService
 from app.features.common.schemas.common_dtos import ServiceResult
 
 class TokenType:
@@ -15,7 +13,7 @@ class TokenType:
     # Used for auth flow
     AUTH = "auth"
 
-class JWTService(BaseService):
+class JWTService:
     """Service for handling JWT tokens and authentication flows."""
 
     def __init__(self):

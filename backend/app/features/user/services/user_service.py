@@ -1,30 +1,27 @@
 
 from app.features.user.repositories.user_repository import UserRepository
-from app.features.common.base.base_service import BaseService
 from app.features.common.schemas.common_dtos import ServiceResult
-from app.features.user.models.user_model import User
 
-class UserService(BaseService):
-    def __init__(self):
-        self.user_repository = UserRepository()
+class UserService:
+    def __init__(self, user_repository: UserRepository):
+        self.user_repository = user_repository
 
     async def does_user_exist(self, email: str) -> ServiceResult:
-        user = await self.user_repository.find_by_email(email)
-        if not user:
-            return ServiceResult(success=False, message="User does not exist")
-        
-        return ServiceResult(success=True, message="User exists", data={user})
+        exists = await self.user_repository.find_by_email(email) is not None
+        return ServiceResult(success=exists, message="User exists" if exists else "User does not exist")
     
     async def create_user(self, email: str) -> ServiceResult:
         user = await self.user_repository.create(email)
-        if not user:
-            return ServiceResult(success=False, message="Failed to create user")
-        
-        return ServiceResult(success=True, message="User created successfully", data=user)
+        return ServiceResult(
+            success=user is not None,
+            message="User created successfully" if user else "Failed to create user",
+            data=user.model_dump() if user else None
+        )
     
     async def get_user(self, email: str) -> ServiceResult:
         user = await self.user_repository.find_by_email(email)
-        if not user:
-            return ServiceResult(success=False, message="User not found")
-        
-        return ServiceResult(success=True, message="User found successfully", data=user)
+        return ServiceResult(
+            success=user is not None,
+            message="User found successfully" if user else "User not found",
+            data=user.model_dump() if user else None
+        )
