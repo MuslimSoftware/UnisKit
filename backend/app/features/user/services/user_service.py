@@ -1,6 +1,6 @@
 
-from app.features.user.repositories.user_repository import UserRepository
-from app.features.common.schemas.common_dtos import ServiceResult
+from app.features.user.repositories import UserRepository
+from app.features.common.schemas import ServiceResult
 
 class UserService:
     def __init__(self, user_repository: UserRepository):

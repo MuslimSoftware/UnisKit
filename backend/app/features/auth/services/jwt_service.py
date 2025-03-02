@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 from typing import Optional, Dict
 from jose import jwt, JWTError
 from app.config.env import settings
-from app.features.common.schemas.common_dtos import ServiceResult
+from app.features.common.schemas import ServiceResult
 
 class TokenType:
     """Token types for different stages of authentication."""

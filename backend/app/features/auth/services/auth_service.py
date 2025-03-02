@@ -1,9 +1,9 @@
 from fastapi import HTTPException
 from app.features.auth.services.jwt_service import JWTService, TokenType
-from app.features.common.services.otp_service import OTPService
+from app.features.common.services import OTPService
 from passlib.context import CryptContext
-from app.features.common.schemas.common_dtos import ServiceResult
-from app.features.user.services.user_service import UserService
+from app.features.common.schemas import ServiceResult
+from app.features.user.services import UserService
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 

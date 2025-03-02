@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
-from app.features.auth.services.auth_service import AuthService
-from app.features.auth.schemas.auth_schemas import (
+from app.features.auth.services import AuthService
+from app.features.auth.schemas import (
     CheckEmailRequest,
     CheckEmailResponse,
     RequestOTPRequest,
@@ -12,9 +12,9 @@ from app.features.auth.schemas.auth_schemas import (
     AuthRequest,
     AuthResponse
 )
-from app.features.common.schemas.common_dtos import ServiceResult
+from app.features.common.schemas import ServiceResult
 from app.config.dependencies import AuthServiceDep, JWTServiceDep
-from app.features.auth.services.jwt_service import JWTService
+from app.features.auth.services import JWTService
 
 prefix = "/auth"
 tags = ["Authentication"]

@@ -3,13 +3,13 @@ from typing import Annotated
 from fastapi import Depends
 
 # Repository imports
-from app.features.user.repositories.user_repository import UserRepository
+from app.features.user.repositories import UserRepository
 
 # Service imports
-from app.features.user.services.user_service import UserService
-from app.features.auth.services.auth_service import AuthService
-from app.features.auth.services.jwt_service import JWTService
-from app.features.common.services.otp_service import OTPService
+from app.features.user.services import UserService
+from app.features.auth.services import AuthService
+from app.features.auth.services import JWTService
+from app.features.common.services import OTPService
 
 # Repositories
 def get_user_repository() -> UserRepository:

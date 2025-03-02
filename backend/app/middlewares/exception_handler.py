@@ -1,7 +1,7 @@
 from fastapi import Request
 from fastapi.responses import JSONResponse
-from app.features.common.exceptions.exceptions import AppException
-from app.features.common.schemas.common_schemas import ErrorResponse
+from app.features.common.exceptions import AppException
+from app.features.common.schemas import ErrorResponse
 import logging
 
 # Configure logging

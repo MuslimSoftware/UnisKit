@@ -1,8 +1,8 @@
 from typing import Optional
 
 import pymongo.errors
-from app.features.user.models.user_model import User
-from app.features.common.exceptions.exceptions import AppException
+from app.features.user.models import User
+from app.features.common.exceptions import AppException
 from passlib.context import CryptContext
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")

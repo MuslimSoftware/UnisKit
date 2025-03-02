@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 import random
 import string
-from app.features.common.schemas.common_dtos import ServiceResult
+from app.features.common.schemas import ServiceResult
 
 class OTPService:
     """Service for handling OTP operations."""

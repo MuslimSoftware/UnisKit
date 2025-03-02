@@ -1,12 +1,10 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
 from app.config.env import settings
 from app.config.db_config import init_db
-from app.features.user.controllers import user_controller
 from app.features.auth.controllers import auth_controller
-from app.features.common.exceptions.exceptions import AppException
-from app.middlewares.exception_handler import app_exception_handler, global_exception_handler
+from app.features.common.exceptions import AppException
+from app.middlewares import app_exception_handler, global_exception_handler
 from app.config.logging import setup_logging
 
 async def lifespan(app: FastAPI):
@@ -40,7 +38,6 @@ app.add_middleware(
 # Include routers with global API prefix
 api_prefix = f"{settings.API_PREFIX}{settings.API_VERSION_PREFIX}"
 app.include_router(auth_controller.router, prefix=api_prefix)
-app.include_router(user_controller.router, prefix=api_prefix)
 
 @app.get("/")
 async def root():
