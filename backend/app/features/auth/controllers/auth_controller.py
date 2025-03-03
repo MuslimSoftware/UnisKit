@@ -11,8 +11,7 @@ from app.features.auth.schemas import (
     AuthResponse
 )
 from app.features.common.schemas import ServiceResult
-from app.config.dependencies import AuthServiceDep, JWTServiceDep
-from app.features.auth.services import JWTService
+from app.config.dependencies import AuthServiceDep
 
 prefix = "/auth"
 tags = ["Authentication"]
@@ -31,8 +30,9 @@ async def check_email_availability(
     result = await auth_service.check_email_availability(request.email)
 
     return CheckEmailResponse(
-        exists=result.data["exists"],
-        message=result.message
+        success=result.success,
+        message=result.message,
+        data={"exists": result.data["exists"]}
     )
 
 @router.post("/request-otp", response_model=RequestOTPResponse)
@@ -46,14 +46,13 @@ async def request_otp(
     return RequestOTPResponse(
         success=result.success,
         message=result.message,
-        expires_in=result.data["expires_in"]
+        data={"expires_in": result.data["expires_in"]}
     )
 
 @router.post("/validate-otp", response_model=ValidateOTPResponse)
 async def validate_otp(
     request: ValidateOTPRequest,
-    auth_service: AuthService = Depends(AuthServiceDep),
-    jwt_service: JWTService = Depends(JWTServiceDep)
+    auth_service: AuthService = Depends(AuthServiceDep)
 ) -> ValidateOTPResponse:
     """Validate OTP and get completion token."""
     result = await auth_service.validate_otp(
@@ -64,7 +63,7 @@ async def validate_otp(
     return ValidateOTPResponse(
         success=result.success,
         message=result.message,
-        token=result.data["token"]
+        data={"token": result.data["token"]}
     )
 
 @router.post("/auth", response_model=AuthResponse)
@@ -79,6 +78,8 @@ async def auth(
     return AuthResponse(
         success=result.success,
         message=result.message,
-        access_token=result.data["access_token"] if "access_token" in result.data else None,
-        refresh_token=result.data["refresh_token"] if "refresh_token" in result.data else None,
+        data={
+            "access_token": result.data["access_token"] if "access_token" in result.data else None,
+            "refresh_token": result.data["refresh_token"] if "refresh_token" in result.data else None,
+        }
     )
