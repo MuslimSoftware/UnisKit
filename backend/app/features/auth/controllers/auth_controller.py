@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from app.features.auth.services import AuthService
 from app.features.auth.schemas import (
     CheckEmailRequest,
@@ -7,8 +7,6 @@ from app.features.auth.schemas import (
     RequestOTPResponse,
     ValidateOTPRequest,
     ValidateOTPResponse,
-    ResetPasswordRequest,
-    ResetPasswordResponse,
     AuthRequest,
     AuthResponse
 )
@@ -33,7 +31,7 @@ async def check_email_availability(
     result = await auth_service.check_email_availability(request.email)
 
     return CheckEmailResponse(
-        exists=result.success,
+        exists=result.data["exists"],
         message=result.message
     )
 
@@ -43,14 +41,12 @@ async def request_otp(
     auth_service: AuthService = Depends(AuthServiceDep)
 ) -> RequestOTPResponse:
     """Request OTP using verification token."""
-    result: ServiceResult = await auth_service.request_otp(request.email, request.otp_token)
-    if not result.success:
-        raise HTTPException(status_code=401, detail=result.message)
+    result: ServiceResult = await auth_service.request_otp(request.email)
     
     return RequestOTPResponse(
+        success=result.success,
         message=result.message,
-        expires_in=result.data["expires_in"],
-        email=request.email
+        expires_in=result.data["expires_in"]
     )
 
 @router.post("/validate-otp", response_model=ValidateOTPResponse)
@@ -64,20 +60,13 @@ async def validate_otp(
         request.email,
         request.otp
     )
-
-    if not result.success:
-        return ValidateOTPResponse(
-            valid=result.success,
-            message=result.message
-        )
-
-    token = jwt_service.create_auth_flow_token(request.email)
     
     return ValidateOTPResponse(
-        valid=result.success,
-        message="OTP verified successfully",
-        token=token
+        success=result.success,
+        message=result.message,
+        token=result.data["token"]
     )
+
 @router.post("/auth", response_model=AuthResponse)
 async def auth(
     request: AuthRequest,
@@ -87,34 +76,9 @@ async def auth(
     # Use auth_service to handle the entire authentication flow
     result: ServiceResult = await auth_service.authenticate_with_token(request.token)
     
-    if not result.success:
-        return AuthResponse(
-            valid=result.success,
-            message=result.message
-        )
-    
     return AuthResponse(
-        valid=True,
-        message=result.message,
-        access_token=result.data["access_token"],
-        refresh_token=result.data["refresh_token"],
-    )
-
-@router.post("/reset-password", response_model=ResetPasswordResponse)
-async def reset_password(
-    request: ResetPasswordRequest,
-    auth_service: AuthService = Depends(AuthServiceDep)
-) -> ResetPasswordResponse:
-    result = await auth_service.reset_password(
-        request.email,
-        request.password,
-        request.completion_token
-    )
-
-    if not result.success:
-        raise HTTPException(status_code=401, detail=result.message)
-    
-    return ResetPasswordResponse(
         success=result.success,
-        message=result.message
+        message=result.message,
+        access_token=result.data["access_token"] if "access_token" in result.data else None,
+        refresh_token=result.data["refresh_token"] if "refresh_token" in result.data else None,
     )

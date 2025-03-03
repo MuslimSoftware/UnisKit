@@ -1,14 +1,6 @@
 from pydantic import BaseModel, EmailStr
 from typing import Optional
 
-class TokenResponse(BaseModel):
-    """Base response schema for authentication tokens.
-    Used as a base class for login and signup responses to ensure consistent token format."""
-    access_token: str
-    refresh_token: str
-    token_type: str = "bearer"
-    expires_in: int  # in seconds
-
 # Email verification
 class CheckEmailRequest(BaseModel):
     """First step in both login and signup flows.
@@ -31,9 +23,9 @@ class RequestOTPRequest(BaseModel):
 class RequestOTPResponse(BaseModel):
     """Response after OTP is sent.
     Includes expiration time for the OTP and confirmation of delivery."""
+    success: bool
     message: str
     expires_in: int # in seconds
-    email: EmailStr
 
 # OTP validation
 class ValidateOTPRequest(BaseModel):
@@ -45,7 +37,7 @@ class ValidateOTPRequest(BaseModel):
 class ValidateOTPResponse(BaseModel):
     """Response after OTP validation.
     If valid=true, provides token for final login/signup step."""
-    valid: bool
+    success: bool
     message: str
     token: Optional[str] = None  # Token for completing auth
 
@@ -55,21 +47,10 @@ class AuthRequest(BaseModel):
     Verifies token and either logs in or signs up."""
     token: str
 
-class AuthResponse(TokenResponse):
+class AuthResponse(BaseModel):
     """Response after authentication completion.
     Provides access/refresh tokens and user ID."""
-    user_id: str
-
-# Reset password
-class ResetPasswordRequest(BaseModel):
-    """Request to reset user's password.
-    Requires email and new password."""
-    email: EmailStr
-    password: str
-    completion_token: str  # Token from OTP validation
-
-class ResetPasswordResponse(BaseModel):
-    """Response after password reset.
-    Confirms that password has been updated successfully."""
     success: bool
     message: str
+    access_token: Optional[str] = None
+    refresh_token: Optional[str] = None

@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 import random
 import string
 from app.features.common.schemas import ServiceResult
+from app.features.common.exceptions import AppException
 
 class OTPService:
     """Service for handling OTP operations."""
@@ -32,7 +33,7 @@ class OTPService:
         return ServiceResult(
             success=True,
             message="Verification code sent",
-            expires_in=self._otp_expiry_seconds
+            data={"expires_in": self._otp_expiry_seconds}
         )
     
     def verify_otp(self, email: str, otp: str) -> ServiceResult:
@@ -49,33 +50,23 @@ class OTPService:
         stored = self._otp_store.get(email)
         
         if not stored:
-            return ServiceResult(
-                success=False,
-                message="No verification code found for this email"
-            )
+            raise AppException(message="No verification code found for this email", error_code="OTP_NOT_FOUND", status_code=400)
         
         if self._is_expired(stored):
             del self._otp_store[email]
-            return ServiceResult(
-                success=False,
-                message="Verification code has expired"
-            )
+            raise AppException(message="Verification code has expired", error_code="OTP_EXPIRED", status_code=400)
         
         is_valid = stored['otp'] == otp
         
         if is_valid:
-            # Clean up used OTP
             # TODO: Implement auto OTP cleanup
             del self._otp_store[email]
             return ServiceResult(
                 success=True,
                 message="Code verified successfully"
             )
-            
-        return ServiceResult(
-            success=False,
-            message="Invalid code"
-        )
+        
+        raise AppException(message="Invalid code", error_code="OTP_INVALID", status_code=400)
     
     def _generate_otp(self) -> str:
         """Generate a random OTP."""
