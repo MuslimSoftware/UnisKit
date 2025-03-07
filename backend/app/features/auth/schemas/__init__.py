@@ -5,8 +5,6 @@ from app.features.auth.schemas.auth_schemas import (
     RequestOTPResponse,
     ValidateOTPRequest,
     ValidateOTPResponse,
-    ResetPasswordRequest,
-    ResetPasswordResponse,
     AuthRequest,
     AuthResponse
 )
@@ -18,8 +16,6 @@ __all__ = [
     "RequestOTPResponse",
     "ValidateOTPRequest",
     "ValidateOTPResponse",
-    "ResetPasswordRequest",
-    "ResetPasswordResponse",
     "AuthRequest",
     "AuthResponse"
 ] 
