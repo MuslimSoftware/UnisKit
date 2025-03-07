@@ -1,24 +1,51 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { StyleSheet, TextInput, View } from 'react-native'
+import { router } from 'expo-router'
 import { useTheme } from '@/hooks/theme'
 import { Typography } from '@/constants/Typography'
 import { Spacing } from '@/constants/Spacing'
 import { AuthScreenLayout } from '@/components/auth/AuthScreenLayout'
 import { ErrorMessage } from '@/components/ErrorMessage'
-import { useEmailSignup } from '@/hooks/auth/useEmailSignup'
 
 export default function EmailScreen() {
   const theme = useTheme()
-  const { email, setEmail, loading, error, handleContinue, isValidEmail } =
-    useEmailSignup()
+  const [email, setEmail] = useState('')
+  const [error, setError] = useState<string | null>(null)
+
+  const isValidEmail = (email: string) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+  }
+
+  const validateEmail = (email: string) => {
+    if (!isValidEmail(email)) {
+      setError('Please enter a valid email address')
+      return false
+    }
+    setError(null)
+    return true
+  }
+
+  const handleEmailChange = (text: string) => {
+    setEmail(text)
+  }
+
+  const handleContinue = () => {
+    if (!validateEmail(email)) {
+      return
+    }
+    router.push({
+      pathname: '/otp',
+      params: { email },
+    })
+  }
 
   return (
     <AuthScreenLayout
       title="Enter Your Email"
       subtitle="We'll send you a verification code"
-      buttonText={loading ? 'Sending code...' : 'Continue'}
+      buttonText="Continue"
       onButtonPress={handleContinue}
-      buttonDisabled={!isValidEmail(email) || loading}
+      buttonDisabled={!isValidEmail(email)}
     >
       <View style={styles.container}>
         <TextInput
@@ -32,18 +59,14 @@ export default function EmailScreen() {
           ]}
           placeholder="email@example.com"
           value={email}
-          onChangeText={setEmail}
+          onChangeText={handleEmailChange}
           keyboardType="email-address"
           autoCapitalize="none"
           autoComplete="email"
           autoCorrect={false}
           placeholderTextColor={theme.input.placeholder}
-          editable={!loading}
         />
-        <ErrorMessage
-          message={error?.message}
-          fallback="Failed to send verification code. Please try again."
-        />
+        {error ? <ErrorMessage message={error} /> : null}
       </View>
     </AuthScreenLayout>
   )

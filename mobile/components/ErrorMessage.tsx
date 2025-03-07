@@ -5,7 +5,7 @@ import { Typography } from '@/constants/Typography'
 import { Spacing } from '@/constants/Spacing'
 
 interface ErrorMessageProps {
-  message?: string
+  message?: string | null
   fallback?: string
 }
 

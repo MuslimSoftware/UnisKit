@@ -6,10 +6,10 @@ import { Colors } from '@/constants/Colors'
 import { useTheme } from '@/hooks/theme'
 
 interface SocialButtonsProps {
-  onEmailSignup: () => void
+  navigateToEmail: () => void
 }
 
-export function SocialButtons({ onEmailSignup }: SocialButtonsProps) {
+export function SocialButtons({ navigateToEmail }: SocialButtonsProps) {
   const theme = useTheme()
 
   return (
@@ -17,7 +17,7 @@ export function SocialButtons({ onEmailSignup }: SocialButtonsProps) {
       <Button
         icon="mail-outline"
         text="Continue with Email"
-        onPress={onEmailSignup}
+        onPress={navigateToEmail}
         align="left"
       />
 
@@ -29,7 +29,7 @@ export function SocialButtons({ onEmailSignup }: SocialButtonsProps) {
           />
         }
         text="Continue with Google"
-        onPress={() => {}}
+        onPress={navigateToEmail}
         align="left"
         backgroundColor={Colors.white}
         borderColor={theme.colors.border}
@@ -39,7 +39,7 @@ export function SocialButtons({ onEmailSignup }: SocialButtonsProps) {
       <Button
         icon="logo-apple"
         text="Continue with Apple"
-        onPress={() => {}}
+        onPress={navigateToEmail}
         align="left"
         backgroundColor={theme.isDark ? Colors.white : Colors.black}
         textColor={theme.isDark ? Colors.black : Colors.white}

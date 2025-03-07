@@ -5,14 +5,18 @@ import { useTheme } from '@/hooks/theme'
 import { Spacing } from '@/constants/Spacing'
 import { Typography } from '@/constants/Typography'
 
-export function AuthFooter({ onEmailLogin }: { onEmailLogin: () => void }) {
+export function AuthFooter({
+  navigateToEmail,
+}: {
+  navigateToEmail: () => void
+}) {
   const theme = useTheme()
 
   return (
     <View style={styles.container}>
       <View style={styles.textContainer}>
         <TextSmall variant="secondary">Already have an account?</TextSmall>
-        <TouchableOpacity onPress={onEmailLogin}>
+        <TouchableOpacity onPress={navigateToEmail}>
           <TextSmall style={[styles.link, { color: theme.colors.tint }]}>
             Sign in
           </TextSmall>

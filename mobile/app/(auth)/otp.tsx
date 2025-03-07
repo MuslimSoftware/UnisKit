@@ -73,7 +73,7 @@ export default function OTPScreen() {
             />
           </Pressable>
           <ErrorMessage
-            message={error?.message}
+            message={error}
             fallback="Failed to verify code. Please try again."
           />
           <TextSmall variant="secondary">

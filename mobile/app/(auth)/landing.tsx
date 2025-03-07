@@ -8,14 +8,14 @@ import { SocialButtons } from '@/components/auth/SocialButtons'
 import { AuthFooter } from '@/components/auth/AuthFooter'
 import { AnimatedLogo, INITIAL_POSITION } from '@/components/auth/AnimatedLogo'
 import { Brand } from '@/constants/Brand'
-import { useLandingPage } from '@/hooks/auth/useLandingPage'
-import { useTheme } from '@/hooks/theme'
+import { router } from 'expo-router'
 
 export default function LandingScreen() {
   const { logoStyle, contentStyle } = useLogoAnimation()
 
-  const theme = useTheme()
-  const { handleEmailSignup, handleEmailLogin } = useLandingPage()
+  const navigateToEmail = () => {
+    router.push('/email')
+  }
 
   return (
     <ThemedView style={styles.container}>
@@ -35,9 +35,9 @@ export default function LandingScreen() {
           Choose how you'd like to continue
         </TextBody>
 
-        <SocialButtons onEmailSignup={handleEmailSignup} />
+        <SocialButtons navigateToEmail={navigateToEmail} />
 
-        <AuthFooter onEmailLogin={handleEmailLogin} />
+        <AuthFooter navigateToEmail={navigateToEmail} />
       </Animated.View>
     </ThemedView>
   )
