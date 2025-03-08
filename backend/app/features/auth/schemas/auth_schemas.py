@@ -27,7 +27,6 @@ class RequestOTPRequest(BaseModel):
 class RequestOTPResponse(BaseResponse):
     """Response after OTP is sent.
     Includes expiration time for the OTP and confirmation of delivery."""
-    expires_in: int # in seconds
 
 # OTP validation
 class ValidateOTPRequest(BaseModel):

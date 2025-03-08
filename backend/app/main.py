@@ -45,10 +45,10 @@ async def root():
     return {"message": "Welcome to the API"} 
 
 # TODO: Implement test controller with test endpoints
-@app.get("/test-app-exception")
+@app.get(f"{api_prefix}/test-app-exception")
 async def test():
     raise AppException(message="Test error", error_code="TEST_ERROR", status_code=400)
 
-@app.get("/test-global-exception")
+@app.get(f"{api_prefix}/test-global-exception")
 async def test():
     raise Exception("Test error")

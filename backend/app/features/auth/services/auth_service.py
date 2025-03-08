@@ -1,4 +1,3 @@
-from fastapi import HTTPException
 from app.features.auth.services.jwt_service import JWTService, TokenType
 from app.features.common.services import OTPService
 from passlib.context import CryptContext

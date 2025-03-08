@@ -24,7 +24,7 @@ router = APIRouter(
 @router.post("/check-email", response_model=CheckEmailResponse)
 async def check_email_availability(
     request: CheckEmailRequest,
-    auth_service: AuthService = Depends(AuthServiceDep)
+    auth_service: AuthServiceDep
 ) -> CheckEmailResponse:
     """Check if email exists and get verification token."""
     result = await auth_service.check_email_availability(request.email)
@@ -38,7 +38,7 @@ async def check_email_availability(
 @router.post("/request-otp", response_model=RequestOTPResponse)
 async def request_otp(
     request: RequestOTPRequest,
-    auth_service: AuthService = Depends(AuthServiceDep)
+    auth_service: AuthServiceDep
 ) -> RequestOTPResponse:
     """Request OTP using verification token."""
     result: ServiceResult = await auth_service.request_otp(request.email)
@@ -52,7 +52,7 @@ async def request_otp(
 @router.post("/validate-otp", response_model=ValidateOTPResponse)
 async def validate_otp(
     request: ValidateOTPRequest,
-    auth_service: AuthService = Depends(AuthServiceDep)
+    auth_service: AuthServiceDep
 ) -> ValidateOTPResponse:
     """Validate OTP and get completion token."""
     result = await auth_service.validate_otp(
@@ -69,7 +69,7 @@ async def validate_otp(
 @router.post("/auth", response_model=AuthResponse)
 async def auth(
     request: AuthRequest,
-    auth_service: AuthService = Depends(AuthServiceDep)
+    auth_service: AuthServiceDep
 ) -> AuthResponse:
     """Verify token and either login or signup"""
     # Use auth_service to handle the entire authentication flow

@@ -7,7 +7,7 @@ from passlib.context import CryptContext
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-class UserRepository():
+class UserRepository:
     @staticmethod
     async def find_by_email(email: str) -> Optional[User]:
         """Find a user by email."""

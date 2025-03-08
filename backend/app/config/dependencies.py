@@ -28,15 +28,11 @@ def get_otp_service() -> OTPService:
     return OTPService()
 
 def get_auth_service(
-    user_service: UserService = Depends(get_user_service),
-    jwt_service: JWTService = Depends(get_jwt_service),
-    otp_service: OTPService = Depends(get_otp_service)
+    user_repository: Annotated[UserRepository, Depends(get_user_repository)],
+    jwt_service: Annotated[JWTService, Depends(get_jwt_service)],
+    otp_service: Annotated[OTPService, Depends(get_otp_service)]
 ) -> AuthService:
-    return AuthService(
-        user_service=user_service,
-        jwt_service=jwt_service,
-        otp_service=otp_service
-    )
+    return AuthService(user_repository, jwt_service, otp_service)
 
 # Service dependencies
 AuthServiceDep = Annotated[AuthService, Depends(get_auth_service)]
