@@ -3,6 +3,7 @@ from typing import Optional, Dict
 from jose import jwt, JWTError
 from app.config.env import settings
 from app.features.common.schemas import ServiceResult
+from app.features.common.exceptions import AppException
 
 class TokenType:
     """Token types for different stages of authentication."""
@@ -58,7 +59,7 @@ class JWTService:
             
         return jwt.encode(to_encode, self.secret_key, algorithm=self.algorithm)
 
-    def create_tokens(self, subject: str) -> Dict[str, str]:
+    def create_tokens(self, email: str) -> Dict[str, str]:
         """
         Create both access and refresh tokens for a user.
         Used after successful login/signup.
@@ -70,13 +71,13 @@ class JWTService:
             Dict containing access and refresh tokens with their expiry
         """
         access_token = self._create_token(
-            subject=subject,
+            email=email,
             token_type=TokenType.ACCESS,
             expires_delta=timedelta(minutes=self.access_token_expire_minutes)
         )
         
         refresh_token = self._create_token(
-            subject=subject,
+            email=email,
             token_type=TokenType.REFRESH,
             expires_delta=timedelta(days=self.refresh_token_expire_days)
         )
@@ -90,14 +91,14 @@ class JWTService:
 
     def create_auth_flow_token(
         self,
-        subject: str,
+        email: str,
         additional_data: Optional[Dict] = None
     ) -> str:
         """
         Create a temporary token for intermediate authentication steps.
         """
         return self._create_token(
-            subject=subject,
+            email=email,
             token_type=TokenType.AUTH,
             expires_delta=timedelta(minutes=self.temp_token_expire_minutes),
             additional_data=additional_data
@@ -121,15 +122,9 @@ class JWTService:
             # Check if all required data is present and matches
             for key in data.keys():
                 if key not in payload:
-                    return ServiceResult(
-                        success=False,
-                        message="Token is missing required data"
-                    )
+                    raise AppException(message="Token is missing required data", error_code="TOKEN_MISSING_DATA", status_code=400)
                 if payload.get(key) != data.get(key):
-                    return ServiceResult(
-                        success=False,
-                        message="Token data does not match required data"
-                    )
+                    raise AppException(message="Token data does not match required data", error_code="TOKEN_DATA_MISMATCH", status_code=400)
             
             return ServiceResult(
                 success=True,
@@ -137,10 +132,7 @@ class JWTService:
                 data=payload
             )
         except JWTError as e:
-            return ServiceResult(
-                success=False,
-                message=f"Invalid or expired token: {str(e)}"
-            )
+            raise AppException(message=f"Invalid or expired token: {str(e)}", error_code="TOKEN_INVALID", status_code=400)
 
     def refresh_access_token(self, refresh_token: str) -> Dict[str, str]:
         """
@@ -158,7 +150,7 @@ class JWTService:
         payload = self.verify_token(refresh_token, TokenType.REFRESH)
         
         access_token = self._create_token(
-            subject=payload["sub"],
+            email=payload["email"],
             token_type=TokenType.ACCESS,
             expires_delta=timedelta(minutes=self.access_token_expire_minutes)
         )

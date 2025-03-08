@@ -56,10 +56,7 @@ class AuthService:
         )
     
     async def authenticate_with_token(self, token: str) -> ServiceResult:
-        verify_result: ServiceResult = await self.jwt_service.verify_token(token, data={"type": TokenType.AUTH})
-        if not verify_result.success:
-            return verify_result
-        
+        verify_result: ServiceResult = self.jwt_service.verify_token(token, data={"type": TokenType.AUTH})        
         email: str = verify_result.data["email"]
         user = await self.user_repository.find_by_email(email)
         

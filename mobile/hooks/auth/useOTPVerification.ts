@@ -87,14 +87,14 @@ export function useOTPVerification() {
 
   const {
     fetch: authenticate,
-  } = useFetch<AuthResponse>(() => ({
+  } = useFetch<AuthResponse>((token) => ({
     url: `${Environment.apiUrl}/auth/auth`,
     options: {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ token: '' }), // Will be set during handleVerify
+      body: JSON.stringify({ token }),
     },
   }))
 
@@ -111,9 +111,7 @@ export function useOTPVerification() {
         if (!email) {
           throw new Error('Email is required')
         }
-        console.log(`${Environment.apiUrl}/auth/request-otp`)
         const response = await requestOTP()
-        console.log('OTP response:', response)
         if (!response?.success) {
           throw new Error(response?.message || 'Failed to send verification code')
         }
@@ -169,7 +167,7 @@ export function useOTPVerification() {
       }
 
       // Step 2: Use the token to authenticate
-      const authResponse = await authenticate()
+      const authResponse = await authenticate(validateResponse.data.token)
       if (!authResponse?.success) {
         throw new Error(authResponse?.message || 'Authentication failed')
       }

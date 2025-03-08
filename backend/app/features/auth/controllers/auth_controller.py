@@ -1,5 +1,4 @@
-from fastapi import APIRouter, Depends
-from app.features.auth.services import AuthService
+from fastapi import APIRouter
 from app.features.auth.schemas import (
     CheckEmailRequest,
     CheckEmailResponse,
@@ -11,7 +10,7 @@ from app.features.auth.schemas import (
     AuthResponse
 )
 from app.features.common.schemas import ServiceResult
-from app.config.dependencies import AuthServiceDep
+from app.config.dependencies import AuthServiceDep, OTPServiceDep
 
 prefix = "/auth"
 tags = ["Authentication"]

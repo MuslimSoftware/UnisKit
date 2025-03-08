@@ -4,12 +4,13 @@ import string
 from app.features.common.schemas import ServiceResult
 from app.features.common.exceptions import AppException
 
+# Shared storage at module level
+_GLOBAL_OTP_STORE = {}
+
 class OTPService:
     """Service for handling OTP operations."""
     
     def __init__(self):
-        # In production, use Redis or similar
-        self._otp_store = {}
         self._otp_length = 6
         self._otp_expiry_seconds = 600  # 10 minutes
 
@@ -47,20 +48,19 @@ class OTPService:
         Returns:
             OTPResult with verification status and OTP type
         """
-        stored = self._otp_store.get(email)
+        stored = _GLOBAL_OTP_STORE.get(email)
         
         if not stored:
             raise AppException(message="No verification code found for this email", error_code="OTP_NOT_FOUND", status_code=400)
         
         if self._is_expired(stored):
-            del self._otp_store[email]
+            del _GLOBAL_OTP_STORE[email]
             raise AppException(message="Verification code has expired", error_code="OTP_EXPIRED", status_code=400)
         
         is_valid = stored['otp'] == otp
         
         if is_valid:
-            # TODO: Implement auto OTP cleanup
-            del self._otp_store[email]
+            del _GLOBAL_OTP_STORE[email]
             return ServiceResult(
                 success=True,
                 message="Code verified successfully"
@@ -74,7 +74,7 @@ class OTPService:
     
     def _store_otp(self, email: str, otp: str) -> None:
         """Store OTP with expiry time and type."""
-        self._otp_store[email] = {
+        _GLOBAL_OTP_STORE[email] = {
             'otp': otp,
             'expires_at': datetime.utcnow() + timedelta(seconds=self._otp_expiry_seconds)
         }
@@ -86,5 +86,5 @@ class OTPService:
     
     def clear_otp(self, email: str) -> None:
         """Clear stored OTP for an email."""
-        if email in self._otp_store:
-            del self._otp_store[email] 
+        if email in _GLOBAL_OTP_STORE:
+            del _GLOBAL_OTP_STORE[email] 
