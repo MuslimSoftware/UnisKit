@@ -19,7 +19,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signOut = () => {
     setIsAuthenticated(false)
-    router.replace('/(auth)/login')
+    router.replace('/(auth)/landing')
   }
 
   return (

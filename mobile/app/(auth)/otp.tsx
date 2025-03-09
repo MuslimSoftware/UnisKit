@@ -1,12 +1,11 @@
 import React from 'react'
-import { StyleSheet, TextInput, View, Pressable } from 'react-native'
-import { useTheme } from '@/hooks/theme'
-import { TextSmall, TextXLarge } from '@/components/typography'
+import { StyleSheet, TextInput, View } from 'react-native'
+import { useTheme } from '@/features/theme/hooks/useTheme'
+import { TextSmall, ErrorMessage } from '@/shared/components/ui'
 import { Typography } from '@/constants/Typography'
 import { Spacing } from '@/constants/Spacing'
-import { AuthScreenLayout } from '@/components/auth/AuthScreenLayout'
-import { ErrorMessage } from '@/components/ErrorMessage'
-import { useOTPVerification } from '@/hooks/auth/useOTPVerification'
+import { AuthScreenLayout } from '@/features/auth/components/AuthScreenLayout'
+import { useOTPVerification } from '@/features/auth/hooks/useOTPVerification'
 
 export default function OTPScreen() {
   const theme = useTheme()
@@ -34,48 +33,27 @@ export default function OTPScreen() {
     >
       <View style={styles.container}>
         <View style={styles.inputContainer}>
-          <Pressable style={styles.otpBoxesContainer} onPress={focusInput}>
-            {/** Render the OTP boxes */}
-            {Array.from({ length: 6 }).map((_, index) => (
-              <View
-                key={index}
-                style={[
-                  styles.otpBox,
-                  {
-                    backgroundColor: theme.input.background,
-                    borderColor: error
-                      ? theme.colors.error
-                      : theme.colors.border,
-                  },
-                ]}
-              >
-                <TextXLarge
-                  style={[styles.otpText, { color: theme.input.text }]}
-                >
-                  {otp[index] || ''}
-                </TextXLarge>
-              </View>
-            ))}
-            {/** The hidden input */}
-            <TextInput
-              ref={inputRef}
-              style={styles.hiddenInput}
-              value={otp}
-              onChangeText={(text) => {
-                // Only allow numbers and limit to 6 digits
-                const cleanText = text.replace(/[^0-9]/g, '').slice(0, 6)
-                setOtp(cleanText)
-              }}
-              keyboardType="number-pad"
-              maxLength={6}
-              caretHidden
-              editable={!loading}
-            />
-          </Pressable>
-          <ErrorMessage
-            message={error}
-            fallback="Failed to verify code. Please try again."
+          <TextInput
+            ref={inputRef}
+            style={[
+              styles.input,
+              {
+                color: theme.colors.text,
+                borderColor: error ? theme.colors.error : theme.colors.border,
+              },
+            ]}
+            value={otp}
+            onChangeText={setOtp}
+            placeholder="Enter verification code"
+            placeholderTextColor={theme.colors.secondaryText}
+            keyboardType="number-pad"
+            maxLength={6}
+            autoComplete="one-time-code"
           />
+          {error && <ErrorMessage message={error.message} />}
+        </View>
+
+        <View style={styles.footer}>
           <TextSmall variant="secondary">
             Didn't receive the code?{' '}
             <TextSmall
@@ -99,36 +77,27 @@ export default function OTPScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    gap: Spacing.spacing.medium,
-    marginBottom: Spacing.spacing.xlarge,
+    flex: 1,
+    paddingHorizontal: Spacing.spacing.medium,
   },
   inputContainer: {
-    gap: Spacing.spacing.medium,
+    marginTop: Spacing.spacing.large,
   },
-  otpBoxesContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    position: 'relative',
-  },
-  otpBox: {
-    width: 40,
+  input: {
+    fontSize: Typography.sizes.medium,
+    fontWeight: Typography.weights.regular,
     height: 48,
-    borderRadius: Spacing.radius.card,
     borderWidth: 1,
+    borderRadius: Spacing.radius.medium,
+    paddingHorizontal: Spacing.spacing.medium,
+    textAlign: 'center',
+    letterSpacing: 8,
+  },
+  footer: {
+    marginTop: Spacing.spacing.medium,
     alignItems: 'center',
-    justifyContent: 'center',
-  },
-  otpText: {
-    fontSize: Typography.sizes.otpInput,
-  },
-  hiddenInput: {
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
-    opacity: 0,
-    zIndex: 1,
   },
   link: {
-    fontWeight: Typography.weights.medium,
+    textDecorationLine: 'underline',
   },
 })

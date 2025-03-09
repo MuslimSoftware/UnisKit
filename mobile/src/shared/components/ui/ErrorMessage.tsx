@@ -1,8 +1,7 @@
 import React from 'react'
-import { StyleSheet, Text } from 'react-native'
-import { useTheme } from '@/hooks/theme'
-import { Typography } from '@/constants/Typography'
-import { Spacing } from '@/constants/Spacing'
+import { StyleSheet } from 'react-native'
+import { TextSmall } from './typography'
+import { useTheme } from '@/features/theme/hooks/useTheme'
 
 interface ErrorMessageProps {
   message?: string | null
@@ -18,15 +17,14 @@ export function ErrorMessage({
   if (!message) return null
 
   return (
-    <Text style={[styles.text, { color: theme.colors.error }]}>
+    <TextSmall style={[styles.text, { color: theme.colors.error }]}>
       {message || fallback}
-    </Text>
+    </TextSmall>
   )
 }
 
 const styles = StyleSheet.create({
   text: {
-    fontSize: Typography.sizes.small,
-    marginTop: Spacing.spacing.xsmall,
+    marginTop: 8,
   },
 })
