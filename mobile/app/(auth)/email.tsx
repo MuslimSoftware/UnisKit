@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import { StyleSheet, TextInput, View } from 'react-native'
 import { router } from 'expo-router'
-import { useTheme } from '@/hooks/theme'
+import { useTheme } from '@/shared/hooks/theme'
 import { Typography } from '@/constants/Typography'
 import { Spacing } from '@/constants/Spacing'
-import { AuthScreenLayout } from '@/components/auth/AuthScreenLayout'
-import { ErrorMessage } from '@/components/ErrorMessage'
+import { AuthScreenLayout } from '@/features/auth/components/AuthScreenLayout'
+import { ErrorMessage } from '@/shared/components/ui'
 
 export default function EmailScreen() {
   const theme = useTheme()

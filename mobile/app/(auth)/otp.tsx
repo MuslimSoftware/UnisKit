@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, TextInput, View } from 'react-native'
-import { useTheme } from '@/features/theme/hooks/useTheme'
+import { useTheme } from '@/shared/hooks/theme'
 import { TextSmall, ErrorMessage } from '@/shared/components/ui'
 import { Typography } from '@/constants/Typography'
 import { Spacing } from '@/constants/Spacing'
@@ -17,7 +17,6 @@ export default function OTPScreen() {
     error,
     handleVerify,
     handleResendOTP,
-    focusInput,
     getScreenTitle,
     getScreenSubtitle,
     resendCooldown,

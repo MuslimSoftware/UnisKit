@@ -1,11 +1,10 @@
 import React from 'react'
-import { Link, Stack } from 'expo-router'
-import { StyleSheet, Text, View } from 'react-native'
+import { Stack } from 'expo-router'
+import { StyleSheet, View } from 'react-native'
 
-import { ThemedView } from '@/components/ThemedView'
-import { TextTitle, TextLink } from '@/components/typography'
+import { TextTitle } from '@/shared/components/ui/typography'
 import { Spacing } from '@/constants/Spacing'
-import { Button } from '@/components/Button'
+import { Button } from '@/shared/components/ui/Button'
 
 export default function NotFoundScreen() {
   return (

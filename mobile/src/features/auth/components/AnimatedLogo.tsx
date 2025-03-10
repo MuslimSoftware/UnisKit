@@ -1,7 +1,7 @@
 import React from 'react'
 import { StyleSheet, View, Animated, Dimensions } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
-import { useTheme } from '@/hooks/theme'
+import { useTheme } from '@/shared/hooks/theme'
 
 export const LOGO_SIZE = 160
 export const LOGO_TO_TITLE_SPACING = 5

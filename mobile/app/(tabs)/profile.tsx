@@ -11,10 +11,10 @@ import {
   TextBody,
   TextSmall,
   TextSemiBold,
-} from '@/components/typography'
+} from '@/shared/components/ui/typography'
 import { Spacing } from '@/constants/Spacing'
-import { useTheme } from '@/hooks/theme'
-import { IconSymbol } from '@/components/ui/IconSymbol'
+import { useTheme } from '@/shared/hooks/theme'
+import { IconSymbol } from '@/shared/components/ui/IconSymbol'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useRouter } from 'expo-router'
 
@@ -65,7 +65,7 @@ export default function ProfileScreen() {
               }}
             >
               <IconSymbol
-                name="gearshape.fill"
+                name="gear"
                 size={Spacing.size.icon.medium}
                 color={theme.colors.text}
               />

@@ -1,6 +1,6 @@
+import { INITIAL_POSITION, FINAL_POSITION } from '@/features/auth/components/AnimatedLogo'
 import { useEffect } from 'react'
 import { Animated, Dimensions } from 'react-native'
-import { INITIAL_POSITION, FINAL_POSITION } from '@/components/auth/AnimatedLogo'
 
 export const LOGO_SIZE = 160 // The size of the logo
 const SCREEN_HEIGHT = Dimensions.get('window').height

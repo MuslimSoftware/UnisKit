@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react'
 import { useApi } from './useApi'
+import { ApiResponse } from '../client/apiClient'
 
 interface PaginationParams {
   page: number
@@ -19,7 +20,7 @@ interface UseApiPaginatedOptions<T> {
 }
 
 export function useApiPaginated<T>(
-  endpoint: string,
+  apiFunction: (params: PaginationParams) => Promise<ApiResponse<PaginatedResponse<T>>>,
   options: UseApiPaginatedOptions<T> = {}
 ) {
   const [page, setPage] = useState(1)
@@ -30,7 +31,7 @@ export function useApiPaginated<T>(
 
   const pageSize = options.pageSize || 20
 
-  const api = useApi<PaginatedResponse<T>>('get', endpoint, {
+  const api = useApi(apiFunction, {
     onSuccess: (response) => {
       setAllData(response.data)
       setHasMore(response.hasMore)
@@ -44,12 +45,11 @@ export function useApiPaginated<T>(
     async (params?: any) => {
       setPage(1)
       setAllData([])
-      const queryParams = new URLSearchParams({
+      return api.execute({
         ...params,
-        page: '1',
-        limit: pageSize.toString(),
+        page: 1,
+        limit: pageSize,
       })
-      return api.execute({ params: queryParams.toString() })
     },
     [api, pageSize]
   )
@@ -61,11 +61,10 @@ export function useApiPaginated<T>(
     const nextPage = page + 1
 
     try {
-      const queryParams = new URLSearchParams({
-        page: nextPage.toString(),
-        limit: pageSize.toString(),
+      const response = await api.execute({
+        page: nextPage,
+        limit: pageSize,
       })
-      const response = await api.execute({ params: queryParams.toString() })
 
       setPage(nextPage)
       setAllData((prev) => [...prev, ...response.data])

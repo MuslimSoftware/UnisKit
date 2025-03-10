@@ -1,12 +1,18 @@
 import React from 'react'
 import { StyleSheet, View, Animated } from 'react-native'
-import { ThemedView } from '@/components/ThemedView'
-import { LOGO_SIZE, useLogoAnimation } from '@/hooks/animation'
-import { TextBody, TextTitle } from '@/components/typography'
+import { ThemedView } from '@/shared/components/ui/ThemedView'
+import {
+  LOGO_SIZE,
+  useLogoAnimation,
+} from '@/features/animation/hooks/useLogoAnimation'
+import { TextBody, TextTitle } from '@/shared/components/ui'
 import { Spacing } from '@/constants/Spacing'
-import { SocialButtons } from '@/components/auth/SocialButtons'
-import { AuthFooter } from '@/components/auth/AuthFooter'
-import { AnimatedLogo, INITIAL_POSITION } from '@/components/auth/AnimatedLogo'
+import { SocialButtons } from '@/features/auth/components/SocialButtons'
+import { AuthFooter } from '@/features/auth/components/AuthFooter'
+import {
+  AnimatedLogo,
+  INITIAL_POSITION,
+} from '@/features/auth/components/AnimatedLogo'
 import { Brand } from '@/constants/Brand'
 import { router } from 'expo-router'
 

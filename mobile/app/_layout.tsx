@@ -10,18 +10,17 @@ import * as SplashScreen from 'expo-splash-screen'
 import { StatusBar } from 'expo-status-bar'
 import { useEffect } from 'react'
 import 'react-native-reanimated'
-import { useTheme } from '@/hooks/theme'
+import { useTheme } from '@/shared/hooks/theme'
 import { AuthProvider, useAuth } from '@/context/AuthContext'
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync()
 
 function RootLayoutNav() {
-  const { isDark } = useTheme()
-  const { isAuthenticated } = useAuth()
+  const theme = useTheme()
 
   return (
-    <ThemeProvider value={isDark ? DarkTheme : DefaultTheme}>
+    <ThemeProvider value={theme.scheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack
         screenOptions={{
           headerShown: false,
@@ -55,7 +54,7 @@ function RootLayoutNav() {
 
 export default function RootLayout() {
   const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+    SpaceMono: require('@/assets/fonts/SpaceMono-Regular.ttf'),
   })
 
   useEffect(() => {

@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react'
-import { apiClient, ApiResponse, ApiError } from '../client/apiClient'
+import { ApiResponse, ApiError } from '../client/apiClient'
 
 interface ApiState<T> {
   data: T | null
@@ -11,13 +11,11 @@ interface UseApiOptions<T> {
   onSuccess?: (data: T) => void
   onError?: (error: ApiError) => void
   initialData?: T | null
+  immediate?: boolean
 }
 
-type ApiMethod = 'get' | 'post' | 'put' | 'delete'
-
 export function useApi<T>(
-  method: ApiMethod,
-  endpoint: string,
+  apiFunction: (...args: any[]) => Promise<ApiResponse<T>>,
   options: UseApiOptions<T> = {}
 ) {
   const [state, setState] = useState<ApiState<T>>({
@@ -27,29 +25,11 @@ export function useApi<T>(
   })
 
   const execute = useCallback(
-    async (data?: any) => {
+    async (...args: any[]) => {
       setState((prev) => ({ ...prev, loading: true, error: null }))
 
       try {
-        let response: ApiResponse<T>
-
-        switch (method) {
-          case 'get':
-            response = await apiClient.get<T>(endpoint)
-            break
-          case 'post':
-            response = await apiClient.post<T>(endpoint, data)
-            break
-          case 'put':
-            response = await apiClient.put<T>(endpoint, data)
-            break
-          case 'delete':
-            response = await apiClient.delete<T>(endpoint)
-            break
-          default:
-            throw new Error(`Unsupported method: ${method}`)
-        }
-
+        const response = await apiFunction(...args)
         setState({ data: response.data, error: null, loading: false })
         options.onSuccess?.(response.data)
         return response.data
@@ -64,7 +44,7 @@ export function useApi<T>(
         throw apiError
       }
     },
-    [method, endpoint, options]
+    [apiFunction, options]
   )
 
   const reset = useCallback(() => {

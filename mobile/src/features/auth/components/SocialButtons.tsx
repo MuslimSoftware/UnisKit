@@ -1,9 +1,9 @@
 import React from 'react'
 import { StyleSheet, View, Image } from 'react-native'
-import { Button } from '@/components/Button'
+import { Button } from '@/shared/components/ui/Button'
 import { Spacing } from '@/constants/Spacing'
 import { Colors } from '@/constants/Colors'
-import { useTheme } from '@/hooks/theme'
+import { useTheme } from '@/shared/hooks/theme'
 
 interface SocialButtonsProps {
   navigateToEmail: () => void
@@ -18,32 +18,26 @@ export function SocialButtons({ navigateToEmail }: SocialButtonsProps) {
         icon="mail-outline"
         text="Continue with Email"
         onPress={navigateToEmail}
-        align="left"
+        variant="secondary"
       />
 
       <Button
         icon={
           <Image
-            source={require('../../assets/images/google.png')}
+            source={require('@/assets/images/google.png')}
             style={{ width: 24, height: 24 }}
           />
         }
         text="Continue with Google"
         onPress={navigateToEmail}
-        align="left"
-        backgroundColor={Colors.white}
-        borderColor={theme.colors.border}
-        textColor={Colors.black}
+        variant="secondary"
       />
 
       <Button
         icon="logo-apple"
         text="Continue with Apple"
         onPress={navigateToEmail}
-        align="left"
-        backgroundColor={theme.isDark ? Colors.white : Colors.black}
-        textColor={theme.isDark ? Colors.black : Colors.white}
-        iconColor={theme.isDark ? Colors.black : Colors.white}
+        variant="secondary"
       />
     </View>
   )

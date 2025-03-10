@@ -1,7 +1,7 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
 import { TextSmall } from './typography'
-import { useTheme } from '@/features/theme/hooks/useTheme'
+import { useTheme } from '@/shared/hooks/theme'
 
 interface ErrorMessageProps {
   message?: string | null

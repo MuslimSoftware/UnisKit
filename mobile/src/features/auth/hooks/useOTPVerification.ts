@@ -1,54 +1,36 @@
 import { useState, useRef, useEffect } from 'react'
 import { TextInput } from 'react-native'
-import { router, useLocalSearchParams } from 'expo-router'
+import { useLocalSearchParams } from 'expo-router'
 import { useApi } from '@/api/hooks/useApi'
 import { useAuth } from '@/context/AuthContext'
 import * as SecureStore from 'expo-secure-store'
+import { requestOTP, validateOTP, authenticate } from '@/api/endpoints/authApi'
 
-interface RequestOTPResponse {
-  success: boolean
-  message: string
-  data: {
-    expires_in: number
-  }
-}
-
-interface ValidateOTPResponse {
-  success: boolean
-  message: string
-  data: {
-    token: string
-  }
-}
-
-interface AuthResponse {
-  success: boolean
-  message: string
-  data: {
-    access_token: string
-    refresh_token: string
-  }
-}
+const COOLDOWN_DURATION = 30 // seconds
+const AUTO_FOCUS_DELAY = 500 // milliseconds
 
 export function useOTPVerification() {
+  // State
   const [otp, setOtp] = useState('')
-  const [resendCooldown, setResendCooldown] = useState(0)
+  const [resendCooldown, setResendCooldown] = useState(COOLDOWN_DURATION)
+  
+  // Refs
   const inputRef = useRef<TextInput>(null)
+  
+  // Hooks
   const { signIn } = useAuth()
+  const { email } = useLocalSearchParams<{ email?: string }>()
+  
+  // API hooks
+  const requestOTPApi = useApi(requestOTP)
+  const validateOTPApi = useApi(validateOTP)
+  const authApi = useApi(authenticate)
 
-  const params = useLocalSearchParams<{ email?: string }>()
-  const email = params.email
+  // Computed values
+  const isLoading = requestOTPApi.loading || validateOTPApi.loading || authApi.loading
+  const error = requestOTPApi.error || validateOTPApi.error || authApi.error
 
-  const requestOTPApi = useApi<RequestOTPResponse>('post', '/auth/request-otp')
-  const validateOTPApi = useApi<ValidateOTPResponse>('post', '/auth/validate-otp')
-  const authApi = useApi<AuthResponse>('post', '/auth/auth')
-
-  // Start cooldown timer when component mounts
-  useEffect(() => {
-    setResendCooldown(30) // 30 seconds cooldown
-  }, [])
-
-  // Handle cooldown timer
+  // Timer management
   useEffect(() => {
     if (resendCooldown <= 0) return
 
@@ -59,74 +41,80 @@ export function useOTPVerification() {
     return () => clearInterval(timer)
   }, [resendCooldown])
 
+  // Input management
+  const focusInput = () => {
+    inputRef.current?.focus()
+  }
+
   useEffect(() => {
-    // Auto-focus the input when the screen mounts
-    const timer = setTimeout(() => {
-      inputRef.current?.focus()
-    }, 500)
-
-    // Request OTP when component mounts
-    const sendInitialOTP = async () => {
-      try {
-        if (!email) {
-          throw new Error('Email is required')
-        }
-        await requestOTPApi.execute({ email })
-      } catch (error) {
-        console.error('Failed to send initial OTP:', error)
-      }
-    }
-
-    sendInitialOTP()
+    const timer = setTimeout(focusInput, AUTO_FOCUS_DELAY)
     return () => clearTimeout(timer)
-  }, [email])
+  }, [])
+
+  // API handlers
+  const sendOTP = async () => {
+    if (!email) {
+      throw new Error('Email is required')
+    }
+    
+    try {
+      await requestOTPApi.execute(email)
+      setResendCooldown(COOLDOWN_DURATION)
+    } catch (error) {
+      console.error('Failed to send OTP:', error)
+    }
+  }
 
   const handleResendOTP = async () => {
     if (resendCooldown > 0) return
-
-    try {
-      await requestOTPApi.execute({ email })
-      setResendCooldown(30)
-    } catch (error) {
-      console.error('Failed to resend OTP:', error)
-    }
+    await sendOTP()
   }
 
   const handleVerify = async () => {
     if (!email) {
       throw new Error('Email is required')
-      return
     }
 
     try {
       // Step 1: Validate OTP
-      const validateResponse = await validateOTPApi.execute({ email, otp })
+      const { token } = await validateOTPApi.execute(email, otp)
 
       // Step 2: Use the token to authenticate
-      const authResponse = await authApi.execute({ token: validateResponse.data.token })
+      const { access_token, refresh_token } = await authApi.execute(token)
 
       // Step 3: Store tokens and sign in
-      await SecureStore.setItemAsync('access_token', authResponse.data.access_token)
-      await SecureStore.setItemAsync('refresh_token', authResponse.data.refresh_token)
+      await Promise.all([
+        SecureStore.setItemAsync('access_token', access_token),
+        SecureStore.setItemAsync('refresh_token', refresh_token),
+      ])
+      
       signIn()
     } catch (error) {
       console.error('Verification failed:', error)
     }
   }
 
-  const focusInput = () => {
-    inputRef.current?.focus()
-  }
+  // Initial OTP request
+  useEffect(() => {
+    sendOTP()
+  }, [email])
 
   return {
+    // Input state
     otp,
     setOtp,
     inputRef,
-    error: requestOTPApi.error || validateOTPApi.error || authApi.error,
-    loading: requestOTPApi.loading || validateOTPApi.loading || authApi.loading,
+    focusInput,
+
+    // Loading and error states
+    error,
+    loading: isLoading,
+
+    // Actions
     handleVerify,
     handleResendOTP,
-    focusInput,
+
+    // UI helpers
     getScreenTitle: () => 'Verify Your Email',
     getScreenSubtitle: () => 'Enter the 6-digit code we sent to your email',
     resendCooldown,

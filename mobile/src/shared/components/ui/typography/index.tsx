@@ -17,6 +17,28 @@ export const TextSmall: React.FC<CustomTextProps> = ({
   />
 )
 
+export const TextBody: React.FC<CustomTextProps> = ({
+  style,
+  variant = 'primary',
+  ...props
+}) => (
+  <Text
+    style={[styles.body, variant === 'secondary' && styles.secondary, style]}
+    {...props}
+  />
+)
+
+export const TextTitle: React.FC<CustomTextProps> = ({
+  style,
+  variant = 'primary',
+  ...props
+}) => (
+  <Text
+    style={[styles.title, variant === 'secondary' && styles.secondary, style]}
+    {...props}
+  />
+)
+
 export const TextMedium: React.FC<CustomTextProps> = ({
   style,
   variant = 'primary',
@@ -50,10 +72,52 @@ export const TextXLarge: React.FC<CustomTextProps> = ({
   />
 )
 
+export const TextSemiBold: React.FC<CustomTextProps> = ({
+  style,
+  variant = 'primary',
+  ...props
+}) => (
+  <Text
+    style={[
+      {
+        fontSize: Typography.sizes.medium,
+        fontWeight: Typography.weights.semiBold,
+      },
+      variant === 'secondary' && styles.secondary,
+      style,
+    ]}
+    {...props}
+  />
+)
+
+export const TextLink: React.FC<CustomTextProps> = ({
+  style,
+  variant = 'primary',
+  ...props
+}) => (
+  <Text
+    style={[
+      styles.body,
+      { textDecorationLine: 'underline' },
+      variant === 'secondary' && styles.secondary,
+      style,
+    ]}
+    {...props}
+  />
+)
+
 const styles = StyleSheet.create({
   small: {
     fontSize: Typography.sizes.small,
     fontWeight: Typography.weights.regular,
+  },
+  body: {
+    fontSize: Typography.sizes.medium,
+    fontWeight: Typography.weights.regular,
+  },
+  title: {
+    fontSize: Typography.sizes.title,
+    fontWeight: Typography.weights.bold,
   },
   medium: {
     fontSize: Typography.sizes.medium,

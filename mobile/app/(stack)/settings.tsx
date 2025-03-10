@@ -1,8 +1,8 @@
 import { View, StyleSheet, ScrollView, Platform, Pressable } from 'react-native'
-import { TextTitle, TextBody, TextSmall } from '@/components/typography'
+import { TextTitle, TextBody, TextSmall } from '@/shared/components/ui'
 import { Spacing } from '@/constants/Spacing'
-import { useTheme } from '@/hooks/theme'
-import { IconSymbol, IconSymbolName } from '@/components/ui/IconSymbol'
+import { useTheme } from '@/shared/hooks'
+import { IconSymbol, IconSymbolName } from '@/shared/components/ui'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useRouter } from 'expo-router'
 import { Colors } from '@/constants/Colors'
@@ -74,15 +74,7 @@ export default function SettingsScreen() {
       style={({ pressed }) => [
         styles.settingItem,
         {
-          backgroundColor: pressed
-            ? Platform.OS === 'ios'
-              ? theme.isDark
-                ? 'rgba(255,255,255,0.1)'
-                : 'rgba(0,0,0,0.1)'
-              : theme.isDark
-              ? theme.colors.border + '40'
-              : theme.colors.border + '40'
-            : 'transparent',
+          backgroundColor: pressed ? theme.colors.border + '40' : 'transparent',
         },
       ]}
     >

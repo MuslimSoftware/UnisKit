@@ -1,5 +1,5 @@
 import { Stack } from 'expo-router'
-import { useTheme } from '@/hooks/theme'
+import { useTheme } from '@/shared/hooks'
 
 export default function StackLayout() {
   const theme = useTheme()

@@ -1,13 +1,14 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
 import { useFonts } from 'expo-font'
-import { ThemedView } from '@/components/ThemedView'
-import { useSplashAnimation } from '@/hooks/animation/useSplashAnimation'
-import { AnimatedLogo } from '@/components/auth/AnimatedLogo'
+import { useTheme } from '@/shared/hooks/theme'
+import { ThemedView } from '@/shared/components/ui/ThemedView'
+import { useSplashAnimation } from '@/features/animation/hooks/useSplashAnimation'
+import { AnimatedLogo } from '@/shared/components/ui/AnimatedLogo'
 
 export default function SplashScreen() {
   const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+    SpaceMono: require('@/assets/fonts/SpaceMono-Regular.ttf'),
   })
 
   const fontsLoadedPromise = new Promise<void>((resolve) => {

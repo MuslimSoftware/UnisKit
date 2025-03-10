@@ -10,11 +10,12 @@ import {
 } from 'react-native'
 import { router } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
-import { ThemedView } from '@/components/ThemedView'
-import { useTheme } from '@/hooks/theme'
-import { Button } from '@/components/Button'
-import { TextTitle, TextBody } from '@/components/typography'
+
+import { useTheme } from '@/shared/hooks/theme'
+import { Button } from '@/shared/components/ui/Button'
+import { TextTitle, TextBody } from '@/shared/components/ui/typography'
 import { Spacing } from '@/constants/Spacing'
+import { ThemedView } from '@/shared/components/ui/ThemedView'
 
 interface AuthScreenLayoutProps {
   title: string
