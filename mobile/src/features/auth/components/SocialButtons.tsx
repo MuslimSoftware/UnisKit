@@ -2,16 +2,12 @@ import React from 'react'
 import { StyleSheet, View, Image } from 'react-native'
 import { Button } from '@/shared/components/ui/Button'
 import { Spacing } from '@/constants/Spacing'
-import { Colors } from '@/constants/Colors'
-import { useTheme } from '@/shared/hooks/theme'
 
 interface SocialButtonsProps {
   navigateToEmail: () => void
 }
 
 export function SocialButtons({ navigateToEmail }: SocialButtonsProps) {
-  const theme = useTheme()
-
   return (
     <View style={styles.container}>
       <Button
