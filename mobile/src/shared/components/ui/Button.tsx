@@ -7,20 +7,21 @@ import {
   StyleProp,
   PressableStateCallbackType,
 } from 'react-native'
-import { TextBody } from './typography'
-import { useTheme } from '@/shared/hooks/theme'
-import { Spacing } from '@/shared/constants/Spacing'
+import { Button as ButtonText } from './typography'
+import { useTheme } from '../../hooks/useTheme'
 
 interface ButtonProps extends PressableProps {
   text: string
   icon?: React.ReactNode
   variant?: 'primary' | 'secondary'
+  size?: 'sm' | 'md' | 'lg'
 }
 
 export const Button: React.FC<ButtonProps> = ({
   icon,
   text,
   variant = 'primary',
+  size = 'md',
   style,
   ...props
 }) => {
@@ -28,36 +29,36 @@ export const Button: React.FC<ButtonProps> = ({
 
   const getStyles = (state: PressableStateCallbackType): ViewStyle => ({
     ...StyleSheet.flatten(styles.button),
-    backgroundColor: variant === 'primary' ? theme.colors.tint : 'transparent',
+    backgroundColor:
+      variant === 'primary' ? theme.colors.primary : 'transparent',
     borderWidth: variant === 'secondary' ? 1 : 0,
-    borderColor: theme.colors.border,
+    borderColor: theme.colors.primary,
     opacity: state.pressed ? 0.7 : 1,
+    padding: theme.spacing[size],
+    borderRadius: theme.borderRadius.md,
     ...(StyleSheet.flatten(style) as ViewStyle),
   })
 
   return (
     <Pressable style={getStyles} {...props}>
-      <TextBody
-        style={[
-          styles.text,
-          { color: variant === 'primary' ? '#fff' : theme.colors.text },
-        ]}
+      {icon}
+      <ButtonText
+        color={
+          variant === 'primary' ? theme.colors.white : theme.colors.primary
+        }
+        align="center"
       >
         {text}
-      </TextBody>
+      </ButtonText>
     </Pressable>
   )
 }
 
 const styles = StyleSheet.create({
   button: {
-    paddingVertical: Spacing.spacing.medium,
-    paddingHorizontal: Spacing.spacing.large,
-    borderRadius: Spacing.radius.card,
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  text: {
-    textAlign: 'center',
+    gap: 8,
   },
 })

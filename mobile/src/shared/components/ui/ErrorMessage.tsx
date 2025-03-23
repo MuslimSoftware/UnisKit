@@ -1,7 +1,7 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
-import { TextSmall } from './typography'
-import { useTheme } from '@/shared/hooks/theme'
+import { Caption } from './typography'
+import { useTheme } from '../../hooks/useTheme'
 
 interface ErrorMessageProps {
   message?: string | null
@@ -17,9 +17,9 @@ export function ErrorMessage({
   if (!message) return null
 
   return (
-    <TextSmall style={[styles.text, { color: theme.colors.error }]}>
+    <Caption color={theme.colors.error} style={styles.text}>
       {message || fallback}
-    </TextSmall>
+    </Caption>
   )
 }
 

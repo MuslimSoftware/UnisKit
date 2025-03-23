@@ -1,6 +1,6 @@
 import React from 'react'
 import { Animated, StyleSheet, View } from 'react-native'
-import { TextTitle } from './typography'
+import { Header1 } from './typography'
 import { Brand } from '@/shared/constants/Brand'
 
 interface AnimatedLogoProps {
@@ -15,7 +15,7 @@ export const AnimatedLogo: React.FC<AnimatedLogoProps> = ({
   return (
     <Animated.View style={[styles.container, animatedStyle]}>
       <View style={styles.logo} />
-      {showTitle && <TextTitle style={styles.title}>{Brand.name}</TextTitle>}
+      {showTitle && <Header1 style={styles.title}>{Brand.name}</Header1>}
     </Animated.View>
   )
 }

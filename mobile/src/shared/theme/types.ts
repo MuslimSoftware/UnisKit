@@ -1,3 +1,4 @@
+// Colors
 export type ColorValue = string;
 
 export interface ColorPalette {
@@ -25,6 +26,7 @@ export interface ColorPalette {
   info: ColorValue;
 }
 
+// Typography
 export type FontWeight = 
   | 'normal' 
   | 'bold' 
@@ -66,6 +68,7 @@ export interface Typography extends TypographyBase {
   scaleFont: (variant: TypographyVariant, scaleFactor?: number) => TypographyVariant;
 }
 
+// Spacing
 export interface SpacingValues {
   xs: number;
   sm: number;
@@ -80,19 +83,38 @@ export interface Spacing extends SpacingValues {
   scale: (factor: number) => number;
 }
 
+// Border radius
+export interface BorderRadius {
+  sm: number;
+  md: number;
+  lg: number;
+  full: number;
+}
+
+// Shadows
+export interface Shadows {
+  sm: string;
+  md: string;
+  lg: string;
+}
+
+// Component theme props
+export interface ThemedStyleProps {
+  backgroundColor?: keyof ColorPalette | string;
+  borderColor?: keyof ColorPalette | string;
+  padding?: number;
+  paddingHorizontal?: number;
+  paddingVertical?: number;
+  margin?: number;
+  marginHorizontal?: number;
+  marginVertical?: number;
+  rounded?: keyof BorderRadius | 'none';
+}
+
 export interface Theme {
   colors: ColorPalette;
   typography: Typography;
   spacing: SpacingValues;
-  borderRadius: {
-    sm: number;
-    md: number;
-    lg: number;
-    full: number;
-  };
-  shadows: {
-    sm: string;
-    md: string;
-    lg: string;
-  };
+  borderRadius: BorderRadius;
+  shadows: Shadows;
 } 

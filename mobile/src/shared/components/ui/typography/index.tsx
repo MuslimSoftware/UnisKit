@@ -1,137 +1,127 @@
 import React from 'react'
-import { Text, TextProps, StyleSheet } from 'react-native'
-import { Typography } from '@/shared/constants/Typography'
+import { Text as RNText, TextProps } from 'react-native'
+import { typography } from '../../../theme/typography'
+import { TypographyVariant } from '../../../theme/types'
+import { useTheme } from '../../../hooks/useTheme'
+import { ColorPalette } from '../../../theme/types'
 
-interface CustomTextProps extends TextProps {
-  variant?: 'primary' | 'secondary'
+type TextAlignment = 'left' | 'center' | 'right'
+
+/**
+ * Props for all typography components
+ * @property align - Text alignment
+ * @property truncate - Whether to truncate text with ellipsis
+ * @property color - Text color from theme or custom color
+ * @property numberOfLines - Number of lines to show (if truncating)
+ * @property selectable - Whether text can be selected
+ */
+interface TypographyProps extends Omit<TextProps, 'numberOfLines'> {
+  /** Text alignment */
+  align?: TextAlignment
+  /** Whether to truncate text with ellipsis */
+  truncate?: boolean | number
+  /** Text color from theme or custom color */
+  color?: keyof ColorPalette | string
+  /** Whether text can be selected */
+  selectable?: boolean
 }
 
-export const TextSmall: React.FC<CustomTextProps> = ({
+const BaseText: React.FC<
+  TypographyProps & { typographyStyle: TypographyVariant }
+> = ({
   style,
-  variant = 'primary',
+  align,
+  truncate,
+  color,
+  typographyStyle,
+  selectable,
   ...props
-}) => (
-  <Text
-    style={[styles.small, variant === 'secondary' && styles.secondary, style]}
+}) => {
+  const theme = useTheme()
+  const textColor = color
+    ? theme.colors[color as keyof ColorPalette] || color
+    : theme.colors.black
+
+  const numberOfLines =
+    typeof truncate === 'number' ? truncate : truncate ? 1 : undefined
+
+  return (
+    <RNText
+      numberOfLines={numberOfLines}
+      selectable={selectable}
+      style={[
+        {
+          fontFamily: typographyStyle.fontFamily,
+          fontSize: typographyStyle.fontSize,
+          fontWeight: typographyStyle.fontWeight,
+          lineHeight: typographyStyle.lineHeight,
+          letterSpacing: typographyStyle.letterSpacing,
+          textAlign: align,
+          color: textColor,
+        },
+        style,
+      ]}
+      {...props}
+    />
+  )
+}
+
+export const Header1: React.FC<TypographyProps> = (props) => (
+  <BaseText
     {...props}
+    typographyStyle={typography.h1}
+    accessibilityRole="header"
   />
 )
 
-export const TextBody: React.FC<CustomTextProps> = ({
-  style,
-  variant = 'primary',
-  ...props
-}) => (
-  <Text
-    style={[styles.body, variant === 'secondary' && styles.secondary, style]}
+export const Header2: React.FC<TypographyProps> = (props) => (
+  <BaseText
     {...props}
+    typographyStyle={typography.h2}
+    accessibilityRole="header"
   />
 )
 
-export const TextTitle: React.FC<CustomTextProps> = ({
-  style,
-  variant = 'primary',
-  ...props
-}) => (
-  <Text
-    style={[styles.title, variant === 'secondary' && styles.secondary, style]}
+export const Header3: React.FC<TypographyProps> = (props) => (
+  <BaseText
     {...props}
+    typographyStyle={typography.h3}
+    accessibilityRole="header"
   />
 )
 
-export const TextMedium: React.FC<CustomTextProps> = ({
-  style,
-  variant = 'primary',
-  ...props
-}) => (
-  <Text
-    style={[styles.medium, variant === 'secondary' && styles.secondary, style]}
+export const Header4: React.FC<TypographyProps> = (props) => (
+  <BaseText
     {...props}
+    typographyStyle={typography.h4}
+    accessibilityRole="header"
   />
 )
 
-export const TextLarge: React.FC<CustomTextProps> = ({
-  style,
-  variant = 'primary',
-  ...props
-}) => (
-  <Text
-    style={[styles.large, variant === 'secondary' && styles.secondary, style]}
-    {...props}
-  />
+export const Subtitle1: React.FC<TypographyProps> = (props) => (
+  <BaseText {...props} typographyStyle={typography.subtitle1} />
 )
 
-export const TextXLarge: React.FC<CustomTextProps> = ({
-  style,
-  variant = 'primary',
-  ...props
-}) => (
-  <Text
-    style={[styles.xlarge, variant === 'secondary' && styles.secondary, style]}
-    {...props}
-  />
+export const Subtitle2: React.FC<TypographyProps> = (props) => (
+  <BaseText {...props} typographyStyle={typography.subtitle2} />
 )
 
-export const TextSemiBold: React.FC<CustomTextProps> = ({
-  style,
-  variant = 'primary',
-  ...props
-}) => (
-  <Text
-    style={[
-      {
-        fontSize: Typography.sizes.medium,
-        fontWeight: Typography.weights.semiBold,
-      },
-      variant === 'secondary' && styles.secondary,
-      style,
-    ]}
-    {...props}
-  />
+export const Body1: React.FC<TypographyProps> = (props) => (
+  <BaseText {...props} typographyStyle={typography.body1} />
 )
 
-export const TextLink: React.FC<CustomTextProps> = ({
-  style,
-  variant = 'primary',
-  ...props
-}) => (
-  <Text
-    style={[
-      styles.body,
-      { textDecorationLine: 'underline' },
-      variant === 'secondary' && styles.secondary,
-      style,
-    ]}
-    {...props}
-  />
+export const Body2: React.FC<TypographyProps> = (props) => (
+  <BaseText {...props} typographyStyle={typography.body2} />
 )
 
-const styles = StyleSheet.create({
-  small: {
-    fontSize: Typography.sizes.small,
-    fontWeight: Typography.weights.regular,
-  },
-  body: {
-    fontSize: Typography.sizes.medium,
-    fontWeight: Typography.weights.regular,
-  },
-  title: {
-    fontSize: Typography.sizes.title,
-    fontWeight: Typography.weights.bold,
-  },
-  medium: {
-    fontSize: Typography.sizes.medium,
-    fontWeight: Typography.weights.regular,
-  },
-  large: {
-    fontSize: Typography.sizes.large,
-    fontWeight: Typography.weights.regular,
-  },
-  xlarge: {
-    fontSize: Typography.sizes.xlarge,
-    fontWeight: Typography.weights.regular,
-  },
-  secondary: {
-    opacity: 0.6,
-  },
-})
+export const Button: React.FC<TypographyProps> = (props) => (
+  <BaseText {...props} typographyStyle={typography.button} />
+)
+
+export const Caption: React.FC<TypographyProps> = (props) => (
+  <BaseText {...props} typographyStyle={typography.caption} />
+)
+
+export const Overline: React.FC<TypographyProps> = (props) => (
+  <BaseText {...props} typographyStyle={typography.overline} />
+)
