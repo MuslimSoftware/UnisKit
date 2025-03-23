@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react'
 import { TextInput } from 'react-native'
 import { useLocalSearchParams } from 'expo-router'
 import { useApi } from '@/api/useApi'
-import { useAuth } from '@/context/AuthContext'
+import { useAuth } from '@/features/auth/context/AuthContext'
 import * as SecureStore from 'expo-secure-store'
 import { requestOTP, validateOTP, authenticate } from '@/api/endpoints/authApi'
 import {

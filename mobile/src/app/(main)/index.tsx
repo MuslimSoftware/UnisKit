@@ -3,7 +3,7 @@ import { ThemedView } from '@/shared/components/ui/ThemedView'
 import { useTheme } from '@/shared/hooks/theme'
 import { TextTitle, TextBody } from '@/shared/components/ui/typography'
 import { IconSymbol } from '@/shared/components/ui/IconSymbol'
-import { Spacing } from '@/constants/Spacing'
+import { Spacing } from '@/shared/constants/Spacing'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 export default function HomeScreen() {

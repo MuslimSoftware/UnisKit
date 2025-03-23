@@ -11,7 +11,7 @@ import { StatusBar } from 'expo-status-bar'
 import { useEffect } from 'react'
 import 'react-native-reanimated'
 import { useTheme } from '@/shared/hooks/theme'
-import { AuthProvider, useAuth } from '@/context/AuthContext'
+import { AuthProvider } from '@/features/auth/context/AuthContext'
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync()
@@ -40,7 +40,7 @@ function RootLayoutNav() {
           }}
         />
         <Stack.Screen
-          name="(tabs)"
+          name="(main)"
           options={{
             animation: 'none',
           }}

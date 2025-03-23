@@ -2,8 +2,8 @@ import React from 'react'
 import { StyleSheet, View, TouchableOpacity } from 'react-native'
 import { TextSmall } from '@/shared/components/ui/typography'
 import { useTheme } from '@/shared/hooks/theme'
-import { Spacing } from '@/constants/Spacing'
-import { Typography } from '@/constants/Typography'
+import { Spacing } from '@/shared/constants/Spacing'
+import { Typography } from '@/shared/constants/Typography'
 
 export function AuthFooter({
   navigateToEmail,

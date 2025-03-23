@@ -6,7 +6,7 @@ import { useTheme } from '@/shared/hooks/theme'
 import { HapticTab } from '@/shared/components/ui/HapticTab'
 import { IconSymbol } from '@/shared/components/ui/IconSymbol'
 import TabBarBackground from '@/shared/components/ui/TabBarBackground'
-import { Spacing } from '@/constants/Spacing'
+import { Spacing } from '@/shared/constants/Spacing'
 
 export default function TabLayout() {
   const theme = useTheme()

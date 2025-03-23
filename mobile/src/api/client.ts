@@ -1,4 +1,4 @@
-import { Environment } from '@/constants/Environment'
+import { Environment } from '@/shared/constants/Environment'
 import { HttpMethod, ApiResponse } from '@/api/types/api.types'
 import * as SecureStore from 'expo-secure-store'
 
@@ -12,16 +12,16 @@ class TokenManager {
       const refreshToken = await SecureStore.getItemAsync('refresh_token')
       if (!refreshToken) return false
 
-      const response = await fetch(`${Environment.apiUrl}/auth/refresh`, {
+      const rawResponse = await fetch(`${Environment.apiUrl}/auth/refresh`, {
         method: HttpMethod.POST,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ refresh_token: refreshToken }),
       })
 
-      const data = await response.json()
-      if (!data.success) return false
+      const response = await rawResponse.json()
+      if (!response.success) return false
 
-      await SecureStore.setItemAsync('access_token', data.data.access_token)
+      await SecureStore.setItemAsync('access_token', response.data.access_token)
       return true
     } catch {
       return false
@@ -96,8 +96,22 @@ class ApiClient {
     }
   }
 
+  private async makeRequest<T>(
+    method: HttpMethod,
+    endpoint: string,
+    data?: any,
+    options: RequestInit = {}
+  ): Promise<ApiResponse<T>> {
+    const requestOptions: RequestInit = {
+      ...options,
+      method,
+      ...(data && { body: JSON.stringify(data) }),
+    }
+    return this.request<T>(endpoint, requestOptions)
+  }
+
   public async get<T>(endpoint: string, options: RequestInit = {}): Promise<ApiResponse<T>> {
-    return this.request<T>(endpoint, { ...options, method: HttpMethod.GET })
+    return this.makeRequest<T>(HttpMethod.GET, endpoint, undefined, options)
   }
 
   public async post<T>(
@@ -105,11 +119,7 @@ class ApiClient {
     data?: any,
     options: RequestInit = {}
   ): Promise<ApiResponse<T>> {
-    return this.request<T>(endpoint, {
-      ...options,
-      method: HttpMethod.POST,
-      body: JSON.stringify(data),
-    })
+    return this.makeRequest<T>(HttpMethod.POST, endpoint, data, options)
   }
 
   public async put<T>(
@@ -117,15 +127,11 @@ class ApiClient {
     data?: any,
     options: RequestInit = {}
   ): Promise<ApiResponse<T>> {
-    return this.request<T>(endpoint, {
-      ...options,
-      method: HttpMethod.PUT,
-      body: JSON.stringify(data),
-    })
+    return this.makeRequest<T>(HttpMethod.PUT, endpoint, data, options)
   }
 
   public async delete<T>(endpoint: string, options: RequestInit = {}): Promise<ApiResponse<T>> {
-    return this.request<T>(endpoint, { ...options, method: HttpMethod.DELETE })
+    return this.makeRequest<T>(HttpMethod.DELETE, endpoint, undefined, options)
   }
 }
 

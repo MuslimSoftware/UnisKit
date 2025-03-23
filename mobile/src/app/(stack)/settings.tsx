@@ -1,11 +1,11 @@
 import { View, StyleSheet, ScrollView, Platform, Pressable } from 'react-native'
 import { TextTitle, TextBody, TextSmall } from '@/shared/components/ui'
-import { Spacing } from '@/constants/Spacing'
+import { Spacing } from '@/shared/constants/Spacing'
 import { useTheme } from '@/shared/hooks'
 import { IconSymbol, IconSymbolName } from '@/shared/components/ui'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useRouter } from 'expo-router'
-import { Colors } from '@/constants/Colors'
+import { Colors } from '@/shared/constants/Colors'
 import * as SecureStore from 'expo-secure-store'
 const SETTINGS_SECTIONS = [
   {

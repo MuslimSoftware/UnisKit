@@ -50,8 +50,6 @@ module.exports = {
     // Expose environment variables to the app
     env: ENV,
     apiUrl: process.env.API_URL,
-    iosApiUrl: process.env.IOS_API_URL,
-    androidApiUrl: process.env.ANDROID_API_URL,
     bypassAuth: process.env.BYPASS_AUTH === 'true',
     autoFillCredentials: process.env.AUTO_FILL_CREDENTIALS === 'true',
     autoFillEmail: process.env.AUTO_FILL_EMAIL,

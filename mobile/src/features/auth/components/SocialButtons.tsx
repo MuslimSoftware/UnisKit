@@ -1,7 +1,7 @@
 import React from 'react'
 import { StyleSheet, View, Image } from 'react-native'
 import { Button } from '@/shared/components/ui/Button'
-import { Spacing } from '@/constants/Spacing'
+import { Spacing } from '@/shared/constants/Spacing'
 
 interface SocialButtonsProps {
   navigateToEmail: () => void

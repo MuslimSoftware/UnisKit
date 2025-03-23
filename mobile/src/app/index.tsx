@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native'
 import { useFonts } from 'expo-font'
 import { useTheme } from '@/shared/hooks/theme'
 import { ThemedView } from '@/shared/components/ui/ThemedView'
-import { useSplashAnimation } from '@/features/animation/hooks/useSplashAnimation'
+import { useSplashAnimation } from '@/features/auth/hooks/useSplashAnimation'
 import { AnimatedLogo } from '@/shared/components/ui/AnimatedLogo'
 
 export default function SplashScreen() {

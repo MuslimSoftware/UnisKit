@@ -3,7 +3,7 @@ import { Stack } from 'expo-router'
 import { StyleSheet, View } from 'react-native'
 
 import { TextTitle } from '@/shared/components/ui/typography'
-import { Spacing } from '@/constants/Spacing'
+import { Spacing } from '@/shared/constants/Spacing'
 import { Button } from '@/shared/components/ui/Button'
 
 export default function NotFoundScreen() {

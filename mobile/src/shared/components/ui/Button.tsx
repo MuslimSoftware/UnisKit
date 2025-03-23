@@ -9,7 +9,7 @@ import {
 } from 'react-native'
 import { TextBody } from './typography'
 import { useTheme } from '@/shared/hooks/theme'
-import { Spacing } from '@/constants/Spacing'
+import { Spacing } from '@/shared/constants/Spacing'
 
 interface ButtonProps extends PressableProps {
   text: string

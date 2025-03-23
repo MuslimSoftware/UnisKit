@@ -14,7 +14,7 @@ import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@/shared/hooks/theme'
 import { Button } from '@/shared/components/ui/Button'
 import { TextTitle, TextBody } from '@/shared/components/ui/typography'
-import { Spacing } from '@/constants/Spacing'
+import { Spacing } from '@/shared/constants/Spacing'
 import { ThemedView } from '@/shared/components/ui/ThemedView'
 
 interface AuthScreenLayoutProps {

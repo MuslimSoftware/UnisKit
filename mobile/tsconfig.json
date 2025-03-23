@@ -8,16 +8,11 @@
       "@/api/*": ["src/api/*"],
       "@/features/*": ["src/features/*"],
       "@/shared/*": ["src/shared/*"],
-      "@/constants/*": ["src/constants/*"],
+      "@/constants/*": ["src/shared/constants/*"],
       "@/context/*": ["src/context/*"],
       "@/assets/*": ["src/assets/*"],
-      "@/types/*": ["src/types/*"]
+      "@/types/*": ["src/shared/types/*"]
     }
   },
-  "include": [
-    "**/*.ts",
-    "**/*.tsx",
-    ".expo/types/**/*.ts",
-    "expo-env.d.ts"
-  ]
+  "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts"]
 }

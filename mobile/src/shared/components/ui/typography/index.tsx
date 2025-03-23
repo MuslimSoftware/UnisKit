@@ -1,6 +1,6 @@
 import React from 'react'
 import { Text, TextProps, StyleSheet } from 'react-native'
-import { Typography } from '@/constants/Typography'
+import { Typography } from '@/shared/constants/Typography'
 
 interface CustomTextProps extends TextProps {
   variant?: 'primary' | 'secondary'
