@@ -1,10 +1,18 @@
 import { useState, useRef, useEffect } from 'react'
 import { TextInput } from 'react-native'
 import { useLocalSearchParams } from 'expo-router'
-import { useApi } from '@/api/hooks/useApi'
+import { useApi } from '@/api/useApi'
 import { useAuth } from '@/context/AuthContext'
 import * as SecureStore from 'expo-secure-store'
 import { requestOTP, validateOTP, authenticate } from '@/api/endpoints/authApi'
+import {
+  RequestOTPResponse,
+  ValidateOTPResponse,
+  AuthResponse,
+  OTPRequest,
+  ValidateOTPRequest,
+  AuthRequest
+} from '@/api/types/auth.types'
 
 const COOLDOWN_DURATION = 30 // seconds
 const AUTO_FOCUS_DELAY = 500 // milliseconds
@@ -22,9 +30,18 @@ export function useOTPVerification() {
   const { email } = useLocalSearchParams<{ email?: string }>()
   
   // API hooks
-  const requestOTPApi = useApi(requestOTP)
-  const validateOTPApi = useApi(validateOTP)
-  const authApi = useApi(authenticate)
+  const requestOTPApi = useApi<
+    RequestOTPResponse,
+    [OTPRequest]
+  >(requestOTP)
+  const validateOTPApi = useApi<
+    ValidateOTPResponse,
+    [ValidateOTPRequest]
+  >(validateOTP)
+  const authApi = useApi<
+    AuthResponse,
+    [AuthRequest]
+  >(authenticate)
 
   // Computed values
   const isLoading = requestOTPApi.loading || validateOTPApi.loading || authApi.loading
@@ -58,7 +75,7 @@ export function useOTPVerification() {
     }
     
     try {
-      await requestOTPApi.execute(email)
+      await requestOTPApi.execute({ email })
       setResendCooldown(COOLDOWN_DURATION)
     } catch (error) {
       console.error('Failed to send OTP:', error)
@@ -71,16 +88,24 @@ export function useOTPVerification() {
   }
 
   const handleVerify = async () => {
-    if (!email) {
-      throw new Error('Email is required')
+    if (!email || !otp) {
+      throw new Error('Email and OTP are required')
     }
 
     try {
       // Step 1: Validate OTP
-      const { token } = await validateOTPApi.execute(email, otp)
+      const validateResponse = await validateOTPApi.execute({ email, otp })
+      if (!validateResponse) {
+        throw new Error('Failed to validate OTP')
+      }
+      const { token } = validateResponse
 
       // Step 2: Use the token to authenticate
-      const { access_token, refresh_token } = await authApi.execute(token)
+      const authResponse = await authApi.execute({ token })
+      if (!authResponse) {
+        throw new Error('Failed to authenticate')
+      }
+      const { access_token, refresh_token } = authResponse
 
       // Step 3: Store tokens and sign in
       await Promise.all([

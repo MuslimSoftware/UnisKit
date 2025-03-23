@@ -1,41 +1,20 @@
 import { Environment } from '@/constants/Environment'
+import { HttpMethod, ApiResponse } from '@/api/types/api.types'
 import * as SecureStore from 'expo-secure-store'
 
-export interface ApiResponse<T = any> {
-  success: boolean
-  message: string
-  data: T
-}
-
-export interface ApiError {
-  message: string
-  error_code: string
-  status_code: number
-}
-
-export class ApiClient {
-  private baseUrl: string
-  private defaultHeaders: Record<string, string>
-
-  constructor() {
-    this.baseUrl = Environment.apiUrl
-    this.defaultHeaders = {
-      'Content-Type': 'application/json',
-    }
-  }
-
-  private async getAuthToken(): Promise<string | null> {
+class TokenManager {
+  static async getAuthToken(): Promise<string | null> {
     return await SecureStore.getItemAsync('access_token')
   }
 
-  private async refreshToken(): Promise<boolean> {
+  static async refreshToken(): Promise<boolean> {
     try {
       const refreshToken = await SecureStore.getItemAsync('refresh_token')
       if (!refreshToken) return false
 
-      const response = await fetch(`${this.baseUrl}/auth/refresh`, {
-        method: 'POST',
-        headers: this.defaultHeaders,
+      const response = await fetch(`${Environment.apiUrl}/auth/refresh`, {
+        method: HttpMethod.POST,
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ refresh_token: refreshToken }),
       })
 
@@ -48,6 +27,18 @@ export class ApiClient {
       return false
     }
   }
+}
+
+class ApiClient {
+  private baseUrl: string
+  private defaultHeaders: Record<string, string>
+
+  constructor() {
+    this.baseUrl = Environment.apiUrl
+    this.defaultHeaders = {
+      'Content-Type': 'application/json',
+    }
+  }
 
   private async request<T>(
     endpoint: string,
@@ -57,7 +48,7 @@ export class ApiClient {
     const headers = { ...this.defaultHeaders }
 
     // Add auth token if available
-    const token = await this.getAuthToken()
+    const token = await TokenManager.getAuthToken()
     if (token) {
       headers['Authorization'] = `Bearer ${token}`
     }
@@ -70,9 +61,9 @@ export class ApiClient {
 
       // Handle 401 with token refresh
       if (response.status === 401 && token) {
-        const refreshed = await this.refreshToken()
+        const refreshed = await TokenManager.refreshToken()
         if (refreshed) {
-          const newToken = await this.getAuthToken()
+          const newToken = await TokenManager.getAuthToken()
           headers['Authorization'] = `Bearer ${newToken}`
           response = await fetch(url, {
             ...options,
@@ -106,7 +97,7 @@ export class ApiClient {
   }
 
   public async get<T>(endpoint: string, options: RequestInit = {}): Promise<ApiResponse<T>> {
-    return this.request<T>(endpoint, { ...options, method: 'GET' })
+    return this.request<T>(endpoint, { ...options, method: HttpMethod.GET })
   }
 
   public async post<T>(
@@ -116,7 +107,7 @@ export class ApiClient {
   ): Promise<ApiResponse<T>> {
     return this.request<T>(endpoint, {
       ...options,
-      method: 'POST',
+      method: HttpMethod.POST,
       body: JSON.stringify(data),
     })
   }
@@ -128,13 +119,13 @@ export class ApiClient {
   ): Promise<ApiResponse<T>> {
     return this.request<T>(endpoint, {
       ...options,
-      method: 'PUT',
+      method: HttpMethod.PUT,
       body: JSON.stringify(data),
     })
   }
 
   public async delete<T>(endpoint: string, options: RequestInit = {}): Promise<ApiResponse<T>> {
-    return this.request<T>(endpoint, { ...options, method: 'DELETE' })
+    return this.request<T>(endpoint, { ...options, method: HttpMethod.DELETE })
   }
 }
 

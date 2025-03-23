@@ -1,31 +1,27 @@
-import { apiClient } from '../client/apiClient'
-import { ApiResponse } from '../client/apiClient'
+import { apiClient } from '@/api/client'
+import { ApiResponse } from '@/api/types/api.types'
+import { 
+  RequestOTPResponse, 
+  ValidateOTPResponse, 
+  AuthResponse,
+  OTPRequest,
+  ValidateOTPRequest,
+  AuthRequest,
+  RefreshTokenRequest
+} from '@/api/types/auth.types'
 
-interface RequestOTPResponse {
-  expires_in: number
+export const requestOTP = async ({email, signal}: OTPRequest): Promise<ApiResponse<RequestOTPResponse>> => {
+  return apiClient.post('/auth/request-otp', { email }, { signal })
 }
 
-interface ValidateOTPResponse {
-  token: string
+export const validateOTP = async ({email, otp, signal}: ValidateOTPRequest): Promise<ApiResponse<ValidateOTPResponse>> => {
+  return apiClient.post('/auth/validate-otp', { email, otp }, { signal })
 }
 
-interface AuthResponse {
-  access_token: string
-  refresh_token: string
+export const authenticate = async ({token, signal}: AuthRequest): Promise<ApiResponse<AuthResponse>> => {
+  return apiClient.post('/auth/auth', { token }, { signal })
 }
 
-export const requestOTP = async (email: string): Promise<ApiResponse<RequestOTPResponse>> => {
-  return apiClient.post('/auth/request-otp', { email })
+export const refreshToken = async ({refreshToken, signal}: RefreshTokenRequest): Promise<ApiResponse<{ access_token: string }>> => {
+  return apiClient.post('/auth/refresh', { refresh_token: refreshToken }, { signal })
 }
-
-export const validateOTP = async (email: string, otp: string): Promise<ApiResponse<ValidateOTPResponse>> => {
-  return apiClient.post('/auth/validate-otp', { email, otp })
-}
-
-export const authenticate = async (token: string): Promise<ApiResponse<AuthResponse>> => {
-  return apiClient.post('/auth/auth', { token })
-}
-
-export const refreshToken = async (refreshToken: string): Promise<ApiResponse<{ access_token: string }>> => {
-  return apiClient.post('/auth/refresh', { refresh_token: refreshToken })
-} 
