@@ -11,12 +11,10 @@ import {
 import { router } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
 
-import { useTheme } from '@/shared/hooks/theme'
-import { Button } from '@/shared/components/ui/Button'
-import { TextTitle, TextBody } from '@/shared/components/ui/text'
-import { Spacing } from '@/shared/constants/Spacing'
-import { ThemedView } from '@/shared/components/ui/ThemedView'
-
+import { useTheme } from '@/shared/context/ThemeContext'
+import { Button } from '@/shared/components/buttons/Button'
+import { Typography } from '@/shared/components/data-display/Typography'
+import Box from '@/shared/components/layout/Box'
 interface AuthScreenLayoutProps {
   title: string
   subtitle: string
@@ -73,130 +71,133 @@ export function AuthScreenLayout({
   }
 
   return (
-    <ThemedView style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={handleBack} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={24} color={theme.colors.text} />
-        </TouchableOpacity>
-      </View>
+    <Box>
+      <Typography variant="h1">{title}</Typography>
+    </Box>
+    // <ThemedView style={styles.container}>
+    //   <View style={styles.header}>
+    //     <TouchableOpacity onPress={handleBack} style={styles.backButton}>
+    //       <Ionicons name="arrow-back" size={24} color={theme.colors.text} />
+    //     </TouchableOpacity>
+    //   </View>
 
-      {Platform.OS === 'ios' ? (
-        <KeyboardAvoidingView
-          behavior="padding"
-          keyboardVerticalOffset={0}
-          style={styles.content}
-        >
-          <View style={styles.formContainer}>
-            <TextTitle style={styles.title}>{title}</TextTitle>
-            <TextBody variant="secondary" style={styles.subtitle}>
-              {subtitle}
-            </TextBody>
+    //   {Platform.OS === 'ios' ? (
+    //     <KeyboardAvoidingView
+    //       behavior="padding"
+    //       keyboardVerticalOffset={0}
+    //       style={styles.content}
+    //     >
+    //       <View style={styles.formContainer}>
+    //         <TextTitle style={styles.title}>{title}</TextTitle>
+    //         <TextBody variant="secondary" style={styles.subtitle}>
+    //           {subtitle}
+    //         </TextBody>
 
-            {children}
-          </View>
+    //         {children}
+    //       </View>
 
-          <Animated.View
-            style={[
-              styles.buttonContainer,
-              {
-                transform: [
-                  {
-                    translateY: buttonAnimation.interpolate({
-                      inputRange: [0.3, 1],
-                      outputRange: [-20, 0],
-                    }),
-                  },
-                ],
-                opacity: buttonAnimation.interpolate({
-                  inputRange: [0.3, 1],
-                  outputRange: [1, 1],
-                }),
-              },
-            ]}
-          >
-            <Button
-              text={buttonText}
-              onPress={onButtonPress}
-              disabled={buttonDisabled}
-            />
-          </Animated.View>
-        </KeyboardAvoidingView>
-      ) : (
-        <View style={styles.content}>
-          <View style={styles.formContainer}>
-            <TextTitle style={styles.title}>{title}</TextTitle>
-            <TextBody variant="secondary" style={styles.subtitle}>
-              {subtitle}
-            </TextBody>
+    //       <Animated.View
+    //         style={[
+    //           styles.buttonContainer,
+    //           {
+    //             transform: [
+    //               {
+    //                 translateY: buttonAnimation.interpolate({
+    //                   inputRange: [0.3, 1],
+    //                   outputRange: [-20, 0],
+    //                 }),
+    //               },
+    //             ],
+    //             opacity: buttonAnimation.interpolate({
+    //               inputRange: [0.3, 1],
+    //               outputRange: [1, 1],
+    //             }),
+    //           },
+    //         ]}
+    //       >
+    //         <Button
+    //           text={buttonText}
+    //           onPress={onButtonPress}
+    //           disabled={buttonDisabled}
+    //         />
+    //       </Animated.View>
+    //     </KeyboardAvoidingView>
+    //   ) : (
+    //     <View style={styles.content}>
+    //       <View style={styles.formContainer}>
+    //         <TextTitle style={styles.title}>{title}</TextTitle>
+    //         <TextBody variant="secondary" style={styles.subtitle}>
+    //           {subtitle}
+    //         </TextBody>
 
-            {children}
-          </View>
+    //         {children}
+    //       </View>
 
-          <Animated.View
-            style={[
-              styles.buttonContainer,
-              {
-                transform: [
-                  {
-                    translateY: buttonAnimation.interpolate({
-                      inputRange: [0.3, 1],
-                      outputRange: [keyboardVisible ? -250 : 0, 0],
-                    }),
-                  },
-                ],
-              },
-            ]}
-          >
-            <Button
-              text={buttonText}
-              onPress={onButtonPress}
-              disabled={buttonDisabled}
-            />
-          </Animated.View>
-        </View>
-      )}
-    </ThemedView>
+    //       <Animated.View
+    //         style={[
+    //           styles.buttonContainer,
+    //           {
+    //             transform: [
+    //               {
+    //                 translateY: buttonAnimation.interpolate({
+    //                   inputRange: [0.3, 1],
+    //                   outputRange: [keyboardVisible ? -250 : 0, 0],
+    //                 }),
+    //               },
+    //             ],
+    //           },
+    //         ]}
+    //       >
+    //         <Button
+    //           text={buttonText}
+    //           onPress={onButtonPress}
+    //           disabled={buttonDisabled}
+    //         />
+    //       </Animated.View>
+    //     </View>
+    //   )}
+    // </ThemedView>
   )
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  header: {
-    paddingTop: 60,
-    paddingHorizontal: Spacing.layout.screen,
-    paddingBottom: Spacing.layout.screen,
-  },
-  backButton: {
-    padding: Spacing.layout.section,
-    marginLeft: -Spacing.layout.section,
-  },
-  content: {
-    flex: 1,
-    paddingHorizontal: Spacing.layout.screen,
-    marginTop: Spacing.spacing.xlarge,
-  },
-  formContainer: {},
-  title: {
-    marginBottom: Spacing.spacing.small,
-  },
-  subtitle: {
-    marginBottom: Spacing.spacing.xlarge,
-  },
-  buttonContainer: {
-    ...(Platform.OS === 'ios'
-      ? {
-          flex: 1,
-          justifyContent: 'flex-end',
-          minHeight: 120,
-          paddingBottom: 50,
-        }
-      : {
-          position: 'absolute',
-          bottom: Spacing.layout.screen,
-          left: Spacing.layout.screen,
-          right: Spacing.layout.screen,
-        }),
-  },
+  // container: {
+  //   flex: 1,
+  // },
+  // header: {
+  //   paddingTop: 60,
+  //   paddingHorizontal: Spacing.layout.screen,
+  //   paddingBottom: Spacing.layout.screen,
+  // },
+  // backButton: {
+  //   padding: Spacing.layout.section,
+  //   marginLeft: -Spacing.layout.section,
+  // },
+  // content: {
+  //   flex: 1,
+  //   paddingHorizontal: Spacing.layout.screen,
+  //   marginTop: Spacing.spacing.xlarge,
+  // },
+  // formContainer: {},
+  // title: {
+  //   marginBottom: Spacing.spacing.small,
+  // },
+  // subtitle: {
+  //   marginBottom: Spacing.spacing.xlarge,
+  // },
+  // buttonContainer: {
+  //   ...(Platform.OS === 'ios'
+  //     ? {
+  //         flex: 1,
+  //         justifyContent: 'flex-end',
+  //         minHeight: 120,
+  //         paddingBottom: 50,
+  //       }
+  //     : {
+  //         position: 'absolute',
+  //         bottom: Spacing.layout.screen,
+  //         left: Spacing.layout.screen,
+  //         right: Spacing.layout.screen,
+  //       }),
+  // },
 })

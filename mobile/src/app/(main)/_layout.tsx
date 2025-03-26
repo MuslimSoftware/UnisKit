@@ -1,23 +1,18 @@
 import { Tabs } from 'expo-router'
 import React from 'react'
 import { Platform } from 'react-native'
-import { useTheme } from '@/shared/hooks/theme'
-
-import { HapticTab } from '@/shared/components/ui/HapticTab'
-import { IconSymbol } from '@/shared/components/ui/IconSymbol'
-import TabBarBackground from '@/shared/components/ui/TabBarBackground'
-import { Spacing } from '@/shared/constants/Spacing'
-
+import { useTheme } from '@/shared/context/ThemeContext'
+import Typography from '@/shared/components/data-display/Typography'
 export default function TabLayout() {
-  const theme = useTheme()
+  const { theme } = useTheme()
 
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: theme.colors.tint,
+        tabBarActiveTintColor: theme.palette.primary.main,
         headerShown: false,
-        tabBarButton: HapticTab,
-        tabBarBackground: TabBarBackground,
+        // tabBarButton: HapticTab,
+        // tabBarBackground: TabBarBackground,
         tabBarStyle: Platform.select({
           ios: {
             // Use a transparent background on iOS to show the blur effect
@@ -25,7 +20,7 @@ export default function TabLayout() {
           },
           android: {
             height: 60,
-            paddingVertical: Spacing.navigation.tabBarPadding,
+            paddingVertical: 10,
           },
           default: {},
         }),
@@ -36,7 +31,8 @@ export default function TabLayout() {
         options={{
           title: 'Home',
           tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="house.fill" color={color} />
+            // <IconSymbol size={28} name="house.fill" color={color} />
+            <Typography variant="h1">Home</Typography>
           ),
         }}
       />
@@ -45,7 +41,8 @@ export default function TabLayout() {
         options={{
           title: 'Profile',
           tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="person.circle.fill" color={color} />
+            // <IconSymbol size={28} name="person.circle.fill" color={color} />
+            <Typography variant="h1">Profile</Typography>
           ),
         }}
       />

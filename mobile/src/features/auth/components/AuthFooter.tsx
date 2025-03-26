@@ -1,38 +1,37 @@
 import React from 'react'
 import { StyleSheet, View, TouchableOpacity } from 'react-native'
-import { TextSM } from '@/shared/components/ui/text'
-import { useTheme } from '@/shared/hooks/useTheme'
-import { Theme } from '@/shared/types/theme'
+import { Typography } from '@/shared/components/data-display/Typography'
+import { useTheme } from '@/shared/context/ThemeContext'
 export function AuthFooter({
   navigateToEmail,
 }: {
   navigateToEmail: () => void
 }) {
-  const {theme} = useTheme()
+  const { theme } = useTheme()
 
   return (
     <View style={styles.container}>
       <View style={styles.textContainer}>
-        <TextSM>Already have an account?</TextSM>
+        <Typography variant="body2">Already have an account?</Typography>
         <TouchableOpacity onPress={navigateToEmail}>
-          <TextSM style={[styles.link, { color: theme.colors.actionPrimary }]}>
+          {/* <Typography variant="body2" style={[styles.link, { color: theme.palette.primary.main }]}>
             Sign in
-          </TextSM>
+          </Typography>
         </TouchableOpacity>
       </View>
 
       <View style={styles.termsContainer}>
-        <TextSM>By continuing, you agree to our </TextSM>
+        <Typography variant="body2">By continuing, you agree to our </Typography>
         <TouchableOpacity>
-          <TextSM style={[styles.link, { color: theme.colors.actionPrimary }]}>
+          <Typography variant="body2" style={[styles.link, { color: theme.palette.primary.main }]}>
             Terms of Service
-          </TextSM>
+          </Typography>
         </TouchableOpacity>
-        <TextSM> and </TextSM>
+        <Typography variant="body2"> and </Typography>
         <TouchableOpacity>
-          <TextSM style={[styles.link, { color: theme.colors.actionPrimary }]}>
+          <Typography variant="body2" style={[styles.link, { color: theme.palette.primary.main }]}>
             Privacy Policy
-          </TextSM>
+          </Typography> */}
         </TouchableOpacity>
       </View>
     </View>
@@ -41,14 +40,14 @@ export function AuthFooter({
 
 const styles = StyleSheet.create({
   container: {
-    gap: theme.spacing.xlarge,
-    paddingBottom: theme.layout.screen,
+    gap: 10,
+    paddingBottom: 10,
   },
   textContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    gap: theme.spacing.xxsmall,
+    gap: 4,
   },
   termsContainer: {
     flexDirection: 'row',
@@ -59,6 +58,6 @@ const styles = StyleSheet.create({
   },
   link: {
     textDecorationLine: 'underline',
-    fontWeight: theme.typography.weights.medium,
+    fontWeight: 'bold',
   },
 })

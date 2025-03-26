@@ -1,9 +1,9 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
 import { useFonts } from 'expo-font'
-import { ThemedView } from '@/shared/components/ui/ThemedView'
 import { useSplashAnimation } from '@/features/auth/hooks/useSplashAnimation'
-import { AnimatedLogo } from '@/shared/components/ui/AnimatedLogo'
+import { AnimatedLogo } from '@/features/auth/components/AnimatedLogo'
+import Box from '@/shared/components/layout/Box'
 
 export default function SplashScreen() {
   const [loaded] = useFonts({
@@ -19,9 +19,9 @@ export default function SplashScreen() {
   const { animatedStyle } = useSplashAnimation(fontsLoadedPromise)
 
   return (
-    <ThemedView style={styles.container}>
+    <Box style={styles.container}>
       <AnimatedLogo animatedStyle={animatedStyle} showTitle={false} />
-    </ThemedView>
+    </Box>
   )
 }
 

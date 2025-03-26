@@ -1,14 +1,12 @@
 import React from 'react'
-import { StyleSheet, TextInput, View } from 'react-native'
-import { useTheme } from '@/shared/hooks/theme'
-import { TextSmall, ErrorMessage } from '@/shared/components/ui/text'
-import { Typography } from '@/shared/constants/Typography'
-import { Spacing } from '@/shared/constants/Spacing'
+import { StyleSheet, TextInput, View, TouchableOpacity } from 'react-native'
+import { useTheme } from '@/shared/context/ThemeContext'
 import { AuthScreenLayout } from '@/features/auth/components/AuthScreenLayout'
 import { useOTPVerification } from '@/features/auth/hooks/useOTPVerification'
+import Typography from '@/shared/components/data-display/Typography'
 
 export default function OTPScreen() {
-  const theme = useTheme()
+  const { theme } = useTheme()
   const {
     otp,
     setOtp,
@@ -37,37 +35,41 @@ export default function OTPScreen() {
             style={[
               styles.input,
               {
-                color: theme.colors.text,
-                borderColor: error ? theme.colors.error : theme.colors.border,
+                color: theme.palette.text.primary,
+                borderColor: error
+                  ? theme.palette.error.main
+                  : theme.palette.divider,
               },
             ]}
             value={otp}
             onChangeText={setOtp}
             placeholder="Enter verification code"
-            placeholderTextColor={theme.colors.secondaryText}
+            placeholderTextColor={theme.palette.text.secondary}
             keyboardType="number-pad"
             maxLength={6}
             autoComplete="one-time-code"
           />
-          {error && <ErrorMessage message={error.message} />}
+          {/* {error && <ErrorMessage message={error.message} />} */}
         </View>
 
         <View style={styles.footer}>
-          <TextSmall variant="secondary">
+          <Typography variant="subtitle2">
             Didn't receive the code?{' '}
-            <TextSmall
+            <TouchableOpacity
               onPress={resendCooldown > 0 ? undefined : handleResendOTP}
-              style={[
-                styles.link,
-                {
-                  color: theme.colors.tint,
-                  opacity: loading || resendCooldown > 0 ? 0.5 : 1,
-                },
-              ]}
+              disabled={resendCooldown > 0}
             >
-              {resendCooldown > 0 ? `Resend in ${resendCooldown}s` : 'Resend'}
-            </TextSmall>
-          </TextSmall>
+              <Typography
+                style={{
+                  ...styles.link,
+                  color: theme.palette.primary.main,
+                  opacity: loading || resendCooldown > 0 ? 0.5 : 1,
+                }}
+              >
+                {resendCooldown > 0 ? `Resend in ${resendCooldown}s` : 'Resend'}
+              </Typography>
+            </TouchableOpacity>
+          </Typography>
         </View>
       </View>
     </AuthScreenLayout>
@@ -77,23 +79,23 @@ export default function OTPScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: Spacing.spacing.medium,
+    // paddingHorizontal: Spacing.spacing.medium,
   },
   inputContainer: {
-    marginTop: Spacing.spacing.large,
+    // marginTop: Spacing.spacing.large,
   },
   input: {
-    fontSize: Typography.sizes.medium,
-    fontWeight: Typography.weights.regular,
+    // fontSize: Typography.sizes.medium,
+    // fontWeight: Typography.weights.regular,
     height: 48,
     borderWidth: 1,
-    borderRadius: Spacing.radius.medium,
-    paddingHorizontal: Spacing.spacing.medium,
+    // borderRadius: Spacing.radius.medium,
+    // paddingHorizontal: Spacing.spacing.medium,
     textAlign: 'center',
     letterSpacing: 8,
   },
   footer: {
-    marginTop: Spacing.spacing.medium,
+    // marginTop: Spacing.spacing.medium,
     alignItems: 'center',
   },
   link: {

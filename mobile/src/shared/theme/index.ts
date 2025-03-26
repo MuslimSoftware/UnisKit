@@ -1,31 +1,30 @@
-import { Theme } from '../types/theme';
-import { lightThemeColors, darkThemeColors } from './colors';
-import { typography } from './typography';
-import { spacing } from './spacing';
-import { styles } from './styles';
+// Export theme components
+import { ThemeProvider, useTheme } from '@/shared/context/ThemeContext';
+import createTheme from '@/shared/theme/createTheme';
+import defaultTheme from '@/shared/theme/defaultTheme';
+import darkTheme from '@/shared/theme/darkTheme';
+import * as themeTypes from '@/shared/theme/types';
 
-// Base theme with shared values
-const baseTheme = {
-  typography,
-  spacing,
-  styles,
-} as const;
+// Export hooks
+import useSystemTheme from '@/shared/hooks/useSystemTheme';
+import useThemeMode from '@/shared/hooks/useThemeMode';
+import useThemeColors from '@/shared/hooks/useThemeColors';
+import useThemeSpacing from '@/shared/hooks/useThemeSpacing';
+import useThemeTypography from '@/shared/hooks/useThemeTypography';
+import useThemeUtils from '@/shared/hooks/useThemeUtils';
 
-// Light theme extends base theme
-export const lightTheme: Theme = {
-  ...baseTheme,
-  colors: lightThemeColors,
+export {
+  ThemeProvider,
+  useTheme,
+  createTheme,
+  defaultTheme,
+  darkTheme,
+  themeTypes,
+  // Hooks
+  useSystemTheme,
+  useThemeMode,
+  useThemeColors,
+  useThemeSpacing,
+  useThemeTypography,
+  useThemeUtils,
 };
-
-// Dark theme extends base theme with dark-specific overrides
-export const darkTheme: Theme = {
-  ...baseTheme,
-  colors: darkThemeColors
-};
-
-// Export all theme-related types and values
-export * from '../types/theme';
-export * from './colors';
-export * from './typography';
-export * from './spacing';
-export * from './styles'; 

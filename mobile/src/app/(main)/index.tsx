@@ -1,20 +1,21 @@
 import { StyleSheet, Platform, View, ScrollView } from 'react-native'
-import { ThemedView } from '@/shared/components/ui/ThemedView'
-import { useTheme } from '@/shared/hooks/theme'
-import { TextTitle, TextBody } from '@/shared/components/ui/text'
-import { IconSymbol } from '@/shared/components/ui/IconSymbol'
-import { Spacing } from '@/shared/constants/Spacing'
+import { useTheme } from '@/shared/context/ThemeContext'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import Box from '@/shared/components/layout/Box'
+import Typography from '@/shared/components/data-display/Typography'
 
 export default function HomeScreen() {
-  const theme = useTheme()
+  const { theme } = useTheme()
   const insets = useSafeAreaInsets()
 
   return (
     <View
-      style={[styles.container, { backgroundColor: theme.colors.background }]}
+      style={[
+        // styles.container,
+        { backgroundColor: theme.palette.background.default },
+      ]}
     >
-      <ScrollView
+      {/* <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={[
           styles.scrollContent,
@@ -77,59 +78,62 @@ export default function HomeScreen() {
             </TextBody>
           </View>
         </View>
-      </ScrollView>
+      </ScrollView> */}
+      <Box>
+        <Typography variant="h1">Home</Typography>
+      </Box>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  scrollContent: {
-    flexGrow: 1,
-  },
-  content: {
-    flex: 1,
-    padding: Spacing.layout.screen,
-    gap: Spacing.spacing.large,
-  },
-  iconContainer: {
-    alignItems: 'center',
-    marginBottom: Spacing.spacing.large,
-  },
-  section: {
-    padding: Spacing.layout.content,
-    borderRadius: Spacing.radius.card,
-    gap: Spacing.spacing.medium,
-  },
-  title: {
-    textAlign: 'center',
-    marginBottom: Spacing.spacing.small,
-  },
-  description: {
-    textAlign: 'center',
-    marginBottom: Spacing.spacing.small,
-  },
-  features: {
-    gap: Spacing.spacing.small,
-  },
-  tip: {
-    textAlign: 'center',
-    lineHeight: 24,
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: Spacing.spacing.large,
-  },
-  card: {
-    padding: Spacing.layout.content,
-    borderRadius: Spacing.radius.card,
-    gap: Spacing.spacing.medium,
-  },
-  buttonContainer: {
-    gap: Spacing.spacing.small,
-  },
+  // container: {
+  //   flex: 1,
+  // },
+  // scrollContent: {
+  //   flexGrow: 1,
+  // },
+  // content: {
+  //   flex: 1,
+  //   padding: Spacing.layout.screen,
+  //   gap: Spacing.spacing.large,
+  // },
+  // iconContainer: {
+  //   alignItems: 'center',
+  //   marginBottom: Spacing.spacing.large,
+  // },
+  // section: {
+  //   padding: Spacing.layout.content,
+  //   borderRadius: Spacing.radius.card,
+  //   gap: Spacing.spacing.medium,
+  // },
+  // title: {
+  //   textAlign: 'center',
+  //   marginBottom: Spacing.spacing.small,
+  // },
+  // description: {
+  //   textAlign: 'center',
+  //   marginBottom: Spacing.spacing.small,
+  // },
+  // features: {
+  //   gap: Spacing.spacing.small,
+  // },
+  // tip: {
+  //   textAlign: 'center',
+  //   lineHeight: 24,
+  // },
+  // header: {
+  //   flexDirection: 'row',
+  //   justifyContent: 'space-between',
+  //   alignItems: 'center',
+  //   marginBottom: Spacing.spacing.large,
+  // },
+  // card: {
+  //   padding: Spacing.layout.content,
+  //   borderRadius: Spacing.radius.card,
+  //   gap: Spacing.spacing.medium,
+  // },
+  // buttonContainer: {
+  //   gap: Spacing.spacing.small,
+  // },
 })

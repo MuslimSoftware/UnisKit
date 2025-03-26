@@ -5,16 +5,16 @@ import * as SplashScreen from 'expo-splash-screen'
 import { StatusBar } from 'expo-status-bar'
 import { useEffect } from 'react'
 import 'react-native-reanimated'
-import { useTheme } from '../shared/hooks/useTheme'
+import { useTheme } from '@/shared/context/ThemeContext'
 import { AuthProvider } from '@/features/auth/context/AuthContext'
-import { ThemeProvider } from '../shared/context/ThemeContext'
+import { ThemeProvider } from '@/shared/context/ThemeProvider'
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync()
 
 function RootLayoutNav() {
-  const theme = useTheme()
-  const isDark = theme.colors.backgroundPrimary === '#212121'
+  const { theme } = useTheme()
+  const isDark = theme.palette.mode === 'dark'
 
   return (
     <>

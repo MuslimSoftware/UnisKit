@@ -6,20 +6,13 @@ import {
   Pressable,
   Image,
 } from 'react-native'
-import {
-  TextTitle,
-  TextBody,
-  TextSmall,
-  TextSemiBold,
-} from '@/shared/components/ui/text'
-import { Spacing } from '@/shared/constants/Spacing'
-import { useTheme } from '@/shared/hooks/theme'
-import { IconSymbol } from '@/shared/components/ui/IconSymbol'
+import { Typography } from '@/shared/components/data-display/Typography'
+import { useTheme } from '@/shared/context/ThemeContext'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useRouter } from 'expo-router'
-
+import Box from '@/shared/components/layout/Box'
 export default function ProfileScreen() {
-  const theme = useTheme()
+  const { theme } = useTheme()
   const insets = useSafeAreaInsets()
   const router = useRouter()
 
@@ -29,9 +22,12 @@ export default function ProfileScreen() {
 
   return (
     <View
-      style={[styles.container, { backgroundColor: theme.colors.background }]}
+      style={[
+        styles.container,
+        { backgroundColor: theme.palette.background.default },
+      ]}
     >
-      <ScrollView
+      {/* <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={[
           styles.scrollContent,
@@ -47,7 +43,7 @@ export default function ProfileScreen() {
       >
         <View style={styles.content}>
           <View style={styles.header}>
-            <TextTitle>Profile</TextTitle>
+            <Typography variant="h1">Profile</Typography>
             <Pressable
               onPress={handleSettingsPress}
               style={({ pressed }) => [
@@ -189,100 +185,103 @@ export default function ProfileScreen() {
             </View>
           </View>
         </View>
-      </ScrollView>
+      </ScrollView> */}
+      <Box>
+        <Typography variant="h1">Profile</Typography>
+      </Box>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  scrollContent: {
-    flexGrow: 1,
-  },
-  content: {
-    flex: 1,
-    padding: Spacing.layout.screen,
-    gap: Spacing.spacing.large,
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  settingsButton: {
-    width: Spacing.size.element.small,
-    height: Spacing.size.element.small,
-    borderRadius: Spacing.size.element.small / 2,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  avatar: {
-    width: Spacing.size.element.large,
-    height: Spacing.size.element.large,
-    borderRadius: Spacing.radius.circle,
-  },
-  profileCard: {
-    padding: Spacing.layout.screen,
-    borderRadius: Spacing.radius.card,
-    gap: Spacing.spacing.medium,
-  },
-  profileInfo: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.spacing.medium,
-  },
-  avatarPlaceholder: {
-    width: Spacing.size.element.large + 5,
-    height: Spacing.size.element.large + 5,
-    borderRadius: Spacing.radius.circle,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  nameContainer: {
-    flex: 1,
-  },
-  name: {
-    marginBottom: Spacing.spacing.xsmall,
-  },
-  username: {
-    opacity: 0.7,
-  },
-  locationContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.spacing.xxsmall,
-  },
-  section: {
-    padding: Spacing.layout.screen,
-    borderRadius: Spacing.radius.card,
-  },
-  sectionHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: Spacing.spacing.medium,
-  },
-  sectionTitle: {
-    fontSize: 18,
-  },
-  editButton: {
-    padding: Spacing.spacing.small,
-  },
-  bio: {
-    lineHeight: 24,
-  },
-  contactItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: Spacing.spacing.small,
-    gap: Spacing.spacing.xxsmall,
-  },
-  contactText: {
-    flex: 1,
-  },
-  location: {
-    flex: 1,
-  },
+  // container: {
+  //   flex: 1,
+  // },
+  // scrollContent: {
+  //   flexGrow: 1,
+  // },
+  // content: {
+  //   flex: 1,
+  //   padding: Spacing.layout.screen,
+  //   gap: Spacing.spacing.large,
+  // },
+  // header: {
+  //   flexDirection: 'row',
+  //   justifyContent: 'space-between',
+  //   alignItems: 'center',
+  // },
+  // settingsButton: {
+  //   width: Spacing.size.element.small,
+  //   height: Spacing.size.element.small,
+  //   borderRadius: Spacing.size.element.small / 2,
+  //   alignItems: 'center',
+  //   justifyContent: 'center',
+  // },
+  // avatar: {
+  //   width: Spacing.size.element.large,
+  //   height: Spacing.size.element.large,
+  //   borderRadius: Spacing.radius.circle,
+  // },
+  // profileCard: {
+  //   padding: Spacing.layout.screen,
+  //   borderRadius: Spacing.radius.card,
+  //   gap: Spacing.spacing.medium,
+  // },
+  // profileInfo: {
+  //   flexDirection: 'row',
+  //   alignItems: 'center',
+  //   gap: Spacing.spacing.medium,
+  // },
+  // avatarPlaceholder: {
+  //   width: Spacing.size.element.large + 5,
+  //   height: Spacing.size.element.large + 5,
+  //   borderRadius: Spacing.radius.circle,
+  //   alignItems: 'center',
+  //   justifyContent: 'center',
+  // },
+  // nameContainer: {
+  //   flex: 1,
+  // },
+  // name: {
+  //   marginBottom: Spacing.spacing.xsmall,
+  // },
+  // username: {
+  //   opacity: 0.7,
+  // },
+  // locationContainer: {
+  //   flexDirection: 'row',
+  //   alignItems: 'center',
+  //   gap: Spacing.spacing.xxsmall,
+  // },
+  // section: {
+  //   padding: Spacing.layout.screen,
+  //   borderRadius: Spacing.radius.card,
+  // },
+  // sectionHeader: {
+  //   flexDirection: 'row',
+  //   justifyContent: 'space-between',
+  //   alignItems: 'center',
+  //   marginBottom: Spacing.spacing.medium,
+  // },
+  // sectionTitle: {
+  //   fontSize: 18,
+  // },
+  // editButton: {
+  //   padding: Spacing.spacing.small,
+  // },
+  // bio: {
+  //   lineHeight: 24,
+  // },
+  // contactItem: {
+  //   flexDirection: 'row',
+  //   alignItems: 'center',
+  //   marginBottom: Spacing.spacing.small,
+  //   gap: Spacing.spacing.xxsmall,
+  // },
+  // contactText: {
+  //   flex: 1,
+  // },
+  // location: {
+  //   flex: 1,
+  // },
 })

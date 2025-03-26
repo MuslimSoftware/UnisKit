@@ -1,7 +1,7 @@
 import React from 'react'
 import { StyleSheet, View, Animated, Dimensions } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
-import { useTheme } from '@/shared/hooks/theme'
+import { useTheme } from '@/shared/context/ThemeContext'
 
 export const LOGO_SIZE = 160
 export const LOGO_TO_TITLE_SPACING = 5
@@ -14,14 +14,14 @@ interface AnimatedLogoProps {
 }
 
 export function AnimatedLogo({ animatedStyle }: AnimatedLogoProps) {
-  const theme = useTheme()
+  const { theme } = useTheme()
 
   return (
     <Animated.View style={[styles.container, animatedStyle]}>
       <Ionicons
         name="heart-circle"
         size={LOGO_SIZE}
-        color={theme.colors.tint}
+        color={theme.palette.primary.main}
       />
     </Animated.View>
   )

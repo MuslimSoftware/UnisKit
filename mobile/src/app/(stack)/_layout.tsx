@@ -1,14 +1,14 @@
 import { Stack } from 'expo-router'
-import { useTheme } from '@/shared/hooks'
+import { useTheme } from '@/shared/context/ThemeContext'
 
 export default function StackLayout() {
-  const theme = useTheme()
+  const { theme } = useTheme()
 
   return (
     <Stack
       screenOptions={{
         headerShown: false,
-        contentStyle: { backgroundColor: theme.colors.background },
+        contentStyle: { backgroundColor: theme.palette.background.default },
         presentation: 'modal',
         animation: 'default',
       }}

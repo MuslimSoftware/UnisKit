@@ -1,14 +1,12 @@
 import React, { useState } from 'react'
 import { StyleSheet, TextInput, View } from 'react-native'
 import { router } from 'expo-router'
-import { useTheme } from '@/shared/hooks/theme'
-import { Typography } from '@/shared/constants/Typography'
-import { Spacing } from '@/shared/constants/Spacing'
+import { useTheme } from '@/shared/context/ThemeContext'
 import { AuthScreenLayout } from '@/features/auth/components/AuthScreenLayout'
-import { ErrorMessage } from '@/shared/components/ui/text'
+import Typography from '@/shared/components/data-display/Typography'
 
 export default function EmailScreen() {
-  const theme = useTheme()
+  const { theme } = useTheme()
   const [email, setEmail] = useState('')
   const [error, setError] = useState<string | null>(null)
 
@@ -52,9 +50,11 @@ export default function EmailScreen() {
           style={[
             styles.input,
             {
-              backgroundColor: theme.input.background,
-              color: theme.input.text,
-              borderColor: error ? theme.colors.error : theme.colors.border,
+              backgroundColor: theme.palette.background.paper,
+              color: theme.palette.text.primary,
+              borderColor: error
+                ? theme.palette.error.main
+                : theme.palette.divider,
             },
           ]}
           placeholder="email@example.com"
@@ -64,9 +64,9 @@ export default function EmailScreen() {
           autoCapitalize="none"
           autoComplete="email"
           autoCorrect={false}
-          placeholderTextColor={theme.input.placeholder}
+          placeholderTextColor={theme.palette.text.secondary}
         />
-        {error ? <ErrorMessage message={error} /> : null}
+        {/* {error ? <ErrorMessage message={error} /> : null} */}
       </View>
     </AuthScreenLayout>
   )
@@ -74,14 +74,9 @@ export default function EmailScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    gap: Spacing.spacing.medium,
-    marginBottom: Spacing.spacing.xlarge,
     width: '100%',
   },
   input: {
-    padding: Spacing.layout.section,
-    borderRadius: Spacing.radius.card,
-    fontSize: Typography.sizes.medium,
     width: '100%',
     borderWidth: 1,
   },

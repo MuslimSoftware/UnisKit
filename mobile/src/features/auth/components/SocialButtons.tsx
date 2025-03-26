@@ -1,7 +1,7 @@
 import React from 'react'
 import { StyleSheet, View, Image } from 'react-native'
-import { Button } from '@/shared/components/ui/Button'
-import { Spacing } from '@/shared/constants/Spacing'
+import { Button } from '@/shared/components/buttons/Button'
+import { useThemeSpacing } from '@/shared/hooks/useThemeSpacing'
 
 interface SocialButtonsProps {
   navigateToEmail: () => void
@@ -11,29 +11,21 @@ export function SocialButtons({ navigateToEmail }: SocialButtonsProps) {
   return (
     <View style={styles.container}>
       <Button
-        icon="mail-outline"
-        text="Continue with Email"
+        children="Continue with Email"
         onPress={navigateToEmail}
-        variant="secondary"
+        variant="contained"
       />
 
       <Button
-        icon={
-          <Image
-            source={require('@/assets/images/google.png')}
-            style={{ width: 24, height: 24 }}
-          />
-        }
-        text="Continue with Google"
+        children="Continue with Google"
         onPress={navigateToEmail}
-        variant="secondary"
+        variant="contained"
       />
 
       <Button
-        icon="logo-apple"
-        text="Continue with Apple"
+        children="Continue with Apple"
         onPress={navigateToEmail}
-        variant="secondary"
+        variant="contained"
       />
     </View>
   )
@@ -41,6 +33,6 @@ export function SocialButtons({ navigateToEmail }: SocialButtonsProps) {
 
 const styles = StyleSheet.create({
   container: {
-    gap: Spacing.spacing.medium,
+    gap: 10,
   },
 })
