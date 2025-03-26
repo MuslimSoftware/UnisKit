@@ -1,26 +1,23 @@
 import React from 'react'
-import {
-  DarkTheme,
-  DefaultTheme,
-  ThemeProvider,
-} from '@react-navigation/native'
 import { useFonts } from 'expo-font'
 import { Stack } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
 import { StatusBar } from 'expo-status-bar'
 import { useEffect } from 'react'
 import 'react-native-reanimated'
-import { useTheme } from '@/shared/hooks/theme'
+import { useTheme } from '../shared/hooks/useTheme'
 import { AuthProvider } from '@/features/auth/context/AuthContext'
+import { ThemeProvider } from '../shared/context/ThemeContext'
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync()
 
 function RootLayoutNav() {
   const theme = useTheme()
+  const isDark = theme.colors.backgroundPrimary === '#212121'
 
   return (
-    <ThemeProvider value={theme.scheme === 'dark' ? DarkTheme : DefaultTheme}>
+    <>
       <Stack
         screenOptions={{
           headerShown: false,
@@ -47,8 +44,8 @@ function RootLayoutNav() {
         />
         <Stack.Screen name="+not-found" options={{ presentation: 'modal' }} />
       </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+      <StatusBar style={isDark ? 'light' : 'dark'} />
+    </>
   )
 }
 
@@ -70,8 +67,10 @@ export default function RootLayout() {
   }
 
   return (
-    <AuthProvider>
-      <RootLayoutNav />
-    </AuthProvider>
+    <ThemeProvider>
+      <AuthProvider>
+        <RootLayoutNav />
+      </AuthProvider>
+    </ThemeProvider>
   )
 }

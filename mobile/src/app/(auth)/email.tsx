@@ -5,7 +5,7 @@ import { useTheme } from '@/shared/hooks/theme'
 import { Typography } from '@/shared/constants/Typography'
 import { Spacing } from '@/shared/constants/Spacing'
 import { AuthScreenLayout } from '@/features/auth/components/AuthScreenLayout'
-import { ErrorMessage } from '@/shared/components/ui'
+import { ErrorMessage } from '@/shared/components/ui/text'
 
 export default function EmailScreen() {
   const theme = useTheme()

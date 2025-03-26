@@ -1,51 +1,85 @@
-import { ColorPalette } from './types';
-
-export const lightColors: ColorPalette = {
-  // Base colors
-  white: '#FFFFFF',
-  black: '#000000',
-
-  // Gray scale
-  gray100: '#F5F5F5',
-  gray200: '#EEEEEE',
-  gray300: '#E0E0E0',
-  gray400: '#BDBDBD',
-  gray500: '#9E9E9E',
-  gray600: '#757575',
-  gray700: '#616161',
+// Base color palette
+const palette = {
+  // Neutrals
+  neutral50: '#FAFAFA',
+  neutral100: '#F5F5F5',
+  neutral200: '#EEEEEE',
+  neutral300: '#E0E0E0',
+  neutral400: '#BDBDBD',
+  neutral500: '#9E9E9E',
+  neutral600: '#757575',
+  neutral700: '#616161',
+  neutral800: '#424242',
+  neutral900: '#212121',
 
   // Brand colors
-  primary: '#2f95dc',    // Your existing primary color
-  secondary: '#FF6B6B',  // You can adjust this
+  primary500: '#2f95dc',
+  primary600: '#2180c2',
+  primary700: '#1b6da3',
 
   // Semantic colors
-  success: '#4CAF50',    // Your existing success color
-  error: '#F44336',      // Your existing error color
-  warning: '#FFC107',    // Your existing warning color
-  info: '#2196F3',       // Your existing info color
+  success500: '#4CAF50',
+  error500: '#F44336',
+  warning500: '#FFC107',
+  info500: '#2196F3',
 } as const;
 
-export const darkColors: ColorPalette = {
-  // Base colors - inverted for dark theme
-  white: '#000000',
-  black: '#FFFFFF',
+// Semantic color mapping for light theme
+export const lightThemeColors = {
+  // Background colors
+  backgroundPrimary: palette.neutral50,
+  backgroundSecondary: palette.neutral100,
+  backgroundTertiary: palette.neutral200,
 
-  // Gray scale - inverted and adjusted for dark theme
-  gray700: '#F5F5F5',
-  gray600: '#EEEEEE',
-  gray500: '#E0E0E0',
-  gray400: '#BDBDBD',
-  gray300: '#757575',
-  gray200: '#616161',
-  gray100: '#424242',
+  // Text colors
+  textPrimary: palette.neutral900,
+  textSecondary: palette.neutral700,
+  textTertiary: palette.neutral500,
+  textInverse: palette.neutral50,
 
-  // Brand colors - adjusted for dark theme
-  primary: '#4dabea',    // Lighter version of primary
-  secondary: '#FF8787',  // Lighter version of secondary
+  // Action colors
+  actionPrimary: palette.primary500,
+  actionPrimaryHover: palette.primary600,
+  actionPrimaryPressed: palette.primary700,
+  actionDisabled: palette.neutral300,
 
-  // Semantic colors - adjusted for better visibility in dark mode
-  success: '#66BB6A',
-  error: '#EF5350',
-  warning: '#FFCA28',
-  info: '#42A5F5',
+  // Border colors
+  borderPrimary: palette.neutral200,
+  borderSecondary: palette.neutral300,
+
+  // Status colors
+  success: palette.success500,
+  error: palette.error500,
+  warning: palette.warning500,
+  info: palette.info500,
+} as const;
+
+// Semantic color mapping for dark theme
+export const darkThemeColors = {
+  // Background colors
+  backgroundPrimary: palette.neutral900,
+  backgroundSecondary: palette.neutral800,
+  backgroundTertiary: palette.neutral700,
+
+  // Text colors
+  textPrimary: palette.neutral50,
+  textSecondary: palette.neutral200,
+  textTertiary: palette.neutral400,
+  textInverse: palette.neutral900,
+
+  // Action colors
+  actionPrimary: palette.primary500,
+  actionPrimaryHover: palette.primary600,
+  actionPrimaryPressed: palette.primary700,
+  actionDisabled: palette.neutral600,
+
+  // Border colors
+  borderPrimary: palette.neutral700,
+  borderSecondary: palette.neutral600,
+
+  // Status colors
+  success: palette.success500,
+  error: palette.error500,
+  warning: palette.warning500,
+  info: palette.info500,
 } as const; 

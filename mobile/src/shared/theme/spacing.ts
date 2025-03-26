@@ -1,27 +1,32 @@
-import { SpacingValues } from './types';
+const BASE = 8;
 
-const BASE_UNIT = 8;
+export const spacing = {
+  // Base spacing units
+  none: 0,
+  xs: BASE * 0.5,    // 4
+  sm: BASE,          // 8
+  md: BASE * 2,      // 16
+  lg: BASE * 3,      // 24
+  xl: BASE * 4,      // 32
+  '2xl': BASE * 6,   // 48
+  '3xl': BASE * 8,   // 64
+  '4xl': BASE * 12,  // 96
+  '5xl': BASE * 16,  // 128
 
-export const spacingValues: SpacingValues = {
-  // Base unit for calculations
-  base: BASE_UNIT,
+  // Component specific spacing
+  container: {
+    sm: BASE * 2,    // 16
+    md: BASE * 3,    // 24
+    lg: BASE * 4,    // 32
+  },
 
-  // Predefined spacings
-  xs: BASE_UNIT * 0.5,    // 4
-  sm: BASE_UNIT,          // 8
-  md: BASE_UNIT * 2,      // 16
-  lg: BASE_UNIT * 3,      // 24
-  xl: BASE_UNIT * 4,      // 32
-  xxl: BASE_UNIT * 6,     // 48
-};
+  // Layout specific spacing
+  layout: {
+    gutter: BASE * 2,      // 16
+    margin: BASE * 2,      // 16
+    padding: BASE * 3,     // 24
+  },
+} as const;
 
-// Utility function to scale spacing
-export const scale = (factor: number): number => BASE_UNIT * factor;
-
-// Helper function to get spacing in different units
-export const getSpacing = (size: keyof SpacingValues | number): number => {
-  if (typeof size === 'number') {
-    return scale(size);
-  }
-  return spacingValues[size] || spacingValues.base;
-}; 
+// Helper function to get custom spacing
+export const getSpacing = (multiplier: number): number => BASE * multiplier; 

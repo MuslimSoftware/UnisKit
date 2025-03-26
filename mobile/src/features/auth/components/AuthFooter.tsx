@@ -1,42 +1,38 @@
 import React from 'react'
 import { StyleSheet, View, TouchableOpacity } from 'react-native'
-import { TextSmall } from '@/shared/components/ui/typography'
-import { useTheme } from '@/shared/hooks/theme'
-import { Spacing } from '@/shared/constants/Spacing'
-import { Typography } from '@/shared/constants/Typography'
-
+import { TextSM } from '@/shared/components/ui/text'
+import { useTheme } from '@/shared/hooks/useTheme'
+import { Theme } from '@/shared/types/theme'
 export function AuthFooter({
   navigateToEmail,
 }: {
   navigateToEmail: () => void
 }) {
-  const theme = useTheme()
+  const {theme} = useTheme()
 
   return (
     <View style={styles.container}>
       <View style={styles.textContainer}>
-        <TextSmall variant="secondary">Already have an account?</TextSmall>
+        <TextSM>Already have an account?</TextSM>
         <TouchableOpacity onPress={navigateToEmail}>
-          <TextSmall style={[styles.link, { color: theme.colors.tint }]}>
+          <TextSM style={[styles.link, { color: theme.colors.actionPrimary }]}>
             Sign in
-          </TextSmall>
+          </TextSM>
         </TouchableOpacity>
       </View>
 
       <View style={styles.termsContainer}>
-        <TextSmall variant="secondary">
-          By continuing, you agree to our{' '}
-        </TextSmall>
+        <TextSM>By continuing, you agree to our </TextSM>
         <TouchableOpacity>
-          <TextSmall style={[styles.link, { color: theme.colors.tint }]}>
+          <TextSM style={[styles.link, { color: theme.colors.actionPrimary }]}>
             Terms of Service
-          </TextSmall>
+          </TextSM>
         </TouchableOpacity>
-        <TextSmall variant="secondary"> and </TextSmall>
+        <TextSM> and </TextSM>
         <TouchableOpacity>
-          <TextSmall style={[styles.link, { color: theme.colors.tint }]}>
+          <TextSM style={[styles.link, { color: theme.colors.actionPrimary }]}>
             Privacy Policy
-          </TextSmall>
+          </TextSM>
         </TouchableOpacity>
       </View>
     </View>
@@ -45,14 +41,14 @@ export function AuthFooter({
 
 const styles = StyleSheet.create({
   container: {
-    gap: Spacing.spacing.xlarge,
-    paddingBottom: Spacing.layout.screen,
+    gap: theme.spacing.xlarge,
+    paddingBottom: theme.layout.screen,
   },
   textContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    gap: Spacing.spacing.xxsmall,
+    gap: theme.spacing.xxsmall,
   },
   termsContainer: {
     flexDirection: 'row',
@@ -63,6 +59,6 @@ const styles = StyleSheet.create({
   },
   link: {
     textDecorationLine: 'underline',
-    fontWeight: Typography.weights.medium,
+    fontWeight: theme.typography.weights.medium,
   },
 })

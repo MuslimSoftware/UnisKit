@@ -1,7 +1,7 @@
 import React from 'react'
 import { StyleSheet, TextInput, View } from 'react-native'
 import { useTheme } from '@/shared/hooks/theme'
-import { TextSmall, ErrorMessage } from '@/shared/components/ui'
+import { TextSmall, ErrorMessage } from '@/shared/components/ui/text'
 import { Typography } from '@/shared/constants/Typography'
 import { Spacing } from '@/shared/constants/Spacing'
 import { AuthScreenLayout } from '@/features/auth/components/AuthScreenLayout'

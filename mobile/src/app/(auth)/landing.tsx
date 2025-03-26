@@ -5,7 +5,7 @@ import {
   LOGO_SIZE,
   useLogoAnimation,
 } from '@/features/animation/hooks/useLogoAnimation'
-import { TextBody, TextTitle } from '@/shared/components/ui'
+import { TextBody, TextTitle } from '@/shared/components/ui/text'
 import { Spacing } from '@/constants/Spacing'
 import { SocialButtons } from '@/features/auth/components/SocialButtons'
 import { AuthFooter } from '@/features/auth/components/AuthFooter'

@@ -1,7 +1,7 @@
 import { StyleSheet, Platform, View, ScrollView } from 'react-native'
 import { ThemedView } from '@/shared/components/ui/ThemedView'
 import { useTheme } from '@/shared/hooks/theme'
-import { TextTitle, TextBody } from '@/shared/components/ui/typography'
+import { TextTitle, TextBody } from '@/shared/components/ui/text'
 import { IconSymbol } from '@/shared/components/ui/IconSymbol'
 import { Spacing } from '@/shared/constants/Spacing'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'

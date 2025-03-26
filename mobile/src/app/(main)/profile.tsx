@@ -11,7 +11,7 @@ import {
   TextBody,
   TextSmall,
   TextSemiBold,
-} from '@/shared/components/ui/typography'
+} from '@/shared/components/ui/text'
 import { Spacing } from '@/shared/constants/Spacing'
 import { useTheme } from '@/shared/hooks/theme'
 import { IconSymbol } from '@/shared/components/ui/IconSymbol'
