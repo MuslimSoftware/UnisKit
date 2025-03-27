@@ -14,7 +14,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signIn = () => {
     setIsAuthenticated(true)
-    router.replace('/(tabs)')
+    router.replace('/(main)')
   }
 
   const signOut = () => {

@@ -67,7 +67,7 @@ export function useSplashAnimation(onFontsLoaded: Promise<void>) {
             // Login if user is already logged in
             const refreshToken = await SecureStore.getItemAsync('refresh_token')
             if (refreshToken) {
-              router.replace('/(tabs)')
+              router.replace('/(main)')
             } else {
               router.replace('/(auth)/landing')
             }

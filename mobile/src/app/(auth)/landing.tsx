@@ -1,39 +1,37 @@
 import React from 'react'
-import { StyleSheet, View, Animated } from 'react-native'
-import Box from '@/shared/components/layout/Box'
+import { StyleSheet, View, Animated, Text } from 'react-native'
 import {
   LOGO_SIZE,
   useLogoAnimation,
 } from '@/features/auth/hooks/useLogoAnimation'
-import { Typography } from '@/shared/components/data-display/Typography'
 import { SocialButtons } from '@/features/auth/components/SocialButtons'
 import { AuthFooter } from '@/features/auth/components/AuthFooter'
-import { useThemeSpacing } from '@/shared/hooks/useThemeSpacing'
 import {
   AnimatedLogo,
   INITIAL_POSITION,
 } from '@/features/auth/components/AnimatedLogo'
 import { Brand } from '@/shared/constants/Brand'
 import { router } from 'expo-router'
-
+import { useTheme } from '@/shared/context/ThemeContext'
+import { TextBody, TextHeader } from '@/shared/components/text'
+import { BgView } from '@/shared/components/layout'
 export default function LandingScreen() {
+  const { theme } = useTheme()
   const { logoStyle, contentStyle } = useLogoAnimation()
-  const getSpacing = useThemeSpacing()
+
   const navigateToEmail = () => {
     router.push('/email')
   }
 
   return (
-    <Box style={styles.container}>
+    <BgView style={styles.container}>
       {/* Logo and Brand Name Group */}
       <Animated.View style={[styles.logoGroup, logoStyle]}>
         <View style={styles.logoWrapper}>
           <AnimatedLogo />
         </View>
         <Animated.View style={[styles.titleContainer, contentStyle]}>
-          <Typography variant="h6" style={styles.title}>
-            {Brand.name}
-          </Typography>
+          <TextHeader style={styles.title}>{Brand.name}</TextHeader>
         </Animated.View>
       </Animated.View>
 
@@ -43,21 +41,21 @@ export default function LandingScreen() {
           styles.bottomContent,
           contentStyle,
           {
-            gap: getSpacing(4),
-            paddingHorizontal: getSpacing(4),
-            paddingBottom: getSpacing(4),
+            gap: theme.spacing.section.gap,
+            paddingHorizontal: theme.spacing.section.padding,
+            paddingBottom: theme.spacing.section.padding,
           },
         ]}
       >
-        <Typography variant="subtitle2" style={styles.subtitle}>
+        <TextBody style={styles.subtitle}>
           Choose how you'd like to continue
-        </Typography>
+        </TextBody>
 
         <SocialButtons navigateToEmail={navigateToEmail} />
 
         <AuthFooter navigateToEmail={navigateToEmail} />
       </Animated.View>
-    </Box>
+    </BgView>
   )
 }
 

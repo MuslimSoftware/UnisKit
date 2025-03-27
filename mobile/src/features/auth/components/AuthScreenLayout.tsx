@@ -1,20 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import {
   StyleSheet,
-  View,
-  TouchableOpacity,
-  KeyboardAvoidingView,
   Platform,
   Keyboard,
   Animated,
+  View,
+  Text,
 } from 'react-native'
 import { router } from 'expo-router'
-import { Ionicons } from '@expo/vector-icons'
 
 import { useTheme } from '@/shared/context/ThemeContext'
-import { Button } from '@/shared/components/buttons/Button'
-import { Typography } from '@/shared/components/data-display/Typography'
-import Box from '@/shared/components/layout/Box'
+
 interface AuthScreenLayoutProps {
   title: string
   subtitle: string
@@ -71,9 +67,9 @@ export function AuthScreenLayout({
   }
 
   return (
-    <Box>
-      <Typography variant="h1">{title}</Typography>
-    </Box>
+    <View>
+      <Text>hi</Text>
+    </View>
     // <ThemedView style={styles.container}>
     //   <View style={styles.header}>
     //     <TouchableOpacity onPress={handleBack} style={styles.backButton}>

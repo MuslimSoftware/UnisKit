@@ -2,8 +2,7 @@ import React from 'react'
 import { Stack } from 'expo-router'
 import { StyleSheet, View } from 'react-native'
 import { useTheme } from '@/shared/context/ThemeContext'
-import Typography from '@/shared/components/data-display/Typography'
-import { Button } from '@/shared/components/buttons/Button'
+import { PrimaryButton } from '@/shared/components/buttons'
 
 export default function NotFoundScreen() {
   const { theme } = useTheme()
@@ -11,12 +10,7 @@ export default function NotFoundScreen() {
     <>
       <Stack.Screen options={{ title: 'Oops!' }} />
       <View style={styles.container}>
-        <Typography variant="h1">This screen doesn't exist.</Typography>
-        <Button
-          onPress={() => {}}
-          variant="contained"
-          children="Go to home screen!"
-        />
+        <PrimaryButton onPress={() => {}} label="Go to home screen!" />
       </View>
     </>
   )
@@ -31,7 +25,5 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    // marginTop: Spacing.spacing.medium,
-    // paddingVertical: Spacing.layout.section,
   },
 })

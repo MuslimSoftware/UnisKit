@@ -1,8 +1,6 @@
 import { StyleSheet, Platform, View, ScrollView } from 'react-native'
 import { useTheme } from '@/shared/context/ThemeContext'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import Box from '@/shared/components/layout/Box'
-import Typography from '@/shared/components/data-display/Typography'
 
 export default function HomeScreen() {
   const { theme } = useTheme()
@@ -10,10 +8,12 @@ export default function HomeScreen() {
 
   return (
     <View
-      style={[
-        // styles.container,
-        { backgroundColor: theme.palette.background.default },
-      ]}
+      style={
+        [
+          // styles.container,
+          // { backgroundColor: theme.palette.background.default },
+        ]
+      }
     >
       {/* <ScrollView
         showsVerticalScrollIndicator={false}
@@ -79,9 +79,6 @@ export default function HomeScreen() {
           </View>
         </View>
       </ScrollView> */}
-      <Box>
-        <Typography variant="h1">Home</Typography>
-      </Box>
     </View>
   )
 }

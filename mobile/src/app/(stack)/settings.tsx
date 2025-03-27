@@ -1,10 +1,16 @@
-import { View, StyleSheet, ScrollView, Platform, Pressable } from 'react-native'
+import {
+  View,
+  StyleSheet,
+  ScrollView,
+  Platform,
+  Pressable,
+  Text,
+} from 'react-native'
 import { useTheme } from '@/shared/context/ThemeContext'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useRouter } from 'expo-router'
 import * as SecureStore from 'expo-secure-store'
-import Box from '@/shared/components/layout/Box'
-import Typography from '@/shared/components/data-display/Typography'
+
 const SETTINGS_SECTIONS = [
   {
     title: 'Account',
@@ -179,9 +185,9 @@ export default function SettingsScreen() {
     //     </View>
     //   </ScrollView>
     // </View>
-    <Box>
-      <Typography variant="h1">Settings</Typography>
-    </Box>
+    <View style={styles.container}>
+      <Text>Settings</Text>
+    </View>
   )
 }
 

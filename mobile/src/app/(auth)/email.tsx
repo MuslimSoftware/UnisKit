@@ -3,7 +3,6 @@ import { StyleSheet, TextInput, View } from 'react-native'
 import { router } from 'expo-router'
 import { useTheme } from '@/shared/context/ThemeContext'
 import { AuthScreenLayout } from '@/features/auth/components/AuthScreenLayout'
-import Typography from '@/shared/components/data-display/Typography'
 
 export default function EmailScreen() {
   const { theme } = useTheme()
@@ -50,11 +49,11 @@ export default function EmailScreen() {
           style={[
             styles.input,
             {
-              backgroundColor: theme.palette.background.paper,
-              color: theme.palette.text.primary,
+              backgroundColor: theme.colors.layout.background,
+              color: theme.colors.text.primary,
               borderColor: error
-                ? theme.palette.error.main
-                : theme.palette.divider,
+                ? theme.colors.indicators.error
+                : theme.colors.layout.border,
             },
           ]}
           placeholder="email@example.com"
@@ -64,7 +63,7 @@ export default function EmailScreen() {
           autoCapitalize="none"
           autoComplete="email"
           autoCorrect={false}
-          placeholderTextColor={theme.palette.text.secondary}
+          placeholderTextColor={theme.colors.text.secondary}
         />
         {/* {error ? <ErrorMessage message={error} /> : null} */}
       </View>

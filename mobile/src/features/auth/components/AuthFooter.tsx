@@ -1,7 +1,8 @@
 import React from 'react'
-import { StyleSheet, View, TouchableOpacity } from 'react-native'
-import { Typography } from '@/shared/components/data-display/Typography'
+import { StyleSheet, View, TouchableOpacity, Text } from 'react-native'
 import { useTheme } from '@/shared/context/ThemeContext'
+import { TextBody } from '@/shared/components/text'
+
 export function AuthFooter({
   navigateToEmail,
 }: {
@@ -12,7 +13,7 @@ export function AuthFooter({
   return (
     <View style={styles.container}>
       <View style={styles.textContainer}>
-        <Typography variant="body2">Already have an account?</Typography>
+        <TextBody>Already have an account?</TextBody>
         <TouchableOpacity onPress={navigateToEmail}>
           {/* <Typography variant="body2" style={[styles.link, { color: theme.palette.primary.main }]}>
             Sign in

@@ -1,15 +1,14 @@
 import { Tabs } from 'expo-router'
 import React from 'react'
-import { Platform } from 'react-native'
+import { Platform, Text } from 'react-native'
 import { useTheme } from '@/shared/context/ThemeContext'
-import Typography from '@/shared/components/data-display/Typography'
 export default function TabLayout() {
   const { theme } = useTheme()
 
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: theme.palette.primary.main,
+        tabBarActiveTintColor: theme.colors.brand.primary,
         headerShown: false,
         // tabBarButton: HapticTab,
         // tabBarBackground: TabBarBackground,
@@ -32,7 +31,7 @@ export default function TabLayout() {
           title: 'Home',
           tabBarIcon: ({ color }) => (
             // <IconSymbol size={28} name="house.fill" color={color} />
-            <Typography variant="h1">Home</Typography>
+            <Text>Home</Text>
           ),
         }}
       />
@@ -42,7 +41,7 @@ export default function TabLayout() {
           title: 'Profile',
           tabBarIcon: ({ color }) => (
             // <IconSymbol size={28} name="person.circle.fill" color={color} />
-            <Typography variant="h1">Profile</Typography>
+            <Text>Profile</Text>
           ),
         }}
       />

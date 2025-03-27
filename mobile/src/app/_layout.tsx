@@ -7,14 +7,13 @@ import { useEffect } from 'react'
 import 'react-native-reanimated'
 import { useTheme } from '@/shared/context/ThemeContext'
 import { AuthProvider } from '@/features/auth/context/AuthContext'
-import { ThemeProvider } from '@/shared/context/ThemeProvider'
+import { ThemeProvider } from '@/shared/context/ThemeContext'
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync()
 
 function RootLayoutNav() {
-  const { theme } = useTheme()
-  const isDark = theme.palette.mode === 'dark'
+  const { isDark } = useTheme()
 
   return (
     <>
@@ -36,13 +35,13 @@ function RootLayoutNav() {
             animation: 'none',
           }}
         />
-        <Stack.Screen
+        {/* <Stack.Screen
           name="(main)"
           options={{
             animation: 'none',
           }}
-        />
-        <Stack.Screen name="+not-found" options={{ presentation: 'modal' }} />
+        /> */}
+        {/* <Stack.Screen name="+not-found" options={{ presentation: 'modal' }} /> */}
       </Stack>
       <StatusBar style={isDark ? 'light' : 'dark'} />
     </>

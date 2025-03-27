@@ -6,11 +6,9 @@ import {
   Pressable,
   Image,
 } from 'react-native'
-import { Typography } from '@/shared/components/data-display/Typography'
 import { useTheme } from '@/shared/context/ThemeContext'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useRouter } from 'expo-router'
-import Box from '@/shared/components/layout/Box'
 export default function ProfileScreen() {
   const { theme } = useTheme()
   const insets = useSafeAreaInsets()
@@ -22,10 +20,12 @@ export default function ProfileScreen() {
 
   return (
     <View
-      style={[
-        styles.container,
-        { backgroundColor: theme.palette.background.default },
-      ]}
+      style={
+        [
+          // styles.container,
+          // { backgroundColor: theme.palette.background.default },
+        ]
+      }
     >
       {/* <ScrollView
         showsVerticalScrollIndicator={false}
@@ -186,9 +186,6 @@ export default function ProfileScreen() {
           </View>
         </View>
       </ScrollView> */}
-      <Box>
-        <Typography variant="h1">Profile</Typography>
-      </Box>
     </View>
   )
 }

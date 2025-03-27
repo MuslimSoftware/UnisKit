@@ -1,9 +1,14 @@
 import React from 'react'
-import { StyleSheet, TextInput, View, TouchableOpacity } from 'react-native'
+import {
+  StyleSheet,
+  TextInput,
+  View,
+  TouchableOpacity,
+  Text,
+} from 'react-native'
 import { useTheme } from '@/shared/context/ThemeContext'
 import { AuthScreenLayout } from '@/features/auth/components/AuthScreenLayout'
 import { useOTPVerification } from '@/features/auth/hooks/useOTPVerification'
-import Typography from '@/shared/components/data-display/Typography'
 
 export default function OTPScreen() {
   const { theme } = useTheme()
@@ -35,16 +40,16 @@ export default function OTPScreen() {
             style={[
               styles.input,
               {
-                color: theme.palette.text.primary,
+                color: theme.colors.text.primary,
                 borderColor: error
-                  ? theme.palette.error.main
-                  : theme.palette.divider,
+                  ? theme.colors.indicators.error
+                  : theme.colors.layout.border,
               },
             ]}
             value={otp}
             onChangeText={setOtp}
             placeholder="Enter verification code"
-            placeholderTextColor={theme.palette.text.secondary}
+            placeholderTextColor={theme.colors.text.secondary}
             keyboardType="number-pad"
             maxLength={6}
             autoComplete="one-time-code"
@@ -53,23 +58,23 @@ export default function OTPScreen() {
         </View>
 
         <View style={styles.footer}>
-          <Typography variant="subtitle2">
+          <Text>
             Didn't receive the code?{' '}
             <TouchableOpacity
               onPress={resendCooldown > 0 ? undefined : handleResendOTP}
               disabled={resendCooldown > 0}
             >
-              <Typography
+              <Text
                 style={{
                   ...styles.link,
-                  color: theme.palette.primary.main,
+                  color: theme.colors.brand.primary,
                   opacity: loading || resendCooldown > 0 ? 0.5 : 1,
                 }}
               >
                 {resendCooldown > 0 ? `Resend in ${resendCooldown}s` : 'Resend'}
-              </Typography>
+              </Text>
             </TouchableOpacity>
-          </Typography>
+          </Text>
         </View>
       </View>
     </AuthScreenLayout>

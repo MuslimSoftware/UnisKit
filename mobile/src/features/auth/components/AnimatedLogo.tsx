@@ -21,7 +21,7 @@ export function AnimatedLogo({ animatedStyle }: AnimatedLogoProps) {
       <Ionicons
         name="heart-circle"
         size={LOGO_SIZE}
-        color={theme.palette.primary.main}
+        color={theme.colors.brand.primary}
       />
     </Animated.View>
   )

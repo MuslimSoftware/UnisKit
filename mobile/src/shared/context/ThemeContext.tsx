@@ -1,55 +1,46 @@
-import React, { createContext, useContext, useState, useEffect } from 'react'
-import defaultTheme from '@/shared/theme/defaultTheme'
-import darkTheme from '@/shared/theme/darkTheme'
-import { Theme, ThemeMode, ThemeContextType } from '@/shared/theme/types'
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useMemo,
+  useCallback,
+} from 'react'
+import { useColorScheme } from 'react-native'
+import { Theme } from '@/shared/theme/theme'
+import { lightTheme, darkTheme } from '@/shared/theme/theme'
 
-const ThemeContext = createContext<ThemeContextType>({
-  theme: defaultTheme,
-  toggleTheme: () => {},
-  setThemeMode: () => {},
-  mode: 'light',
-})
-
-export interface ThemeProviderProps {
-  children: React.ReactNode
-  defaultMode?: ThemeMode
-  theme?: Theme
-  darkTheme?: Theme
+type ThemeContextType = {
+  theme: Theme
+  isDark: boolean
+  toggleTheme: () => void
 }
 
-export const ThemeProvider: React.FC<ThemeProviderProps> = ({
+const ThemeContext = createContext<ThemeContextType>({
+  theme: lightTheme,
+  isDark: false,
+  toggleTheme: () => {},
+})
+
+export const useTheme = () => useContext(ThemeContext)
+
+export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
-  defaultMode = 'light',
-  theme = defaultTheme,
-  darkTheme: customDarkTheme = darkTheme,
 }) => {
-  const [themeMode, setThemeMode] = useState<ThemeMode>(defaultMode)
-  const [currentTheme, setCurrentTheme] = useState<Theme>(
-    themeMode === 'light' ? theme : customDarkTheme
-  )
+  const colorScheme = useColorScheme()
+  const [isDark, setIsDark] = useState(colorScheme === 'dark')
 
-  useEffect(() => {
-    setCurrentTheme(themeMode === 'light' ? theme : customDarkTheme)
-  }, [themeMode, theme, customDarkTheme])
+  const toggleTheme = useCallback(() => {
+    setIsDark(!isDark)
+  }, [isDark])
 
-  const toggleTheme = () => {
-    setThemeMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'))
-  }
-
-  const contextValue = {
-    theme: currentTheme,
-    mode: themeMode,
-    toggleTheme,
-    setThemeMode,
-  }
+  const theme = useMemo(() => {
+    return isDark ? darkTheme : lightTheme
+  }, [isDark])
 
   return (
-    <ThemeContext.Provider value={contextValue}>
+    <ThemeContext.Provider value={{ theme, isDark, toggleTheme }}>
       {children}
     </ThemeContext.Provider>
   )
 }
-
-export const useTheme = () => useContext(ThemeContext)
-
-export default ThemeContext
