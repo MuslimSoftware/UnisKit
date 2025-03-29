@@ -1,6 +1,8 @@
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
-import { PrimaryButton, SecondaryButton } from '@/shared/components/buttons'
+import { PrimaryButton } from '@/shared/components/buttons/PrimaryButton'
+import { AppleButton } from '@/shared/components/buttons/AppleButton'
+import { GoogleButton } from '@/shared/components/buttons/GoogleButton'
 
 interface SocialButtonsProps {
   navigateToEmail: () => void
@@ -12,9 +14,9 @@ export function SocialButtons({ navigateToEmail }: SocialButtonsProps) {
     <View style={styles.container}>
       <PrimaryButton label="Continue with Email" onPress={navigateToEmail} />
 
-      <SecondaryButton label="Continue with Google" onPress={navigateToEmail} />
+      <GoogleButton onPress={navigateToEmail} />
 
-      <PrimaryButton label="Continue with Apple" onPress={navigateToEmail} />
+      <AppleButton onPress={navigateToEmail} />
     </View>
   )
 }

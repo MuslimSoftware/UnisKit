@@ -1,38 +1,29 @@
 import React from 'react'
-import { StyleSheet, View, TouchableOpacity, Text } from 'react-native'
-import { useTheme } from '@/shared/context/ThemeContext'
-import { TextBody } from '@/shared/components/text'
+import { StyleSheet, View, TouchableOpacity } from 'react-native'
+import { TextSubtitle, TextCaption } from '@/shared/components/text'
 
 export function AuthFooter({
   navigateToEmail,
 }: {
   navigateToEmail: () => void
 }) {
-  const { theme } = useTheme()
-
   return (
     <View style={styles.container}>
       <View style={styles.textContainer}>
-        <TextBody>Already have an account?</TextBody>
+        <TextSubtitle>Already have an account?</TextSubtitle>
         <TouchableOpacity onPress={navigateToEmail}>
-          {/* <Typography variant="body2" style={[styles.link, { color: theme.palette.primary.main }]}>
-            Sign in
-          </Typography>
+          <TextSubtitle style={styles.link}>Sign in</TextSubtitle>
         </TouchableOpacity>
       </View>
 
       <View style={styles.termsContainer}>
-        <Typography variant="body2">By continuing, you agree to our </Typography>
+        <TextCaption>By continuing, you agree to our</TextCaption>
         <TouchableOpacity>
-          <Typography variant="body2" style={[styles.link, { color: theme.palette.primary.main }]}>
-            Terms of Service
-          </Typography>
+          <TextCaption style={styles.link}>Terms of Service</TextCaption>
         </TouchableOpacity>
-        <Typography variant="body2"> and </Typography>
+        <TextCaption> and</TextCaption>
         <TouchableOpacity>
-          <Typography variant="body2" style={[styles.link, { color: theme.palette.primary.main }]}>
-            Privacy Policy
-          </Typography> */}
+          <TextCaption style={styles.link}>Privacy Policy</TextCaption>
         </TouchableOpacity>
       </View>
     </View>

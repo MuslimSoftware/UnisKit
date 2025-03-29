@@ -3,6 +3,7 @@ import { StyleSheet, View } from 'react-native'
 import { useFonts } from 'expo-font'
 import { useSplashAnimation } from '@/features/auth/hooks/useSplashAnimation'
 import { AnimatedLogo } from '@/features/auth/components/AnimatedLogo'
+import { BgView } from '@/shared/components/layout'
 
 export default function SplashScreen() {
   const [loaded] = useFonts({
@@ -18,9 +19,9 @@ export default function SplashScreen() {
   const { animatedStyle } = useSplashAnimation(fontsLoadedPromise)
 
   return (
-    <View style={styles.container}>
+    <BgView style={styles.container}>
       <AnimatedLogo animatedStyle={animatedStyle} showTitle={false} />
-    </View>
+    </BgView>
   )
 }
 

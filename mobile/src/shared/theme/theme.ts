@@ -25,8 +25,16 @@ type ThemeColors = {
         disabled: string;
     }
     button: {
-        primary: string;
-        secondary: string;
+        primary: {
+            background: string;
+            border: string;
+            text: string;
+        };
+        secondary: {
+            background: string;
+            border: string;
+            text: string;
+        };
     }
 }
 
@@ -67,8 +75,16 @@ export const lightTheme: Theme = {
             disabled: Colors.gray400,
         },
         button: {
-            primary: Colors.primary.light,
-            secondary: Colors.secondary.light,
+            primary: {
+                background: Colors.primary.light,
+                border: Colors.primary.light,
+                text: Colors.gray50
+            },
+            secondary: {
+                background: Colors.secondary.light,
+                border: Colors.secondary.light,
+                text: Colors.gray900 // Dark text for secondary in light mode
+            },
         },
     },
     ...baseTheme,
@@ -99,8 +115,16 @@ export const darkTheme: Theme = {
             disabled: Colors.gray600,
         },
         button: {
-            primary: Colors.primary.dark,
-            secondary: Colors.secondary.dark,
+            primary: {
+                background: Colors.primary.dark,
+                border: Colors.primary.dark,
+                text: Colors.gray50
+            },
+            secondary: {
+                background: Colors.secondary.dark,
+                border: Colors.secondary.dark,
+                text: Colors.gray50 // Light text for secondary in dark mode
+            },
         },
     },
     ...baseTheme,

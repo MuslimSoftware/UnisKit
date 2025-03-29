@@ -1,50 +1,62 @@
+export const scale = {
+  xxs: 2,
+  xs: 4,
+  sm: 8,
+  md: 16,
+  lg: 24,
+  xl: 32,
+  xxl: 64,
+};
+
+type SpacingValue = {
+    gap?: number;
+    padding?: number;
+    borderRadius?: number;
+    iconSize?: number;
+}
 
 export type Spacing = {
-    section: {
-        gap: number;
-        padding: number;
-    }
+    section: SpacingValue;
     list: {
-        gap: number;
-        item: {
-            padding: number;
-        }
+        gap?: number;
+        borderRadius?: number;
+        item: SpacingValue;
     }
-    card: {
-        padding: number;
-    }
-    button: {
-        padding: number;
-    }
-    input: {
-        padding: number;
-    }
-    select: {
-        padding: number;
-    }
+    card: SpacingValue;
+    button: SpacingValue;
+    input: SpacingValue;
+    select: SpacingValue;
 }
 
 export const spacing: Spacing = {
     section: {
-        gap: 16,
-        padding: 16,
+        gap: scale.md,
+        padding: scale.md,
+        borderRadius: scale.md,
     },
     list: {
-        gap: 16,
+        gap: scale.md,
+        borderRadius: scale.md,
         item: {
-            padding: 16,
+            padding: scale.md,
+            borderRadius: scale.md,
         },
     },
     card: {
-        padding: 16,
+        padding: scale.md,
+        borderRadius: scale.md,
     },
     button: {
-        padding: 16,
+        padding: scale.md,
+        borderRadius: scale.xl,
+        iconSize: scale.lg,
     },
     input: {
-        padding: 16,
+        padding: scale.md,
+        borderRadius: scale.md,
     },
     select: {
-        padding: 16,
+        padding: scale.md,
+        borderRadius: scale.md,
     },
 }
