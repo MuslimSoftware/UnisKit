@@ -1,6 +1,9 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
-import { IconButton, IconButtonProps } from './IconButton'
+import {
+  IconButton,
+  IconButtonProps,
+} from '@/shared/components/buttons/IconButton'
 import { AntDesign } from '@expo/vector-icons' // Import icons
 import { useTheme } from '@/shared/context/ThemeContext'
 

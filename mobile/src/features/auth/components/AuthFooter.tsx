@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, View, TouchableOpacity } from 'react-native'
-import { TextSubtitle, TextCaption } from '@/shared/components/text'
+import { TextSubtitle, TextCaption, TextLink } from '@/shared/components/text'
 
 export function AuthFooter({
   navigateToEmail,
@@ -12,18 +12,18 @@ export function AuthFooter({
       <View style={styles.textContainer}>
         <TextSubtitle>Already have an account?</TextSubtitle>
         <TouchableOpacity onPress={navigateToEmail}>
-          <TextSubtitle style={styles.link}>Sign in</TextSubtitle>
+          <TextLink>Sign in</TextLink>
         </TouchableOpacity>
       </View>
 
       <View style={styles.termsContainer}>
         <TextCaption>By continuing, you agree to our</TextCaption>
         <TouchableOpacity>
-          <TextCaption style={styles.link}>Terms of Service</TextCaption>
+          <TextLink>Terms of Service</TextLink>
         </TouchableOpacity>
         <TextCaption> and</TextCaption>
         <TouchableOpacity>
-          <TextCaption style={styles.link}>Privacy Policy</TextCaption>
+          <TextLink>Privacy Policy</TextLink>
         </TouchableOpacity>
       </View>
     </View>

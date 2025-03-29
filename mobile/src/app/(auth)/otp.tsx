@@ -1,21 +1,17 @@
 import React from 'react'
-import {
-  StyleSheet,
-  TextInput,
-  View,
-  TouchableOpacity,
-  Text,
-} from 'react-native'
+import { StyleSheet, View, TouchableOpacity } from 'react-native'
 import { useTheme } from '@/shared/context/ThemeContext'
 import { AuthScreenLayout } from '@/features/auth/components/AuthScreenLayout'
 import { useOTPVerification } from '@/features/auth/hooks/useOTPVerification'
+import { OtpInput } from '@/features/auth/components/OtpInput'
+import { TextCaption, TextLink } from '@/shared/components/text'
+import { Column } from '@/shared/components/layout'
 
 export default function OTPScreen() {
   const { theme } = useTheme()
   const {
     otp,
     setOtp,
-    inputRef,
     loading,
     error,
     handleVerify,
@@ -25,6 +21,11 @@ export default function OTPScreen() {
     resendCooldown,
   } = useOTPVerification()
 
+  const errorMessage =
+    typeof error === 'string'
+      ? error
+      : (error as any)?.message || 'An error occurred'
+
   return (
     <AuthScreenLayout
       title={getScreenTitle()}
@@ -33,77 +34,63 @@ export default function OTPScreen() {
       onButtonPress={handleVerify}
       buttonDisabled={otp.length !== 6 || loading}
     >
-      <View style={styles.container}>
+      <Column style={styles.container}>
         <View style={styles.inputContainer}>
-          <TextInput
-            ref={inputRef}
-            style={[
-              styles.input,
-              {
-                color: theme.colors.text.primary,
-                borderColor: error
-                  ? theme.colors.indicators.error
-                  : theme.colors.layout.border,
-              },
-            ]}
+          <OtpInput
             value={otp}
             onChangeText={setOtp}
-            placeholder="Enter verification code"
-            placeholderTextColor={theme.colors.text.secondary}
-            keyboardType="number-pad"
-            maxLength={6}
-            autoComplete="one-time-code"
+            digitCount={6}
+            error={!!error}
           />
-          {/* {error && <ErrorMessage message={error.message} />} */}
+          {error && (
+            <TextCaption
+              color={theme.colors.indicators.error}
+              style={styles.errorText}
+            >
+              {errorMessage}
+            </TextCaption>
+          )}
         </View>
 
-        <View style={styles.footer}>
-          <Text>
-            Didn't receive the code?{' '}
-            <TouchableOpacity
-              onPress={resendCooldown > 0 ? undefined : handleResendOTP}
-              disabled={resendCooldown > 0}
-            >
-              <Text
-                style={{
-                  ...styles.link,
-                  color: theme.colors.brand.primary,
-                  opacity: loading || resendCooldown > 0 ? 0.5 : 1,
-                }}
-              >
-                {resendCooldown > 0 ? `Resend in ${resendCooldown}s` : 'Resend'}
-              </Text>
-            </TouchableOpacity>
-          </Text>
+        <View style={styles.footerRow}>
+          <TextCaption>Didn't receive the code? </TextCaption>
+          <TouchableOpacity
+            onPress={resendCooldown > 0 ? undefined : handleResendOTP}
+            disabled={resendCooldown > 0 || loading}
+            style={{ opacity: loading || resendCooldown > 0 ? 0.5 : 1 }}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          >
+            <TextLink>
+              {resendCooldown > 0 ? `Resend in ${resendCooldown}s` : 'Resend'}
+            </TextLink>
+          </TouchableOpacity>
         </View>
-      </View>
+      </Column>
     </AuthScreenLayout>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    // paddingHorizontal: Spacing.spacing.medium,
+    width: '100%',
+    alignItems: 'center',
   },
   inputContainer: {
-    // marginTop: Spacing.spacing.large,
+    width: '100%',
   },
-  input: {
-    // fontSize: Typography.sizes.medium,
-    // fontWeight: Typography.weights.regular,
-    height: 48,
-    borderWidth: 1,
-    // borderRadius: Spacing.radius.medium,
-    // paddingHorizontal: Spacing.spacing.medium,
+  otpInputText: {
     textAlign: 'center',
     letterSpacing: 8,
   },
-  footer: {
-    // marginTop: Spacing.spacing.medium,
+  footerRow: {
+    flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'flex-start',
+    width: '100%',
   },
-  link: {
-    textDecorationLine: 'underline',
+  errorText: {
+    marginTop: 8,
+    textAlign: 'left',
+    width: '100%',
   },
 })

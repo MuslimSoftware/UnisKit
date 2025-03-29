@@ -1,71 +1,87 @@
 import React, { useState } from 'react'
-import { StyleSheet, TextInput, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { router } from 'expo-router'
 import { useTheme } from '@/shared/context/ThemeContext'
 import { AuthScreenLayout } from '@/features/auth/components/AuthScreenLayout'
+import { AuthInput } from '@/features/auth/components/AuthInput'
+import { useRequestOTP } from '@/features/auth/hooks/useRequestOTP'
 
 export default function EmailScreen() {
-  const { theme } = useTheme()
   const [email, setEmail] = useState('')
-  const [error, setError] = useState<string | null>(null)
+  const [validationError, setValidationError] = useState<string | null>(null)
+
+  const {
+    sendOTP,
+    loading: otpLoading,
+    error: otpError,
+    reset: resetOtpError,
+  } = useRequestOTP()
 
   const isValidEmail = (email: string) => {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
   }
 
-  const validateEmail = (email: string) => {
-    if (!isValidEmail(email)) {
-      setError('Please enter a valid email address')
+  const validateEmail = (input: string) => {
+    resetOtpError()
+    if (!input) {
+      setValidationError('Email cannot be empty')
       return false
     }
-    setError(null)
+    if (!isValidEmail(input)) {
+      setValidationError('Please enter a valid email address')
+      return false
+    }
+    setValidationError(null)
     return true
   }
 
   const handleEmailChange = (text: string) => {
     setEmail(text)
+    if (validationError) {
+      validateEmail(text)
+    }
+    if (otpError) {
+      resetOtpError()
+    }
   }
 
-  const handleContinue = () => {
+  const handleContinue = async () => {
     if (!validateEmail(email)) {
       return
     }
-    router.push({
-      pathname: '/otp',
-      params: { email },
-    })
+
+    const success = await sendOTP(email)
+
+    if (success) {
+      router.push({
+        pathname: '/otp',
+        params: { email },
+      })
+    }
   }
+
+  const displayError = validationError || otpError?.message
 
   return (
     <AuthScreenLayout
       title="Enter Your Email"
       subtitle="We'll send you a verification code"
-      buttonText="Continue"
+      buttonText={otpLoading ? 'Sending Code...' : 'Continue'}
       onButtonPress={handleContinue}
-      buttonDisabled={!isValidEmail(email)}
+      buttonDisabled={!isValidEmail(email) || otpLoading}
     >
       <View style={styles.container}>
-        <TextInput
-          style={[
-            styles.input,
-            {
-              backgroundColor: theme.colors.layout.background,
-              color: theme.colors.text.primary,
-              borderColor: error
-                ? theme.colors.indicators.error
-                : theme.colors.layout.border,
-            },
-          ]}
-          placeholder="email@example.com"
+        <AuthInput
+          label="Email"
           value={email}
           onChangeText={handleEmailChange}
+          error={!!displayError}
+          errorMessage={displayError}
           keyboardType="email-address"
           autoCapitalize="none"
           autoComplete="email"
-          autoCorrect={false}
-          placeholderTextColor={theme.colors.text.secondary}
+          autoFocus={true}
         />
-        {/* {error ? <ErrorMessage message={error} /> : null} */}
       </View>
     </AuthScreenLayout>
   )
@@ -74,9 +90,5 @@ export default function EmailScreen() {
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-  },
-  input: {
-    width: '100%',
-    borderWidth: 1,
   },
 })

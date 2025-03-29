@@ -12,28 +12,31 @@ export interface IconButtonProps extends Omit<BaseButtonProps, 'children'> {
   textVariant?: TextVariant // Optional: Control text style
   textColor?: string // Optional: Override default text color
   textStyle?: TextStyle // Optional: Further text style overrides
+  disabled?: boolean // Optional: Default disabled to false if not provided
 }
 
 export const IconButton = ({
   label,
   icon,
   iconPosition = 'left',
-  variant = 'primary', // Default variant passed to BaseButton
-  textVariant = 'button', // Default text style
-  textColor,
+  variant = 'primary',
+  textVariant = 'button',
+  textColor, // Keep explicit textColor prop for overrides
   textStyle,
   style,
+  disabled = false, // Default disabled to false if not provided
   ...props
 }: IconButtonProps) => {
   const { theme } = useTheme()
 
-  // Determine default text color from theme based on variant
-  // Fallback to theme.colors.text.primary if button-specific text color isn't defined
-  const defaultTextColorFromTheme =
-    theme.colors.button[variant]?.text || theme.colors.text.primary
+  // Determine the effective variant for styling
+  const effectiveVariant = disabled ? 'disabled' : variant
 
-  // Determine final text color: explicit prop > theme button text > theme primary text
-  const finalTextColor = textColor || defaultTextColorFromTheme
+  // Determine text color: explicit prop > theme color for effective variant
+  const finalTextColor =
+    textColor ||
+    theme.colors.button[effectiveVariant].text || // Use text color from effective variant
+    theme.colors.text.primary // Fallback to primary text color if needed
 
   const textElement = (
     <ThemedText
@@ -53,7 +56,9 @@ export const IconButton = ({
   )
 
   return (
-    <BaseButton variant={variant} style={style} {...props}>
+    // Pass the original variant and disabled props to BaseButton
+    // BaseButton will handle applying the correct background/border
+    <BaseButton variant={variant} style={style} disabled={disabled} {...props}>
       {content}
     </BaseButton>
   )

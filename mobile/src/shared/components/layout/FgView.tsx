@@ -5,7 +5,7 @@ export const FgView = ({
   children,
   style,
 }: {
-  children: React.ReactNode
+  children?: React.ReactNode
   style?: ViewStyle
 }) => {
   const { theme } = useTheme()

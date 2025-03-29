@@ -1,6 +1,9 @@
 import React from 'react'
 import { StyleSheet, Image, ImageStyle } from 'react-native'
-import { IconButton, IconButtonProps } from './IconButton'
+import {
+  IconButton,
+  IconButtonProps,
+} from '@/shared/components/buttons/IconButton'
 import { useTheme } from '@/shared/context/ThemeContext'
 
 // Extend IconButtonProps, omitting things we'll set internally
@@ -31,7 +34,7 @@ export const GoogleButton = (props: GoogleButtonProps) => {
       label="Continue with Google"
       icon={
         <Image
-          source={require('../../../assets/images/google_logo.png')}
+          source={require('@/assets/images/google_logo.png')}
           style={logoStyle}
         />
       }

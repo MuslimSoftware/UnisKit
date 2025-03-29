@@ -1,5 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
-import { TextInput } from 'react-native'
+import { useState, useEffect } from 'react'
 import { useLocalSearchParams } from 'expo-router'
 import { useApi } from '@/api/useApi'
 import { useAuth } from '@/features/auth/context/AuthContext'
@@ -15,15 +14,11 @@ import {
 } from '@/api/types/auth.types'
 
 const COOLDOWN_DURATION = 30 // seconds
-const AUTO_FOCUS_DELAY = 500 // milliseconds
 
 export function useOTPVerification() {
   // State
   const [otp, setOtp] = useState('')
   const [resendCooldown, setResendCooldown] = useState(COOLDOWN_DURATION)
-  
-  // Refs
-  const inputRef = useRef<TextInput>(null)
   
   // Hooks
   const { signIn } = useAuth()
@@ -58,22 +53,13 @@ export function useOTPVerification() {
     return () => clearInterval(timer)
   }, [resendCooldown])
 
-  // Input management
-  const focusInput = () => {
-    inputRef.current?.focus()
-  }
-
-  useEffect(() => {
-    const timer = setTimeout(focusInput, AUTO_FOCUS_DELAY)
-    return () => clearTimeout(timer)
-  }, [])
-
   // API handlers
   const sendOTP = async () => {
     if (!email) {
-      throw new Error('Email is required')
+      console.warn('Cannot send OTP without email')
+      return
     }
-    
+
     try {
       await requestOTPApi.execute({ email })
       setResendCooldown(COOLDOWN_DURATION)
@@ -89,21 +75,24 @@ export function useOTPVerification() {
 
   const handleVerify = async () => {
     if (!email || !otp) {
-      throw new Error('Email and OTP are required')
+      console.error('Email and OTP are required for verification')
+      return
     }
 
     try {
       // Step 1: Validate OTP
       const validateResponse = await validateOTPApi.execute({ email, otp })
       if (!validateResponse) {
-        throw new Error('Failed to validate OTP')
+        console.error('validateOTPApi execute failed or returned null')
+        return
       }
       const { token } = validateResponse
 
       // Step 2: Use the token to authenticate
       const authResponse = await authApi.execute({ token })
       if (!authResponse) {
-        throw new Error('Failed to authenticate')
+        console.error('authApi execute failed or returned null')
+        return
       }
       const { access_token, refresh_token } = authResponse
 
@@ -115,21 +104,14 @@ export function useOTPVerification() {
       
       signIn()
     } catch (error) {
-      console.error('Verification failed:', error)
+      console.error('Verification process failed:', error)
     }
   }
-
-  // Initial OTP request
-  useEffect(() => {
-    sendOTP()
-  }, [email])
 
   return {
     // Input state
     otp,
     setOtp,
-    inputRef,
-    focusInput,
 
     // Loading and error states
     error,

@@ -7,8 +7,7 @@ import React, {
   useCallback,
 } from 'react'
 import { useColorScheme } from 'react-native'
-import { Theme } from '@/shared/theme/theme'
-import { lightTheme, darkTheme } from '@/shared/theme/theme'
+import { Theme, lightTheme, darkTheme } from '@/shared/theme/theme'
 
 type ThemeContextType = {
   theme: Theme
@@ -44,3 +43,6 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
     </ThemeContext.Provider>
   )
 }
+
+// Export the Theme type itself
+export type { Theme }

@@ -24,15 +24,19 @@ export const BaseButton = ({
 }: BaseButtonProps) => {
   const { theme } = useTheme()
 
+  // Determine the effective variant based on the disabled state
+  const effectiveVariant = disabled ? 'disabled' : variant
+
+  // Get colors from the theme using the effective variant
+  const buttonThemeStyles = theme.colors.button[effectiveVariant]
+
   const buttonStyle: StyleProp<ViewStyle> = [
     styles.button,
     {
-      backgroundColor: (disabled
-        ? theme.colors.text.disabled
-        : theme.colors.button[variant].background) as ColorValue,
-      borderColor: (disabled
-        ? theme.colors.text.disabled
-        : theme.colors.button[variant].border) as ColorValue,
+      // Use colors from the determined variant (primary, secondary, or disabled)
+      backgroundColor: buttonThemeStyles.background as ColorValue,
+      borderColor: buttonThemeStyles.border as ColorValue,
+      borderWidth: 1, // Ensure border is visible
       padding: theme.spacing.button.padding,
       borderRadius: theme.spacing.button.borderRadius,
     },

@@ -2,14 +2,17 @@ type Palette = {
     primary: {
         light: string;
         dark: string;
+        disabled: string;
     }
     secondary: {
         light: string;
         dark: string;
+        disabled: string;
     }
     tertiary: {
         light: string;
         dark: string;
+        disabled: string;
     }
 
     // grays
@@ -78,14 +81,17 @@ export const Colors: Palette = {
     primary: {
         light: '#2ecc71',
         dark: '#2ecc71',
+        disabled: '#09351b',
     },
     secondary: {
         light: '#27ae60',
         dark: '#16a085',
+        disabled: '#092b17',
     },
     tertiary: {
         light: '#16a085',
         dark: '#148f77',
+        disabled: '#08332a',
     },
     
     // grays

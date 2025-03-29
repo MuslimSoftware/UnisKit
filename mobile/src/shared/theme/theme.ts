@@ -2,6 +2,12 @@ import { typography, Typography } from './typography';
 import { spacing, Spacing } from './spacing';
 import { Colors } from './colors';
 
+type ButtonStyle = {
+    background: string;
+    border: string;
+    text: string;
+}
+
 type ThemeColors = {
     brand: {
         primary: string;
@@ -25,16 +31,9 @@ type ThemeColors = {
         disabled: string;
     }
     button: {
-        primary: {
-            background: string;
-            border: string;
-            text: string;
-        };
-        secondary: {
-            background: string;
-            border: string;
-            text: string;
-        };
+        primary: ButtonStyle;
+        secondary: ButtonStyle;
+        disabled: ButtonStyle;
     }
 }
 
@@ -78,13 +77,18 @@ export const lightTheme: Theme = {
             primary: {
                 background: Colors.primary.light,
                 border: Colors.primary.light,
-                text: Colors.gray50
+                text: Colors.gray50,
             },
             secondary: {
                 background: Colors.secondary.light,
                 border: Colors.secondary.light,
-                text: Colors.gray900 // Dark text for secondary in light mode
+                text: Colors.gray900,
             },
+            disabled: {
+                background: Colors.gray200,
+                border: Colors.gray200,
+                text: Colors.gray500,
+            }
         },
     },
     ...baseTheme,
@@ -118,13 +122,18 @@ export const darkTheme: Theme = {
             primary: {
                 background: Colors.primary.dark,
                 border: Colors.primary.dark,
-                text: Colors.gray50
+                text: Colors.gray50,
             },
             secondary: {
                 background: Colors.secondary.dark,
                 border: Colors.secondary.dark,
-                text: Colors.gray50 // Light text for secondary in dark mode
+                text: Colors.gray50,
             },
+            disabled: {
+                background: Colors.primary.disabled,
+                border: Colors.primary.disabled,
+                text: Colors.gray200,
+            }
         },
     },
     ...baseTheme,
