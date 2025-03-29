@@ -1,7 +1,7 @@
 import React from 'react'
 import { ViewProps, StyleProp, ViewStyle } from 'react-native'
 import { BaseColumn } from './BaseColumn'
-import { scale } from '@/shared/theme/spacing'
+import { gaps } from '@/shared/theme/spacing'
 
 // Define props, excluding 'gap' as it's handled internally
 interface ColumnProps extends Omit<ViewProps, 'style'> {
@@ -10,7 +10,8 @@ interface ColumnProps extends Omit<ViewProps, 'style'> {
   style?: StyleProp<ViewStyle>
 }
 
-const GAP_SIZE = scale.md // Use the medium gap size
+// Use the medium gap size directly from the constant
+const GAP_SIZE = gaps.medium
 
 export const Column: React.FC<ColumnProps> = ({
   children,

@@ -130,8 +130,8 @@ export const darkTheme: Theme = {
                 text: Colors.gray50,
             },
             disabled: {
-                background: Colors.primary.disabled,
-                border: Colors.primary.disabled,
+                background: Colors.gray700,
+                border: Colors.gray700,
                 text: Colors.gray200,
             }
         },

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useLocalSearchParams } from 'expo-router'
 import { useApi } from '@/api/useApi'
 import { useAuth } from '@/features/auth/context/AuthContext'
@@ -38,9 +38,22 @@ export function useOTPVerification() {
     [AuthRequest]
   >(authenticate)
 
-  // Computed values
+  // Combined raw error from API hooks
+  const rawError = requestOTPApi.error || validateOTPApi.error || authApi.error
+
+  // Derived state for user-facing error message
+  const errorMessage = useMemo(() => rawError?.message || '', [rawError])
+
+  // Reset API errors when OTP changes (to clear previous validation errors)
+  useEffect(() => {
+    if (otp) {
+      validateOTPApi.reset()
+      authApi.reset()
+    }
+  }, [otp])
+
+  // Computed loading state
   const isLoading = requestOTPApi.loading || validateOTPApi.loading || authApi.loading
-  const error = requestOTPApi.error || validateOTPApi.error || authApi.error
 
   // Timer management
   useEffect(() => {
@@ -64,6 +77,7 @@ export function useOTPVerification() {
       await requestOTPApi.execute({ email })
       setResendCooldown(COOLDOWN_DURATION)
     } catch (error) {
+      // Error is caught and processed by the useMemo above
       console.error('Failed to send OTP:', error)
     }
   }
@@ -80,23 +94,20 @@ export function useOTPVerification() {
     }
 
     try {
-      // Step 1: Validate OTP
       const validateResponse = await validateOTPApi.execute({ email, otp })
       if (!validateResponse) {
-        console.error('validateOTPApi execute failed or returned null')
+        // Let the hook's errorMessage handle display
         return
       }
       const { token } = validateResponse
 
-      // Step 2: Use the token to authenticate
       const authResponse = await authApi.execute({ token })
       if (!authResponse) {
-        console.error('authApi execute failed or returned null')
+        // Let the hook's errorMessage handle display
         return
       }
       const { access_token, refresh_token } = authResponse
 
-      // Step 3: Store tokens and sign in
       await Promise.all([
         SecureStore.setItemAsync('access_token', access_token),
         SecureStore.setItemAsync('refresh_token', refresh_token),
@@ -104,6 +115,7 @@ export function useOTPVerification() {
       
       signIn()
     } catch (error) {
+      // Error is caught and processed by the useMemo above
       console.error('Verification process failed:', error)
     }
   }
@@ -113,8 +125,10 @@ export function useOTPVerification() {
     otp,
     setOtp,
 
+    // Expose the processed error message, not the raw error
+    errorMessage,
+
     // Loading and error states
-    error,
     loading: isLoading,
 
     // Actions
@@ -122,8 +136,6 @@ export function useOTPVerification() {
     handleResendOTP,
 
     // UI helpers
-    getScreenTitle: () => 'Verify Your Email',
-    getScreenSubtitle: () => 'Enter the 6-digit code we sent to your email',
     resendCooldown,
   }
 } 

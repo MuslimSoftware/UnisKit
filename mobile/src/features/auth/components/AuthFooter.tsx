@@ -12,7 +12,7 @@ export function AuthFooter({
       <View style={styles.textContainer}>
         <TextSubtitle>Already have an account?</TextSubtitle>
         <TouchableOpacity onPress={navigateToEmail}>
-          <TextLink>Sign in</TextLink>
+          <TextLink variant="body2">Sign in</TextLink>
         </TouchableOpacity>
       </View>
 

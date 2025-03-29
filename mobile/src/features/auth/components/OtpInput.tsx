@@ -1,14 +1,19 @@
 import React, { useRef, useState, useEffect } from 'react'
 import { View, TextInput, StyleSheet, Pressable, Animated } from 'react-native'
 import { useTheme } from '@/shared/context/ThemeContext'
-import { ThemedText } from '@/shared/components/text'
-import { spacing, scale } from '@/shared/theme/spacing'
+import {
+  TextCaption,
+  TextHeader,
+  TextHeaderThree,
+} from '@/shared/components/text'
+import { gaps, borderRadii } from '@/shared/theme/spacing'
 
 interface OtpInputProps {
   value: string
   onChangeText: (text: string) => void
   digitCount?: number
   error?: boolean
+  errorMessage?: string | null
   // Add other necessary props like onSubmitEditing if needed
 }
 
@@ -17,6 +22,7 @@ export const OtpInput: React.FC<OtpInputProps> = ({
   onChangeText,
   digitCount = 6,
   error = false,
+  errorMessage = null,
 }) => {
   const { theme } = useTheme()
   const inputRef = useRef<TextInput>(null)
@@ -82,13 +88,11 @@ export const OtpInput: React.FC<OtpInputProps> = ({
         onChangeText={onChangeText}
         maxLength={digitCount}
         keyboardType="number-pad"
-        autoFocus={true} // Auto focus the hidden input
-        caretHidden // Hide the caret visually if possible
+        autoFocus={true}
+        caretHidden
         onFocus={handleFocus}
         onBlur={handleBlur}
-        // Style to hide it completely
         style={styles.hiddenInput}
-        // Consider adding accessibility labels
       />
 
       {/* Display Boxes */}
@@ -112,11 +116,11 @@ export const OtpInput: React.FC<OtpInputProps> = ({
 
           return (
             <View key={index} style={boxStyle}>
-              <ThemedText
+              <TextHeaderThree
                 style={[styles.boxText, { color: theme.colors.text.primary }]}
               >
                 {digit}
-              </ThemedText>
+              </TextHeaderThree>
               {isActive && (
                 <Animated.View
                   style={[
@@ -132,6 +136,16 @@ export const OtpInput: React.FC<OtpInputProps> = ({
           )
         })}
       </Pressable>
+
+      {/* Conditionally render the error message */}
+      {errorMessage && (
+        <TextCaption
+          color={theme.colors.indicators.error}
+          style={styles.errorText}
+        >
+          {errorMessage}
+        </TextCaption>
+      )}
     </View>
   )
 }
@@ -149,17 +163,17 @@ const styles = StyleSheet.create({
   },
   displayContainer: {
     flexDirection: 'row',
-    gap: scale.sm, // Add gap between boxes
+    gap: gaps.small, // Use gaps constant
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center', // Center the row of boxes
   },
   box: {
     flex: 1, // Allow boxes to share space
-    maxWidth: scale.xxl + scale.sm, // Prevent boxes from getting too wide
+    maxWidth: gaps.xxlarge + gaps.small, // Use gaps constants
     aspectRatio: 1,
     borderWidth: 1,
-    borderRadius: spacing.input.borderRadius,
+    borderRadius: borderRadii.medium, // Use borderRadii constant
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -171,5 +185,10 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: 2,
     height: '40%',
+  },
+  errorText: {
+    marginTop: gaps.small, // Use gaps constant
+    textAlign: 'left', // Align text to the left below the inputs
+    width: '100%', // Take full width
   },
 })

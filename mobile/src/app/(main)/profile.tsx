@@ -23,10 +23,11 @@ import {
   FgView,
   SmColumn,
 } from '@/shared/components/layout'
-import { scale, spacing } from '@/shared/theme/spacing'
+import { paddings, gaps, borderRadii } from '@/shared/theme/spacing'
+import { iconSizes } from '@/shared/theme/sizes'
 
 export default function ProfileScreen() {
-  const { theme } = useTheme()
+  const { theme, isDark } = useTheme()
   const insets = useSafeAreaInsets()
   const router = useRouter()
 
@@ -35,6 +36,7 @@ export default function ProfileScreen() {
   }
 
   const TAB_BAR_HEIGHT = 60
+  const defaultPadding = paddings.medium
 
   return (
     <BgView style={styles.container}>
@@ -43,15 +45,15 @@ export default function ProfileScreen() {
         contentContainerStyle={[
           styles.scrollContent,
           {
-            paddingTop: insets.top + spacing.section.padding,
+            paddingTop: insets.top + defaultPadding,
             paddingBottom:
               Platform.OS === 'ios'
                 ? insets.bottom + TAB_BAR_HEIGHT
-                : insets.bottom + spacing.section.padding,
+                : insets.bottom + defaultPadding,
           },
         ]}
       >
-        <BaseColumn style={styles.content} gap={scale.lg}>
+        <BaseColumn style={styles.content} gap={gaps.large}>
           <View style={styles.header}>
             <TextHeader>Profile</TextHeader>
             <Pressable
@@ -64,14 +66,14 @@ export default function ProfileScreen() {
             >
               <Ionicons
                 name="settings-outline"
-                size={theme.typography.icon.sm}
+                size={iconSizes.medium}
                 color={theme.colors.text.primary}
               />
             </Pressable>
           </View>
 
           <FgView style={styles.profileCard}>
-            <BaseColumn gap={scale.md}>
+            <BaseColumn gap={gaps.medium}>
               <View style={styles.profileInfo}>
                 <View
                   style={[
@@ -97,7 +99,7 @@ export default function ProfileScreen() {
               <View style={styles.locationContainer}>
                 <Ionicons
                   name="location-outline"
-                  size={theme.typography.icon.sm}
+                  size={iconSizes.small}
                   color={theme.colors.text.secondary}
                 />
                 <TextCaption
@@ -127,11 +129,11 @@ export default function ProfileScreen() {
               <View style={styles.sectionHeader}>
                 <TextBody>Contact</TextBody>
               </View>
-              <BaseColumn gap={scale.sm}>
+              <BaseColumn gap={gaps.small}>
                 <View style={styles.contactItem}>
                   <Ionicons
                     name="mail-outline"
-                    size={theme.typography.icon.xs}
+                    size={iconSizes.xsmall}
                     color={theme.colors.text.secondary}
                   />
                   <TextCaption
@@ -144,7 +146,7 @@ export default function ProfileScreen() {
                 <View style={styles.contactItem}>
                   <Ionicons
                     name="link-outline"
-                    size={theme.typography.icon.xs}
+                    size={iconSizes.xsmall}
                     color={theme.colors.text.secondary}
                   />
                   <TextCaption
@@ -172,7 +174,7 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    paddingHorizontal: spacing.section.padding ?? 24,
+    paddingHorizontal: paddings.medium,
   },
   header: {
     flexDirection: 'row',
@@ -180,21 +182,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   settingsButton: {
-    padding: scale.xs,
+    padding: paddings.xsmall,
     alignItems: 'center',
     justifyContent: 'center',
   },
   editButton: {
-    padding: scale.sm,
+    padding: paddings.small,
   },
   profileCard: {
-    padding: scale.lg,
-    borderRadius: spacing.card.borderRadius ?? 12,
+    padding: paddings.large,
+    borderRadius: borderRadii.large,
   },
   profileInfo: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: scale.md,
+    gap: gaps.medium,
   },
   avatarPlaceholder: {
     width: 65,
@@ -217,14 +219,14 @@ const styles = StyleSheet.create({
   locationContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: scale.xs,
+    gap: gaps.xsmall,
   },
   locationText: {
     flex: 1,
   },
   section: {
-    padding: scale.lg,
-    borderRadius: spacing.card.borderRadius ?? 12,
+    padding: paddings.large,
+    borderRadius: borderRadii.large,
   },
   sectionHeader: {
     flexDirection: 'row',
@@ -234,7 +236,7 @@ const styles = StyleSheet.create({
   contactItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: scale.sm,
+    gap: gaps.small,
   },
   contactText: {
     flex: 1,

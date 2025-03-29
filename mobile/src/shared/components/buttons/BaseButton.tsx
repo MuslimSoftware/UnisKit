@@ -7,6 +7,7 @@ import {
   ColorValue,
 } from 'react-native'
 import { useTheme } from '@/shared/context/ThemeContext'
+import { paddings, borderRadii, gaps } from '@/shared/theme/spacing'
 
 export interface BaseButtonProps
   extends Omit<TouchableOpacityProps, 'children'> {
@@ -37,8 +38,8 @@ export const BaseButton = ({
       backgroundColor: buttonThemeStyles.background as ColorValue,
       borderColor: buttonThemeStyles.border as ColorValue,
       borderWidth: 1, // Ensure border is visible
-      padding: theme.spacing.button.padding,
-      borderRadius: theme.spacing.button.borderRadius,
+      padding: paddings.base,
+      borderRadius: borderRadii.xxlarge,
     },
     style,
   ]
@@ -60,6 +61,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
-    gap: 8,
+    gap: gaps.small,
   },
 })

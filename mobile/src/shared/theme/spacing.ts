@@ -1,11 +1,44 @@
-export const scale = {
-  xxs: 2,
-  xs: 4,
-  sm: 8,
-  md: 16,
-  lg: 24,
-  xl: 32,
-  xxl: 64,
+// --- Padding Values ---
+export const paddings = {
+  none: 0,
+  xxsmall: 2,
+  xsmall: 4,
+  small: 8,
+  base: 12,
+  medium: 16,
+  large: 24,
+  xlarge: 32,
+  xxlarge: 64,
+};
+
+// --- Gap Values ---
+export const gaps = {
+  none: 0,
+  xxsmall: 2,
+  xsmall: 4,
+  small: 8,
+  medium: 16,
+  large: 24,
+  xlarge: 32,
+  xxlarge: 64,
+};
+
+// --- Border Radius Values ---
+export const borderRadii = {
+  none: 0,
+  small: 4,
+  medium: 8,
+  large: 16,
+  xlarge: 24,
+  xxlarge: 32,
+  round: 9999,
+};
+
+// Optional: Type definition for documentation or theme integration
+export type ThemeSpacing = {
+  paddings: typeof paddings;
+  gaps: typeof gaps;
+  borderRadii: typeof borderRadii;
 };
 
 type SpacingValue = {
@@ -29,37 +62,37 @@ export type Spacing = {
 
 export const spacing: Spacing = {
     section: {
-        gap: scale.md,
-        padding: scale.md,
-        borderRadius: scale.md,
+        gap: gaps.medium,
+        padding: paddings.medium,
+        borderRadius: borderRadii.medium,
     },
     list: {
-        gap: scale.md,
-        borderRadius: scale.md,
+        gap: gaps.medium,
+        borderRadius: borderRadii.medium,
         item: {
-            gap: scale.md,
-            padding: scale.md,
-            borderRadius: scale.md,
+            gap: gaps.medium,
+            padding: paddings.medium,
+            borderRadius: borderRadii.medium,
         },
     },
     card: {
-        padding: scale.md,
-        borderRadius: scale.md,
-        gap: scale.md,
+        padding: paddings.medium,
+        borderRadius: borderRadii.medium,
+        gap: gaps.medium,
     },
     button: {
-        padding: scale.md,
-        borderRadius: scale.xl,
-        gap: scale.md,
+        padding: paddings.medium,
+        borderRadius: borderRadii.xlarge,
+        gap: gaps.medium,
     },
     input: {
-        padding: scale.md,
-        borderRadius: scale.md,
-        gap: scale.md,
+        padding: paddings.medium,
+        borderRadius: borderRadii.medium,
+        gap: gaps.medium,
     },
     select: {
-        padding: scale.md,
-        borderRadius: scale.md,
-        gap: scale.md,
+        padding: paddings.medium,
+        borderRadius: borderRadii.medium,
+        gap: gaps.medium,
     },
 }

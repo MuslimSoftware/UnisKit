@@ -1,6 +1,5 @@
 import React from 'react'
 import { StyleSheet, View, TouchableOpacity } from 'react-native'
-import { useTheme } from '@/shared/context/ThemeContext'
 import { AuthScreenLayout } from '@/features/auth/components/AuthScreenLayout'
 import { useOTPVerification } from '@/features/auth/hooks/useOTPVerification'
 import { OtpInput } from '@/features/auth/components/OtpInput'
@@ -8,28 +7,20 @@ import { TextCaption, TextLink } from '@/shared/components/text'
 import { Column } from '@/shared/components/layout'
 
 export default function OTPScreen() {
-  const { theme } = useTheme()
   const {
     otp,
     setOtp,
     loading,
-    error,
+    errorMessage,
     handleVerify,
     handleResendOTP,
-    getScreenTitle,
-    getScreenSubtitle,
     resendCooldown,
   } = useOTPVerification()
 
-  const errorMessage =
-    typeof error === 'string'
-      ? error
-      : (error as any)?.message || 'An error occurred'
-
   return (
     <AuthScreenLayout
-      title={getScreenTitle()}
-      subtitle={getScreenSubtitle()}
+      title="Verify Your Email"
+      subtitle="Enter the 6-digit code we sent to your email"
       buttonText={loading ? 'Verifying...' : 'Verify'}
       onButtonPress={handleVerify}
       buttonDisabled={otp.length !== 6 || loading}
@@ -40,16 +31,9 @@ export default function OTPScreen() {
             value={otp}
             onChangeText={setOtp}
             digitCount={6}
-            error={!!error}
+            error={!!errorMessage}
+            errorMessage={errorMessage}
           />
-          {error && (
-            <TextCaption
-              color={theme.colors.indicators.error}
-              style={styles.errorText}
-            >
-              {errorMessage}
-            </TextCaption>
-          )}
         </View>
 
         <View style={styles.footerRow}>
@@ -78,19 +62,10 @@ const styles = StyleSheet.create({
   inputContainer: {
     width: '100%',
   },
-  otpInputText: {
-    textAlign: 'center',
-    letterSpacing: 8,
-  },
   footerRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start',
-    width: '100%',
-  },
-  errorText: {
-    marginTop: 8,
-    textAlign: 'left',
     width: '100%',
   },
 })

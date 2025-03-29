@@ -9,7 +9,7 @@ import {
 } from 'react-native'
 import { BaseInput } from '@/shared/components/inputs/BaseInput'
 import { TextBody } from '@/shared/components/text'
-import { spacing, scale } from '@/shared/theme/spacing'
+import { paddings, gaps } from '@/shared/theme/spacing'
 import { useTheme } from '@/shared/context/ThemeContext'
 
 interface AuthInputProps extends Omit<TextInputProps, 'style'> {
@@ -55,10 +55,10 @@ export const AuthInput: React.FC<AuthInputProps> = ({
 const styles = StyleSheet.create({
   outerContainer: {
     width: '100%',
-    marginBottom: spacing.input.padding,
+    marginBottom: paddings.medium,
   },
   errorText: {
-    marginTop: scale.xs,
+    marginTop: gaps.xsmall,
     fontSize: 12,
   },
 })

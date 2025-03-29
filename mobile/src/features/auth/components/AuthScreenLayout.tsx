@@ -15,7 +15,7 @@ import { Ionicons } from '@expo/vector-icons'
 import { BgView } from '@/shared/components/layout'
 import { TextBody, TextHeader } from '@/shared/components/text'
 import { PrimaryButton } from '@/shared/components/buttons'
-import { spacing } from '@/shared/theme/spacing'
+import { paddings, gaps } from '@/shared/theme/spacing'
 
 interface AuthScreenLayoutProps {
   title: string
@@ -71,6 +71,8 @@ export function AuthScreenLayout({
   const handleBack = () => {
     router.back()
   }
+
+  const screenPadding = paddings.medium ?? 24
 
   return (
     <BgView style={styles.container}>
@@ -165,24 +167,24 @@ const styles = StyleSheet.create({
   },
   header: {
     paddingTop: 60,
-    paddingHorizontal: spacing.section.padding,
-    paddingBottom: spacing.section.padding,
+    paddingHorizontal: paddings.medium,
+    paddingBottom: paddings.medium,
   },
   backButton: {
-    padding: spacing.section.padding,
-    marginLeft: (spacing.section.padding ?? 0) * -1,
+    padding: paddings.medium,
+    marginLeft: (paddings.medium ?? 0) * -1,
   },
   content: {
     flex: 1,
-    paddingHorizontal: spacing.section.padding,
-    marginTop: spacing.section.gap,
+    paddingHorizontal: paddings.medium,
+    marginTop: gaps.medium,
   },
   formContainer: {},
   title: {
-    marginBottom: spacing.section.gap,
+    marginBottom: gaps.medium,
   },
   subtitle: {
-    marginBottom: spacing.section.gap,
+    marginBottom: gaps.medium,
   },
   buttonContainer: {
     ...(Platform.OS === 'ios'
@@ -194,9 +196,9 @@ const styles = StyleSheet.create({
         }
       : {
           position: 'absolute',
-          bottom: spacing.section.padding,
-          left: spacing.section.padding,
-          right: spacing.section.padding,
+          bottom: paddings.medium,
+          left: paddings.medium,
+          right: paddings.medium,
         }),
   },
 })

@@ -2,7 +2,6 @@ import { useCallback } from 'react';
 import { useApi } from '@/api/useApi';
 import { requestOTP } from '@/api/endpoints/authApi';
 import { RequestOTPResponse, OTPRequest } from '@/api/types/auth.types';
-import { ApiError } from '@/api/types/api.types';
 
 export function useRequestOTP() {
   const { 

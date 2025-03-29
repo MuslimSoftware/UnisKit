@@ -5,6 +5,7 @@ import {
   IconButtonProps,
 } from '@/shared/components/buttons/IconButton'
 import { useTheme } from '@/shared/context/ThemeContext'
+import { iconSizes } from '@/shared/theme/sizes'
 
 // Extend IconButtonProps, omitting things we'll set internally
 type GoogleButtonProps = Omit<
@@ -25,8 +26,8 @@ export const GoogleButton = (props: GoogleButtonProps) => {
   const googleTextColor = '#3c4043'
 
   const logoStyle: ImageStyle = {
-    width: theme.typography.icon.md,
-    height: theme.typography.icon.md,
+    width: iconSizes.medium,
+    height: iconSizes.medium,
   }
 
   return (

@@ -10,7 +10,8 @@ import {
 import { useTheme } from '@/shared/context/ThemeContext'
 import { Ionicons } from '@expo/vector-icons'
 import { TextBody } from '@/shared/components/text'
-import { scale, spacing } from '@/shared/theme/spacing'
+import { paddings, gaps } from '@/shared/theme/spacing'
+import { iconSizes } from '@/shared/theme/sizes'
 
 // Define IoniconName type locally or import if shared
 type IoniconName = keyof typeof Ionicons.glyphMap
@@ -59,7 +60,7 @@ export const ListButton = ({
         {icon && (
           <Ionicons
             name={icon}
-            size={theme.typography.icon.sm} // Consistent icon size
+            size={iconSizes.small}
             color={finalIconColor}
             style={styles.icon}
           />
@@ -73,7 +74,7 @@ export const ListButton = ({
       {showChevron && (
         <Ionicons
           name="chevron-forward"
-          size={theme.typography.icon.xs}
+          size={iconSizes.xsmall}
           color={finalChevronColor}
         />
       )}
@@ -86,15 +87,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: spacing.section.padding ?? 16,
-    paddingVertical: scale.md,
+    paddingHorizontal: paddings.medium,
+    paddingVertical: paddings.medium,
   },
   contentLeft: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: scale.md,
+    gap: gaps.medium,
     flex: 1,
-    marginRight: scale.sm,
+    marginRight: gaps.small,
   },
   icon: {
     textAlign: 'center',

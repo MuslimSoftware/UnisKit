@@ -9,7 +9,7 @@ import {
   TextStyle,
 } from 'react-native'
 import { useTheme } from '@/shared/context/ThemeContext'
-import { spacing } from '@/shared/theme/spacing'
+import { paddings, borderRadii } from '@/shared/theme/spacing'
 
 interface BaseInputProps extends Omit<TextInputProps, 'style'> {
   inputStyle?: StyleProp<TextStyle>
@@ -55,8 +55,8 @@ const styles = StyleSheet.create({
   input: {
     width: '100%',
     borderWidth: 1,
-    borderRadius: spacing.input.borderRadius,
-    padding: spacing.input.padding,
+    borderRadius: borderRadii.medium,
+    padding: paddings.medium,
     fontSize: 16, // Consider adding this to theme.typography
     // Add other base styles as needed
   },

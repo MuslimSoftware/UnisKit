@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, StyleSheet, ViewProps, ViewStyle } from 'react-native'
-import { spacing } from '@/shared/theme/spacing'
+import { paddings } from '@/shared/theme/spacing'
 
 // Extend ViewProps to accept standard View properties
 interface PageViewProps extends ViewProps {
@@ -19,7 +19,7 @@ export const PageView = ({ children, style, ...props }: PageViewProps) => {
 const styles = StyleSheet.create({
   container: {
     // Apply horizontal padding using the value from theme spacing
-    paddingHorizontal: spacing.section.padding,
+    paddingHorizontal: paddings.medium,
     // Make it flexible by default to take up available space within its parent
     flex: 1,
   },

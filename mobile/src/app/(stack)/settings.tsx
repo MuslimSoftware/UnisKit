@@ -12,7 +12,8 @@ import {
 } from '@/shared/components/layout'
 import { TextHeader, TextBody, TextCaption } from '@/shared/components/text'
 import { Ionicons } from '@expo/vector-icons'
-import { scale, spacing } from '@/shared/theme/spacing'
+import { paddings, gaps, borderRadii } from '@/shared/theme/spacing'
+import { iconSizes } from '@/shared/theme/sizes'
 import { ListButton } from '@/shared/components/buttons'
 // --- Types ---
 type IoniconName = keyof typeof Ionicons.glyphMap
@@ -88,6 +89,13 @@ export default function SettingsScreen() {
     console.log('switch accounts')
   }
 
+  // Calculate dynamic values needed for styles
+  const defaultPadding = paddings.medium
+  const iconMediumSize = iconSizes.medium
+  const iconSmallSize = iconSizes.small
+  const headerSpacerWidth = iconMediumSize + paddings.small * 2
+  const separatorMarginLeft = defaultPadding + iconSmallSize + gaps.medium
+
   return (
     <BgView style={styles.container}>
       <ScrollView
@@ -95,8 +103,8 @@ export default function SettingsScreen() {
         contentContainerStyle={[
           styles.scrollContent,
           {
-            paddingTop: insets.top + (spacing.section.padding ?? 24),
-            paddingBottom: insets.bottom + (spacing.section.padding ?? 24),
+            paddingTop: insets.top + defaultPadding,
+            paddingBottom: insets.bottom + defaultPadding,
           },
         ]}
       >
@@ -112,15 +120,15 @@ export default function SettingsScreen() {
             >
               <Ionicons
                 name="arrow-back"
-                size={theme.typography.icon.md}
+                size={iconMediumSize}
                 color={theme.colors.text.primary}
               />
             </Pressable>
             <TextHeader>Settings</TextHeader>
-            <View style={styles.headerSpacer} />
+            <View style={{ width: headerSpacerWidth }} />
           </View>
 
-          <BaseColumn gap={scale.lg}>
+          <BaseColumn gap={gaps.large}>
             {SETTINGS_SECTIONS.map((section) => (
               <View key={section.title} style={styles.section}>
                 <TextCaption
@@ -135,16 +143,16 @@ export default function SettingsScreen() {
                       <ListButton
                         label={item.label}
                         icon={item.icon}
-                        onPress={() => {
-                          console.log('pressed')
-                        }}
                         iconColor={theme.colors.text.primary}
                       />
                       {index < section.items.length - 1 && (
                         <View
                           style={[
                             styles.separator,
-                            { backgroundColor: theme.colors.layout.border },
+                            {
+                              marginLeft: separatorMarginLeft,
+                              backgroundColor: theme.colors.layout.border,
+                            },
                           ]}
                         />
                       )}
@@ -190,7 +198,7 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    gap: scale.xl,
+    gap: gaps.xlarge,
   },
   header: {
     flexDirection: 'row',
@@ -198,31 +206,30 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   backButton: {
-    padding: scale.sm,
-  },
-  headerSpacer: {
-    width: 48,
+    padding: paddings.small,
   },
   section: {
-    gap: scale.sm,
+    gap: gaps.small,
   },
   sectionContent: {
-    borderRadius: spacing.card.borderRadius ?? 12,
+    borderRadius: borderRadii.large,
     overflow: 'hidden',
   },
   sectionTitle: {
-    marginLeft: scale.xs,
+    marginLeft: paddings.xsmall,
     textTransform: 'uppercase',
     letterSpacing: 1,
   },
   separator: {
     height: StyleSheet.hairlineWidth,
-    marginLeft: 56,
   },
   logoutButtonContainer: {
-    borderRadius: spacing.card.borderRadius ?? 12,
-    marginTop: scale.md,
+    borderRadius: borderRadii.large,
+    marginTop: gaps.medium,
     overflow: 'hidden',
   },
-  logoutButton: {},
+  logoutButton: {
+    padding: paddings.medium,
+    alignItems: 'center',
+  },
 })

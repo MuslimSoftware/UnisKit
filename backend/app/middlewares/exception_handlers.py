@@ -22,7 +22,7 @@ async def app_exception_handler(request: Request, exc: AppException):
 async def global_exception_handler(request: Request, exc: Exception):
     # Log at CRITICAL level with stack trace for unhandled exceptions
     logger.critical(
-        f"UNHANDLED EXCEPTION for {request.method} {request.url}: {str(exc)}",
+        f"UNHANDLED EXCEPTION for {request.method} {request.url}",
         exc_info=True  # Includes stack trace like logger.exception()
     )
     return JSONResponse(

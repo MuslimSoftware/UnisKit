@@ -4,14 +4,14 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { TextBody, TextHeader } from '@/shared/components/text'
 import { Ionicons } from '@expo/vector-icons'
 import { Column, BaseColumn } from '@/shared/components/layout'
-import { scale } from '@/shared/theme/spacing'
+import { paddings, gaps, borderRadii } from '@/shared/theme/spacing'
 
 export default function HomeScreen() {
   const { theme } = useTheme()
   const insets = useSafeAreaInsets()
 
   const TAB_BAR_HEIGHT = 60
-  const defaultPadding = 24
+  const defaultPadding = paddings.medium
 
   return (
     <View
@@ -25,17 +25,15 @@ export default function HomeScreen() {
         contentContainerStyle={[
           styles.scrollContent,
           {
-            paddingTop:
-              insets.top + (theme.spacing.section.padding ?? defaultPadding),
+            paddingTop: insets.top + defaultPadding,
             paddingBottom:
               Platform.OS === 'ios'
                 ? insets.bottom + TAB_BAR_HEIGHT
-                : insets.bottom +
-                  (theme.spacing.section.padding ?? defaultPadding),
+                : insets.bottom + defaultPadding,
           },
         ]}
       >
-        <BaseColumn style={styles.content} gap={scale.lg}>
+        <BaseColumn style={styles.content} gap={gaps.large}>
           <View style={styles.iconContainer}>
             <Ionicons
               name="home"
@@ -55,7 +53,7 @@ export default function HomeScreen() {
             >
               Thanks for using my React Native template. This template includes:
             </TextBody>
-            <BaseColumn style={styles.features} gap={scale.sm}>
+            <BaseColumn style={styles.features} gap={gaps.small}>
               <TextBody style={{ color: theme.colors.text.secondary }}>
                 • Beautiful dark/light theme
               </TextBody>
@@ -74,12 +72,7 @@ export default function HomeScreen() {
             </BaseColumn>
           </View>
 
-          <View
-            style={[
-              styles.section,
-              { backgroundColor: theme.colors.layout.background },
-            ]}
-          >
+          <View style={[styles.section]}>
             <TextBody style={styles.tip}>
               💡 Start by modifying the files in the{' '}
               <TextBody style={{ color: theme.colors.brand.primary }}>
@@ -103,31 +96,31 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    paddingHorizontal: 24,
+    paddingHorizontal: paddings.large,
   },
   iconContainer: {
     alignItems: 'center',
-    marginTop: 40,
+    marginTop: paddings.xlarge,
   },
   section: {
-    padding: 20,
-    borderRadius: 12,
+    padding: paddings.large,
+    borderRadius: borderRadii.large,
   },
   title: {
     textAlign: 'center',
-    marginBottom: scale.sm,
+    marginBottom: gaps.small,
   },
   description: {
     textAlign: 'center',
-    marginBottom: scale.md,
+    marginBottom: gaps.medium,
   },
   features: {
     alignItems: 'flex-start',
-    marginLeft: 20,
+    marginLeft: paddings.large,
   },
   tip: {
     textAlign: 'center',
     lineHeight: 24,
-    paddingHorizontal: scale.sm,
+    paddingHorizontal: paddings.small,
   },
 })
