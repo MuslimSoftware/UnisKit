@@ -25,8 +25,8 @@ export const GoogleButton = (props: GoogleButtonProps) => {
   const googleTextColor = '#3c4043'
 
   const logoStyle: ImageStyle = {
-    width: theme.spacing.button.iconSize,
-    height: theme.spacing.button.iconSize,
+    width: theme.typography.icon.md,
+    height: theme.typography.icon.md,
   }
 
   return (

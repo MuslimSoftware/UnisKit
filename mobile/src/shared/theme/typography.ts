@@ -61,6 +61,14 @@ export type Typography = {
         fontWeight: FontWeight;
         lineHeight: number;
     }
+    icon: {
+        xxs: number;
+        xs: number;
+        sm: number;
+        md: number;
+        lg: number;
+        xl: number;
+    }
 }
 
 export const typography: Typography = {
@@ -124,4 +132,12 @@ export const typography: Typography = {
             fontWeight: 400,
             lineHeight: 16,
         },
+        icon: {
+            xxs: 10,
+            xs: 16,
+            sm: 24,
+            md: 32,
+            lg: 40,
+            xl: 48,
+        }
     }

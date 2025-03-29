@@ -59,7 +59,7 @@ export const lightTheme: Theme = {
         },
         layout: {
             background: Colors.gray50,
-            foreground: Colors.gray900,
+            foreground: Colors.gray100,
             border: Colors.gray100,
         },
         indicators: {
@@ -104,7 +104,7 @@ export const darkTheme: Theme = {
         },
         layout: {
             background: Colors.gray900,
-            foreground: Colors.gray50,
+            foreground: Colors.gray800,
             border: Colors.gray800,
         },
         indicators: {

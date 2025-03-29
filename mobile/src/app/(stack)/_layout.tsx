@@ -8,7 +8,7 @@ export default function StackLayout() {
     <Stack
       screenOptions={{
         headerShown: false,
-        contentStyle: { backgroundColor: theme.palette.background.default },
+        contentStyle: { backgroundColor: theme.colors.layout.background },
         presentation: 'modal',
         animation: 'default',
       }}

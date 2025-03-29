@@ -13,7 +13,7 @@ import { ThemeProvider } from '@/shared/context/ThemeContext'
 SplashScreen.preventAutoHideAsync()
 
 function RootLayoutNav() {
-  const { isDark } = useTheme()
+  const { isDark, theme } = useTheme()
 
   return (
     <>
@@ -35,15 +35,18 @@ function RootLayoutNav() {
             animation: 'none',
           }}
         />
-        {/* <Stack.Screen
+        <Stack.Screen
           name="(main)"
           options={{
             animation: 'none',
           }}
-        /> */}
-        {/* <Stack.Screen name="+not-found" options={{ presentation: 'modal' }} /> */}
+        />
+        <Stack.Screen name="+not-found" options={{ presentation: 'modal' }} />
       </Stack>
-      <StatusBar style={isDark ? 'light' : 'dark'} />
+      <StatusBar
+        style={isDark ? 'light' : 'dark'}
+        backgroundColor={theme.colors.layout.background}
+      />
     </>
   )
 }

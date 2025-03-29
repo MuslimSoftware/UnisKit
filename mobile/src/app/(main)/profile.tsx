@@ -1,284 +1,242 @@
 import {
-  View,
   StyleSheet,
   ScrollView,
   Platform,
   Pressable,
   Image,
+  View,
 } from 'react-native'
 import { useTheme } from '@/shared/context/ThemeContext'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useRouter } from 'expo-router'
+import {
+  TextBody,
+  TextHeader,
+  TextCaption,
+  TextHeaderTwo,
+} from '@/shared/components/text'
+import { Ionicons } from '@expo/vector-icons'
+import {
+  Column,
+  BaseColumn,
+  BgView,
+  FgView,
+  SmColumn,
+} from '@/shared/components/layout'
+import { scale, spacing } from '@/shared/theme/spacing'
+
 export default function ProfileScreen() {
   const { theme } = useTheme()
   const insets = useSafeAreaInsets()
   const router = useRouter()
 
   const handleSettingsPress = () => {
-    router.push('/(stack)/settings')
+    router.push('/settings')
   }
 
+  const TAB_BAR_HEIGHT = 60
+
   return (
-    <View
-      style={
-        [
-          // styles.container,
-          // { backgroundColor: theme.palette.background.default },
-        ]
-      }
-    >
-      {/* <ScrollView
+    <BgView style={styles.container}>
+      <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={[
           styles.scrollContent,
           {
-            paddingTop: insets.top + Spacing.layout.screen,
+            paddingTop: insets.top + spacing.section.padding,
             paddingBottom:
               Platform.OS === 'ios'
-                ? insets.bottom + Spacing.navigation.tabBarHeight
-                : Spacing.layout.content +
-                  Spacing.navigation.androidTabBarPadding,
+                ? insets.bottom + TAB_BAR_HEIGHT
+                : insets.bottom + spacing.section.padding,
           },
         ]}
       >
-        <View style={styles.content}>
+        <BaseColumn style={styles.content} gap={scale.lg}>
           <View style={styles.header}>
-            <Typography variant="h1">Profile</Typography>
+            <TextHeader>Profile</TextHeader>
             <Pressable
               onPress={handleSettingsPress}
               style={({ pressed }) => [
                 styles.settingsButton,
-                {
-                  backgroundColor: theme.colors.card,
-                  opacity: pressed ? 0.7 : 1,
-                },
+                { opacity: pressed ? 0.7 : 1 },
               ]}
-              hitSlop={{
-                top: Spacing.interactive.pressableArea,
-                bottom: Spacing.interactive.pressableArea,
-                left: Spacing.interactive.pressableArea,
-                right: Spacing.interactive.pressableArea,
-              }}
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
             >
-              <IconSymbol
-                name="gear"
-                size={Spacing.size.icon.medium}
-                color={theme.colors.text}
+              <Ionicons
+                name="settings-outline"
+                size={theme.typography.icon.sm}
+                color={theme.colors.text.primary}
               />
             </Pressable>
           </View>
 
-          <View
-            style={[styles.profileCard, { backgroundColor: theme.colors.card }]}
-          >
-            <View style={styles.profileInfo}>
-              <View
-                style={[
-                  styles.avatarPlaceholder,
-                  { backgroundColor: theme.colors.border },
-                ]}
-              >
-                <Image
-                  source={require('@/assets/images/profile_picture.png')}
-                  style={styles.avatar}
-                />
-              </View>
-              <View style={styles.nameContainer}>
-                <TextTitle style={styles.name}>Younes Benketira</TextTitle>
-                <TextSmall
+          <FgView style={styles.profileCard}>
+            <BaseColumn gap={scale.md}>
+              <View style={styles.profileInfo}>
+                <View
                   style={[
-                    styles.username,
-                    { color: theme.colors.secondaryText },
+                    styles.avatarPlaceholder,
+                    { backgroundColor: theme.colors.layout.border },
                   ]}
                 >
-                  @younesbenketira
-                </TextSmall>
+                  <Image
+                    source={require('@/assets/images/icon.png')}
+                    style={styles.avatar}
+                  />
+                </View>
+                <SmColumn style={styles.nameContainer}>
+                  <TextHeaderTwo>Younes Benketira</TextHeaderTwo>
+                  <TextCaption
+                    style={styles.username}
+                    color={theme.colors.text.secondary}
+                  >
+                    @younesbenketira
+                  </TextCaption>
+                </SmColumn>
               </View>
-            </View>
-            <View style={styles.locationContainer}>
-              <IconSymbol
-                name="location.fill"
-                size={Spacing.size.icon.small}
-                color={theme.colors.secondaryText}
-              />
-              <TextSmall
-                style={[styles.location, { color: theme.colors.secondaryText }]}
-              >
-                Montreal, QC
-              </TextSmall>
-            </View>
-          </View>
-
-          <View
-            style={[styles.section, { backgroundColor: theme.colors.card }]}
-          >
-            <View style={styles.sectionHeader}>
-              <TextSemiBold style={styles.sectionTitle}>About</TextSemiBold>
-              <Pressable
-                style={({ pressed }) => [
-                  styles.editButton,
-                  { opacity: pressed ? 0.7 : 1 },
-                ]}
-              >
-                <IconSymbol
-                  name="pencil"
-                  size={Spacing.size.icon.small}
-                  color={theme.colors.tint}
+              <View style={styles.locationContainer}>
+                <Ionicons
+                  name="location-outline"
+                  size={theme.typography.icon.sm}
+                  color={theme.colors.text.secondary}
                 />
-              </Pressable>
-            </View>
-            <TextBody
-              style={[styles.bio, { color: theme.colors.secondaryText }]}
-            >
-              Software developer passionate about creating amazing user
-              experiences. Love building beautiful and functional apps.
-            </TextBody>
-          </View>
+                <TextCaption
+                  style={styles.locationText}
+                  color={theme.colors.text.secondary}
+                >
+                  Montreal, QC
+                </TextCaption>
+              </View>
+            </BaseColumn>
+          </FgView>
 
-          <View
-            style={[styles.section, { backgroundColor: theme.colors.card }]}
-          >
-            <View style={styles.sectionHeader}>
-              <TextSemiBold style={styles.sectionTitle}>Contact</TextSemiBold>
-              <Pressable
-                style={({ pressed }) => [
-                  styles.editButton,
-                  { opacity: pressed ? 0.7 : 1 },
-                ]}
-              >
-                <IconSymbol
-                  name="pencil"
-                  size={Spacing.size.icon.small}
-                  color={theme.colors.tint}
-                />
-              </Pressable>
-            </View>
-            <View style={styles.contactItem}>
-              <IconSymbol
-                name="envelope.fill"
-                size={Spacing.size.icon.small}
-                color={theme.colors.secondaryText}
-              />
-              <TextSmall
-                style={[
-                  styles.contactText,
-                  { color: theme.colors.secondaryText },
-                ]}
-              >
-                me@younesbenketira.com
-              </TextSmall>
-            </View>
-            <View style={styles.contactItem}>
-              <IconSymbol
-                name="link"
-                size={Spacing.size.icon.small}
-                color={theme.colors.secondaryText}
-              />
-              <TextSmall
-                style={[
-                  styles.contactText,
-                  { color: theme.colors.secondaryText },
-                ]}
-              >
-                github.com/younesbenketira
-              </TextSmall>
-            </View>
-          </View>
-        </View>
-      </ScrollView> */}
-    </View>
+          <FgView style={styles.section}>
+            <Column>
+              <View style={styles.sectionHeader}>
+                <TextBody>About</TextBody>
+              </View>
+              <TextBody color={theme.colors.text.secondary}>
+                Software developer passionate about creating amazing user
+                experiences. Love building beautiful and functional apps.
+              </TextBody>
+            </Column>
+          </FgView>
+
+          <FgView style={styles.section}>
+            <Column>
+              <View style={styles.sectionHeader}>
+                <TextBody>Contact</TextBody>
+              </View>
+              <BaseColumn gap={scale.sm}>
+                <View style={styles.contactItem}>
+                  <Ionicons
+                    name="mail-outline"
+                    size={theme.typography.icon.xs}
+                    color={theme.colors.text.secondary}
+                  />
+                  <TextCaption
+                    style={styles.contactText}
+                    color={theme.colors.text.secondary}
+                  >
+                    me@younesbenketira.com
+                  </TextCaption>
+                </View>
+                <View style={styles.contactItem}>
+                  <Ionicons
+                    name="link-outline"
+                    size={theme.typography.icon.xs}
+                    color={theme.colors.text.secondary}
+                  />
+                  <TextCaption
+                    style={styles.contactText}
+                    color={theme.colors.text.secondary}
+                  >
+                    github.com/younesbenketira
+                  </TextCaption>
+                </View>
+              </BaseColumn>
+            </Column>
+          </FgView>
+        </BaseColumn>
+      </ScrollView>
+    </BgView>
   )
 }
 
 const styles = StyleSheet.create({
-  // container: {
-  //   flex: 1,
-  // },
-  // scrollContent: {
-  //   flexGrow: 1,
-  // },
-  // content: {
-  //   flex: 1,
-  //   padding: Spacing.layout.screen,
-  //   gap: Spacing.spacing.large,
-  // },
-  // header: {
-  //   flexDirection: 'row',
-  //   justifyContent: 'space-between',
-  //   alignItems: 'center',
-  // },
-  // settingsButton: {
-  //   width: Spacing.size.element.small,
-  //   height: Spacing.size.element.small,
-  //   borderRadius: Spacing.size.element.small / 2,
-  //   alignItems: 'center',
-  //   justifyContent: 'center',
-  // },
-  // avatar: {
-  //   width: Spacing.size.element.large,
-  //   height: Spacing.size.element.large,
-  //   borderRadius: Spacing.radius.circle,
-  // },
-  // profileCard: {
-  //   padding: Spacing.layout.screen,
-  //   borderRadius: Spacing.radius.card,
-  //   gap: Spacing.spacing.medium,
-  // },
-  // profileInfo: {
-  //   flexDirection: 'row',
-  //   alignItems: 'center',
-  //   gap: Spacing.spacing.medium,
-  // },
-  // avatarPlaceholder: {
-  //   width: Spacing.size.element.large + 5,
-  //   height: Spacing.size.element.large + 5,
-  //   borderRadius: Spacing.radius.circle,
-  //   alignItems: 'center',
-  //   justifyContent: 'center',
-  // },
-  // nameContainer: {
-  //   flex: 1,
-  // },
-  // name: {
-  //   marginBottom: Spacing.spacing.xsmall,
-  // },
-  // username: {
-  //   opacity: 0.7,
-  // },
-  // locationContainer: {
-  //   flexDirection: 'row',
-  //   alignItems: 'center',
-  //   gap: Spacing.spacing.xxsmall,
-  // },
-  // section: {
-  //   padding: Spacing.layout.screen,
-  //   borderRadius: Spacing.radius.card,
-  // },
-  // sectionHeader: {
-  //   flexDirection: 'row',
-  //   justifyContent: 'space-between',
-  //   alignItems: 'center',
-  //   marginBottom: Spacing.spacing.medium,
-  // },
-  // sectionTitle: {
-  //   fontSize: 18,
-  // },
-  // editButton: {
-  //   padding: Spacing.spacing.small,
-  // },
-  // bio: {
-  //   lineHeight: 24,
-  // },
-  // contactItem: {
-  //   flexDirection: 'row',
-  //   alignItems: 'center',
-  //   marginBottom: Spacing.spacing.small,
-  //   gap: Spacing.spacing.xxsmall,
-  // },
-  // contactText: {
-  //   flex: 1,
-  // },
-  // location: {
-  //   flex: 1,
-  // },
+  container: {
+    flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
+  },
+  content: {
+    flex: 1,
+    paddingHorizontal: spacing.section.padding ?? 24,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  settingsButton: {
+    padding: scale.xs,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  editButton: {
+    padding: scale.sm,
+  },
+  profileCard: {
+    padding: scale.lg,
+    borderRadius: spacing.card.borderRadius ?? 12,
+  },
+  profileInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: scale.md,
+  },
+  avatarPlaceholder: {
+    width: 65,
+    height: 65,
+    borderRadius: 32.5,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  avatar: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+  },
+  nameContainer: {
+    flex: 1,
+  },
+  username: {
+    opacity: 0.7,
+  },
+  locationContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: scale.xs,
+  },
+  locationText: {
+    flex: 1,
+  },
+  section: {
+    padding: scale.lg,
+    borderRadius: spacing.card.borderRadius ?? 12,
+  },
+  sectionHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  contactItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: scale.sm,
+  },
+  contactText: {
+    flex: 1,
+  },
 })

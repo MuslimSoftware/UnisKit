@@ -63,5 +63,3 @@ export const IconButton = ({
     </BaseButton>
   )
 }
-
-// IconButton doesn't need its own StyleSheet for now

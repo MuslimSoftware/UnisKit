@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react'
 import { View, TextInput, StyleSheet, Pressable, Animated } from 'react-native'
 import { useTheme } from '@/shared/context/ThemeContext'
-import { TextHeaderTwo } from '@/shared/components/text'
+import { ThemedText } from '@/shared/components/text'
 import { spacing, scale } from '@/shared/theme/spacing'
 
 interface OtpInputProps {
@@ -112,11 +112,11 @@ export const OtpInput: React.FC<OtpInputProps> = ({
 
           return (
             <View key={index} style={boxStyle}>
-              <TextHeaderTwo
+              <ThemedText
                 style={[styles.boxText, { color: theme.colors.text.primary }]}
               >
                 {digit}
-              </TextHeaderTwo>
+              </ThemedText>
               {isActive && (
                 <Animated.View
                   style={[

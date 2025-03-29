@@ -1,7 +1,9 @@
 import { Tabs } from 'expo-router'
 import React from 'react'
-import { Platform, Text } from 'react-native'
+import { Platform, StyleSheet } from 'react-native'
 import { useTheme } from '@/shared/context/ThemeContext'
+import { Ionicons } from '@expo/vector-icons'
+
 export default function TabLayout() {
   const { theme } = useTheme()
 
@@ -10,41 +12,49 @@ export default function TabLayout() {
       screenOptions={{
         tabBarActiveTintColor: theme.colors.brand.primary,
         headerShown: false,
-        // tabBarButton: HapticTab,
-        // tabBarBackground: TabBarBackground,
-        tabBarStyle: Platform.select({
-          ios: {
-            // Use a transparent background on iOS to show the blur effect
-            position: 'absolute',
-          },
-          android: {
+        tabBarStyle: {
+          backgroundColor: theme.colors.layout.background,
+          borderTopColor: theme.colors.layout.border,
+          ...(Platform.OS === 'android' && {
             height: 60,
-            paddingVertical: 10,
-          },
-          default: {},
-        }),
+          }),
+        },
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
           title: 'Home',
-          tabBarIcon: ({ color }) => (
-            // <IconSymbol size={28} name="house.fill" color={color} />
-            <Text>Home</Text>
+          tabBarIcon: ({ color, size, focused }) => (
+            <Ionicons
+              name={focused ? 'home' : 'home-outline'}
+              size={size}
+              color={color}
+            />
           ),
+          tabBarIconStyle: styles.tabBarIcon,
         }}
       />
       <Tabs.Screen
         name="profile"
         options={{
           title: 'Profile',
-          tabBarIcon: ({ color }) => (
-            // <IconSymbol size={28} name="person.circle.fill" color={color} />
-            <Text>Profile</Text>
+          tabBarIcon: ({ color, size, focused }) => (
+            <Ionicons
+              name={focused ? 'person' : 'person-outline'}
+              size={size}
+              color={color}
+            />
           ),
+          tabBarIconStyle: styles.tabBarIcon,
         }}
       />
     </Tabs>
   )
 }
+
+const styles = StyleSheet.create({
+  tabBarIcon: {
+    marginTop: 5,
+  },
+})

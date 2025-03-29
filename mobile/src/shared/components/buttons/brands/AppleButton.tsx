@@ -31,7 +31,7 @@ export const AppleButton = (props: AppleButtonProps) => {
       icon={
         <AntDesign
           name="apple1"
-          size={theme.spacing.button.iconSize}
+          size={theme.typography.icon.md}
           color={appleTextColor}
         />
       } // Use AntDesign icon

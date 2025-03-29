@@ -9,10 +9,9 @@ export const scale = {
 };
 
 type SpacingValue = {
-    gap?: number;
-    padding?: number;
-    borderRadius?: number;
-    iconSize?: number;
+    gap: number;
+    padding: number;
+    borderRadius: number;
 }
 
 export type Spacing = {
@@ -38,6 +37,7 @@ export const spacing: Spacing = {
         gap: scale.md,
         borderRadius: scale.md,
         item: {
+            gap: scale.md,
             padding: scale.md,
             borderRadius: scale.md,
         },
@@ -45,18 +45,21 @@ export const spacing: Spacing = {
     card: {
         padding: scale.md,
         borderRadius: scale.md,
+        gap: scale.md,
     },
     button: {
         padding: scale.md,
         borderRadius: scale.xl,
-        iconSize: scale.lg,
+        gap: scale.md,
     },
     input: {
         padding: scale.md,
         borderRadius: scale.md,
+        gap: scale.md,
     },
     select: {
         padding: scale.md,
         borderRadius: scale.md,
+        gap: scale.md,
     },
 }
