@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useEffect } from 'react'
+import { useState, useCallback, useRef, useEffect, useMemo } from 'react'
 import { ApiResponse, ApiError } from '@/api/types/api.types'
 
 interface ApiState<T> {
@@ -114,8 +114,34 @@ export function useApi<T, Args extends any[]>(
     });
   }, [options.initialData]);
 
+  // --- Debugging Refs for useApi (Place AFTER function definitions) --- 
+  const prevExecuteRef = useRef(execute);
+  const prevResetRef = useRef(reset);
+  // --- End Debugging Refs ---
+
+  // --- Debugging useEffect for execute identity --- 
+  useEffect(() => {
+    if (prevExecuteRef.current !== execute) {
+      console.log('[useApi Debug] execute function identity changed');
+      prevExecuteRef.current = execute;
+    }
+  }, [execute]);
+  // --- End Debugging useEffect ---
+
+  // --- Debugging useEffect for reset identity --- 
+  useEffect(() => {
+    if (prevResetRef.current !== reset) {
+      console.log('[useApi Debug] reset function identity changed');
+      prevResetRef.current = reset;
+    }
+  }, [reset]);
+  // --- End Debugging useEffect ---
+
+  // Return state values directly and memoized functions
   return {
-    ...state,
+    data: state.data,
+    loading: state.loading,
+    error: state.error,
     execute,
     cancel,
     reset,

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { StyleSheet, View, TouchableOpacity } from 'react-native'
 import { AuthScreenLayout } from '@/features/auth/components/AuthScreenLayout'
 import { useOTPVerification } from '@/features/auth/hooks/useOTPVerification'
@@ -17,20 +17,30 @@ export default function OTPScreen() {
     resendCooldown,
   } = useOTPVerification()
 
+  const DIGIT_COUNT = 6
+
+  useEffect(() => {
+    if (otp.length !== DIGIT_COUNT) {
+      return;
+    }
+
+    handleVerify();
+  }, [otp, handleVerify, DIGIT_COUNT]);
+
   return (
     <AuthScreenLayout
       title="Verify Your Email"
       subtitle="Enter the 6-digit code we sent to your email"
       buttonText={loading ? 'Verifying...' : 'Verify'}
       onButtonPress={handleVerify}
-      buttonDisabled={otp.length !== 6 || loading}
+      buttonDisabled={otp.length !== DIGIT_COUNT || loading || !!errorMessage}
     >
       <Column style={styles.container}>
         <View style={styles.inputContainer}>
           <OtpInput
             value={otp}
             onChangeText={setOtp}
-            digitCount={6}
+            digitCount={DIGIT_COUNT}
             error={!!errorMessage}
             errorMessage={errorMessage}
           />

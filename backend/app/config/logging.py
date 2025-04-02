@@ -1,5 +1,6 @@
 import logging
 import sys
+import os # Add os import
 import traceback  # Import the traceback module
 from logging.handlers import RotatingFileHandler
 
@@ -30,13 +31,19 @@ class TracebackSuppressingFormatter(logging.Formatter):
 
 # --- Logging Setup --- 
 def setup_logging():
+    # --- Create logs directory if it doesn't exist ---
+    log_directory = "logs" 
+    if not os.path.exists(log_directory):
+        os.makedirs(log_directory)
+    log_file_path = os.path.join(log_directory, "app.log")
+    
     # Create the custom formatter
     # Keep the original format string for the base message
     formatter = TracebackSuppressingFormatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     
     # Create and configure the file handler
     file_handler = RotatingFileHandler(
-        'app.log',
+        log_file_path, # Use the new path
         maxBytes=512*1024,  # 0.5MB
         backupCount=5
     )

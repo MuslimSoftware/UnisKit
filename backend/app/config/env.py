@@ -25,11 +25,6 @@ class Settings(BaseSettings):
     REFRESH_TOKEN_EXPIRE_DAYS: int = 30
     SIGNUP_TOKEN_EXPIRE_MINUTES: int = 10
 
-    # CORS Origins
-    # Add your frontend URLs here (comma-separated)
-    # Example: http://localhost:3000, http://localhost:8080
-    BACKEND_CORS_ORIGINS: list[str] = ["http://localhost:3000", "http://localhost:19006"] 
-
     JWT_SECRET_KEY: str = "your-super-secret-key-change-this-in-production"
     JWT_ALGORITHM: str = "HS256"
     JWT_ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
