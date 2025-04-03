@@ -2,6 +2,7 @@ import { typography, Typography } from './typography';
 import { spacing, Spacing } from './spacing';
 import { Colors } from './colors';
 
+// --- Types (Keep internal definitions or move to theme.types.ts if preferred) --- 
 type ButtonStyle = {
     background: string;
     border: string;
@@ -37,6 +38,7 @@ type ThemeColors = {
     }
 }
 
+// Base Theme Type
 export type Theme = {
     mode: 'light' | 'dark';
     colors: ThemeColors;
@@ -44,11 +46,13 @@ export type Theme = {
     spacing: Spacing;
 }
 
+// --- Base Theme Object --- 
 const baseTheme = {
     typography: typography,
     spacing: spacing,
 }
 
+// --- Exported Themes --- 
 export const lightTheme: Theme = {
     mode: 'light',
     colors: {
@@ -137,4 +141,4 @@ export const darkTheme: Theme = {
         },
     },
     ...baseTheme,
-}
+} 

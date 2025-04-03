@@ -2,10 +2,8 @@ import React from 'react';
 import { StyleSheet, View, Pressable } from 'react-native';
 import { TextBody } from '@/shared/components/text';
 import { FgView, SmallRow } from '@/shared/components/layout';
-import { Theme } from '@/shared/theme/theme';
-import { borderRadii, gaps, paddings } from '@/shared/theme/spacing';
 import { Ionicons } from '@expo/vector-icons';
-import { iconSizes } from '@/shared/theme/sizes';
+import { iconSizes, Theme, gaps, paddings, borderRadii } from '@fullstack-template/shared';
 
 type ThemeCardProps = {
   theme: Theme;

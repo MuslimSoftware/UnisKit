@@ -23,8 +23,9 @@ import {
   FgView,
   SmallColumn,
 } from '@/shared/components/layout'
-import { paddings, gaps, borderRadii } from '@/shared/theme/spacing'
-import { iconSizes } from '@/shared/theme/sizes'
+import { paddings, gaps, borderRadii, iconSizes } from '@fullstack-template/shared'
+import { BaseInput } from '@/shared/components/inputs'
+import { PrimaryButton, SecondaryButton } from '@/shared/components/buttons'
 
 export default function ProfileScreen() {
   const { theme, isDark } = useTheme()

@@ -8,8 +8,7 @@ import React, {
 } from 'react'
 import { useColorScheme } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { Theme, lightTheme, darkTheme } from '@/shared/theme/theme'
-import { ThemePreference, ThemeContextType } from '@/shared/types/theme.types'
+import { Theme, lightTheme, darkTheme, ThemePreference, ThemeContextType } from '@fullstack-template/shared'
 
 const ASYNC_STORAGE_KEY = 'userThemePreference'
 

@@ -5,7 +5,7 @@ import { PrimaryButton } from '@/shared/components/buttons'
 import { TextHeader, TextBody } from '@/shared/components/text'
 import { BgView, MediumColumn } from '@/shared/components/layout'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { paddings } from '@/shared/theme/spacing'
+import { paddings } from '@fullstack-template/shared'
 import { useTheme } from '@/shared/context/ThemeContext'
 import { Href } from 'expo-router'
 

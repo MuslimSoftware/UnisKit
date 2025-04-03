@@ -1,6 +1,6 @@
 import React from 'react';
 import { BaseRow, BaseRowProps } from './BaseRow';
-import { gaps } from '@/shared/theme/spacing';
+import { gaps } from '@fullstack-template/shared';
 
 export interface LargeRowProps extends BaseRowProps {}
 

@@ -9,18 +9,21 @@ import {
   TextStyle,
 } from 'react-native'
 import { useTheme } from '@/shared/context/ThemeContext'
-import { paddings, borderRadii } from '@/shared/theme/spacing'
+import { paddings, borderRadii } from '@fullstack-template/shared'
+import { TextCaption } from '@/shared/components/text'
 
 interface BaseInputProps extends Omit<TextInputProps, 'style'> {
   inputStyle?: StyleProp<TextStyle>
   containerStyle?: ViewStyle
   error?: boolean
+  label?: string
 }
 
 export const BaseInput: React.FC<BaseInputProps> = ({
   inputStyle,
   containerStyle,
   error,
+  label,
   ...props
 }) => {
   const { theme } = useTheme()

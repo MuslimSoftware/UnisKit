@@ -8,8 +8,10 @@ import {
   ViewStyle,
 } from 'react-native'
 import { BaseInput } from '@/shared/components/inputs/BaseInput'
-import { TextBody } from '@/shared/components/text'
-import { paddings, gaps } from '@/shared/theme/spacing'
+import { TextBody, TextCaption } from '@/shared/components/text'
+import { IconButton } from '@/shared/components/buttons'
+import { FgView } from '@/shared/components/layout'
+import { paddings, gaps } from '@fullstack-template/shared'
 import { useTheme } from '@/shared/context/ThemeContext'
 
 interface AuthInputProps extends Omit<TextInputProps, 'style'> {

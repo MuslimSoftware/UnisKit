@@ -1,0 +1,48 @@
+.header {
+  position: absolute; /* Makes header overlay content */
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: transparent; /* Transparent background */
+  padding: var(--padding-medium) 0; /* Use theme variable */
+  z-index: 1000; /* Ensure it's above other content */
+  transition: background-color 0.3s ease; /* Optional: transition for scroll effect */
+}
+
+/* Optional: Style for when scrolled */
+/* .headerScrolled { 
+  background-color: rgba(0, 0, 0, 0.8); 
+} */
+
+.container {
+  max-width: 1200px; /* Or your preferred max width */
+  margin: 0 auto;
+  padding: 0 var(--padding-medium); /* Use theme variable */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo a {
+  color: var(--color-text-primary); /* Use theme variable */
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1.5rem;
+  /* Adjust styling as needed */
+}
+
+.nav {
+  display: flex;
+  gap: var(--gap-medium); /* Use theme variable */
+}
+
+.nav a {
+  color: var(--color-text-primary); /* Use theme variable */
+  text-decoration: none;
+  padding: 0.5rem;
+  transition: color 0.2s ease;
+}
+
+.nav a:hover {
+  color: var(--color-primary); /* Use theme variable */
+} 

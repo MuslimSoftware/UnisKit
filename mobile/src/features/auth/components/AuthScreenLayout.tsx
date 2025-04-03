@@ -12,10 +12,10 @@ import { router } from 'expo-router'
 
 import { useTheme } from '@/shared/context/ThemeContext'
 import { Ionicons } from '@expo/vector-icons'
-import { BgView } from '@/shared/components/layout'
-import { TextBody, TextHeader } from '@/shared/components/text'
+import { BgView, MediumColumn, SmallRow } from '@/shared/components/layout'
+import { TextHeader, TextBody, TextLink } from '@/shared/components/text'
 import { PrimaryButton } from '@/shared/components/buttons'
-import { paddings, gaps } from '@/shared/theme/spacing'
+import { paddings, gaps } from '@fullstack-template/shared'
 
 interface AuthScreenLayoutProps {
   title: string

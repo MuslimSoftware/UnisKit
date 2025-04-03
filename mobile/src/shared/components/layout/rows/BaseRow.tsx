@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-// Import the shared type
-import { BaseLayoutComponentProps } from '@/shared/types/layout.types';
+import { BaseLayoutComponentProps } from '@fullstack-template/shared';
 
 // Use the shared prop type definition
 export interface BaseRowProps extends BaseLayoutComponentProps {}

@@ -3,10 +3,9 @@ import { StyleSheet, useColorScheme } from 'react-native';
 import { useTheme } from '@/shared/context/ThemeContext';
 import { FgView, LargeRow, MediumRow } from '@/shared/components/layout';
 import { TextBody } from '@/shared/components/text';
-import { paddings, borderRadii } from '@/shared/theme/spacing';
+import { paddings, borderRadii, lightTheme, darkTheme } from '@fullstack-template/shared';
 import { SettingsPageLayout } from '@/features/settings/components/SettingsPageLayout';
 import { ThemeCard } from '@/features/settings/components/ThemeCard';
-import { lightTheme, darkTheme } from '@/shared/theme/theme';
 import { Switch } from '@/shared/components/forms/Switch';
 
 export default function ThemeSettingsScreen() {

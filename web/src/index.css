@@ -1,0 +1,59 @@
+/* Basic Reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Apply base font from CSS variable */
+body {
+  font-family: var(--font-family-base, 'Roboto', sans-serif); /* Use variable, fallback to Roboto */
+  line-height: 1.6;
+  background-color: var(--color-layout-background);
+  color: var(--color-text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* CSS Theme Variables - Populated by ThemeProvider */
+:root {
+  /* Light Theme Defaults (will be overridden by JS) */
+  --color-brand-primary: #2ecc71;
+  --color-brand-secondary: #27ae60;
+  --color-layout-background: #ffffff;
+  --color-layout-foreground: #f3f4f6;
+  --color-layout-border: #f3f4f6;
+  --color-indicators-error: #EF4444;
+  --color-text-primary: #0c0c0c;
+  --color-text-secondary: #52525b;
+  --color-text-disabled: #a1a1aa;
+
+  --padding-small: 8px;
+  --padding-medium: 16px;
+  --padding-large: 24px;
+  /* Add all padding values */
+
+  --gap-small: 8px;
+  --gap-medium: 16px;
+  --gap-large: 24px;
+  /* Add all gap values */
+
+  --border-radius-small: 4px;
+  --border-radius-medium: 8px;
+  --border-radius-large: 16px;
+  --border-radius-round: 9999px;
+  /* Add all border-radius values */
+
+  --icon-size-small: 20px;
+  --icon-size-medium: 24px;
+  --icon-size-large: 32px;
+  /* Add all icon sizes */
+  
+  --font-family-base: 'Roboto'; /* Set base font variable */
+  /* Add other typography variables if needed (font sizes, weights) */
+}
+
+/* Dark theme overrides are now handled directly by JS setting variables */
+/* [data-theme='dark'] { ... } selector is still useful if you 
+   need CSS-only overrides not covered by JS variable setting */ 

@@ -1,6 +1,8 @@
 import React from 'react'
 import { View, StyleSheet, ViewProps, ViewStyle } from 'react-native'
-import { paddings } from '@/shared/theme/spacing'
+import { paddings } from '@fullstack-template/shared'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { BgView } from './BgView'
 
 // Extend ViewProps to accept standard View properties
 interface PageViewProps extends ViewProps {

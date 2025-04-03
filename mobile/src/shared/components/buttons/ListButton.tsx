@@ -10,8 +10,7 @@ import {
 import { useTheme } from '@/shared/context/ThemeContext'
 import { Ionicons } from '@expo/vector-icons'
 import { TextBody } from '@/shared/components/text'
-import { paddings, gaps } from '@/shared/theme/spacing'
-import { iconSizes } from '@/shared/theme/sizes'
+import { iconSizes, paddings, gaps } from '@fullstack-template/shared'
 import { MediumRow, SmallRow } from '@/shared/components/layout'
 
 // Define IoniconName type locally or import if shared

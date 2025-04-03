@@ -1,0 +1,84 @@
+.hero {
+  position: relative; /* Needed for overlay positioning */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh; /* Adjust height as needed */
+  padding: 6rem var(--padding-medium); /* Use theme variables */
+  background: url('/placeholder-hero.jpg') no-repeat center center/cover; /* Placeholder background */
+  text-align: center;
+  color: #fff; /* Default text color on dark background */
+}
+
+/* Optional overlay for better text readability */
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Adjust darkness */
+  z-index: 1;
+}
+
+.content {
+  position: relative; /* Ensure content is above overlay */
+  z-index: 2;
+  max-width: 800px;
+}
+
+.title {
+  font-size: 3rem; /* Adjust size */
+  font-weight: bold;
+  margin-bottom: var(--gap-medium); /* Use theme variable */
+  color: #fff; /* Ensure title is visible */
+}
+
+.subtitle {
+  font-size: 1.2rem; /* Adjust size */
+  margin-bottom: var(--gap-large); /* Use theme variable */
+  color: rgba(255, 255, 255, 0.85); /* Slightly muted white */
+}
+
+.ctaButtons {
+  display: flex;
+  justify-content: center;
+  gap: var(--gap-medium); /* Use theme variable */
+  flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
+}
+
+/* Basic button styling - replace with actual Button component styles later */
+.ctaPrimary,
+.ctaSecondary {
+  padding: var(--padding-medium) var(--padding-large);
+  border: none;
+  border-radius: var(--border-radius-medium);
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.ctaPrimary {
+  background-color: var(--color-primary);
+  color: #fff;
+}
+
+.ctaPrimary:hover {
+  filter: brightness(1.1);
+}
+
+.ctaSecondary {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  border: 1px solid #fff;
+}
+
+.ctaSecondary:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.ctaPrimary:active,
+.ctaSecondary:active {
+  transform: scale(0.98);
+} 

@@ -7,11 +7,10 @@ import {
   BaseColumn,
 } from '@/shared/components/layout'
 import { TextCaption } from '@/shared/components/text'
-import { paddings, gaps, borderRadii } from '@/shared/theme/spacing'
-import { iconSizes } from '@/shared/theme/sizes'
 import { ListButton } from '@/shared/components/buttons'
-import { SETTINGS_SECTIONS } from '@/shared/constants/settings'
 import { SettingsPageLayout } from '@/features/settings/components/SettingsPageLayout'
+import { SETTINGS_SECTIONS } from '@/shared/constants/settings'
+import { paddings, gaps, borderRadii, iconSizes } from '@fullstack-template/shared'
 
 export default function SettingsScreen() {
   const { theme } = useTheme()

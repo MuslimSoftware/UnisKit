@@ -153,4 +153,4 @@ export const Colors: Palette = {
     yellow700: '#B45309',
     yellow800: '#92400E',
     yellow900: '#78350F',
-}
+} 

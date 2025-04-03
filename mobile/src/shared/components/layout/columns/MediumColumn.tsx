@@ -1,6 +1,6 @@
 import React from 'react'
 import { BaseColumn } from './BaseColumn'
-import { gaps } from '@/shared/theme/spacing'
+import { gaps } from '@fullstack-template/shared'
 import { ViewProps } from 'react-native'
 
 // Rename the component to MediumColumn
