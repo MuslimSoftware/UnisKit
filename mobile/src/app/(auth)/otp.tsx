@@ -19,6 +19,7 @@ export default function OTPScreen() {
 
   const DIGIT_COUNT = 6
 
+  // Automatically verify when the user enters the full OTP
   useEffect(() => {
     if (otp.length !== DIGIT_COUNT) {
       return;

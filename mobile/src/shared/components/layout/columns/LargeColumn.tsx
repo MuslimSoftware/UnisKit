@@ -1,15 +1,15 @@
 import React from 'react'
-import { ViewProps } from 'react-native'
 import { BaseColumn } from './BaseColumn'
 import { gaps } from '@/shared/theme/spacing'
+import { ViewProps } from 'react-native'
 
-export const SmColumn: React.FC<ViewProps> = ({
+export const LargeColumn: React.FC<ViewProps> = ({
   children,
-  style,
   ...props
 }) => {
+
   return (
-    <BaseColumn gap={gaps.small} style={style} {...props}>
+    <BaseColumn gap={gaps.large} {...props}>
       {children}
     </BaseColumn>
   )

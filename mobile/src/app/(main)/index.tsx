@@ -3,7 +3,7 @@ import { useTheme } from '@/shared/context/ThemeContext'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { TextBody, TextHeader } from '@/shared/components/text'
 import { Ionicons } from '@expo/vector-icons'
-import { Column, BaseColumn } from '@/shared/components/layout'
+import { LargeColumn, BgView, SmColumn } from '@/shared/components/layout'
 import { paddings, gaps, borderRadii } from '@/shared/theme/spacing'
 
 export default function HomeScreen() {
@@ -14,12 +14,7 @@ export default function HomeScreen() {
   const defaultPadding = paddings.medium
 
   return (
-    <View
-      style={[
-        styles.container,
-        { backgroundColor: theme.colors.layout.background },
-      ]}
-    >
+    <BgView style={styles.container}>
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={[
@@ -33,7 +28,7 @@ export default function HomeScreen() {
           },
         ]}
       >
-        <BaseColumn style={styles.content} gap={gaps.large}>
+        <LargeColumn style={styles.content}>
           <View style={styles.iconContainer}>
             <Ionicons
               name="home"
@@ -53,7 +48,7 @@ export default function HomeScreen() {
             >
               Thanks for using my React Native template. This template includes:
             </TextBody>
-            <BaseColumn style={styles.features} gap={gaps.small}>
+            <SmColumn style={styles.features}>
               <TextBody style={{ color: theme.colors.text.secondary }}>
                 • Beautiful dark/light theme
               </TextBody>
@@ -69,7 +64,7 @@ export default function HomeScreen() {
               <TextBody style={{ color: theme.colors.text.secondary }}>
                 • iOS & Android support
               </TextBody>
-            </BaseColumn>
+            </SmColumn>
           </View>
 
           <View style={[styles.section]}>
@@ -81,9 +76,9 @@ export default function HomeScreen() {
               directory to build your app!
             </TextBody>
           </View>
-        </BaseColumn>
+        </LargeColumn>
       </ScrollView>
-    </View>
+    </BgView>
   )
 }
 

@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { router } from 'expo-router'
-import { useTheme } from '@/shared/context/ThemeContext'
 import { AuthScreenLayout } from '@/features/auth/components/AuthScreenLayout'
 import { AuthInput } from '@/features/auth/components/AuthInput'
 import { useRequestOTP } from '@/features/auth/hooks/useRequestOTP'
+import { isValidEmail } from '@/shared/utils/validation'
 
 export default function EmailScreen() {
   const [email, setEmail] = useState('')
@@ -16,10 +16,6 @@ export default function EmailScreen() {
     error: otpError,
     reset: resetOtpError,
   } = useRequestOTP()
-
-  const isValidEmail = (email: string) => {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
-  }
 
   const validateEmail = (input: string) => {
     resetOtpError()

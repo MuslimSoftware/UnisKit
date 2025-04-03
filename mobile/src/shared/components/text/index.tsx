@@ -6,8 +6,6 @@ export * from './ThemedText'
 
 // Export the aliases
 export * from './TextLink'
-export * from './TextButtonLabel'
-export * from './TextCaption'
 
 export const TextHeader = (props: TextAliasProps) => (
   <ThemedText variant="h1" {...props} />
@@ -35,4 +33,8 @@ export const TextSubtitle = (props: TextAliasProps) => (
 
 export const TextCaption = (props: TextAliasProps) => (
   <ThemedText variant="caption" {...props} />
+)
+
+export const TextButtonLabel = (props: TextAliasProps) => (
+  <ThemedText variant="button" {...props} />
 )

@@ -3,12 +3,11 @@ import { useLocalSearchParams } from 'expo-router'
 import { useApi } from '@/api/useApi'
 import { useAuth } from '@/features/auth/context/AuthContext'
 import * as SecureStore from 'expo-secure-store'
-import { requestOTP, validateOTP, authenticate } from '@/api/endpoints/authApi'
+import { validateOTP, authenticate } from '@/api/endpoints/authApi'
+import { useRequestOTP } from './useRequestOTP'
 import {
-  RequestOTPResponse,
   ValidateOTPResponse,
   AuthResponse,
-  OTPRequest,
   ValidateOTPRequest,
   AuthRequest
 } from '@/api/types/auth.types'
@@ -25,11 +24,15 @@ export function useOTPVerification() {
   const { signIn } = useAuth()
   const { email } = useLocalSearchParams<{ email?: string }>()
 
-  // API hooks
-  const requestOTPApi = useApi<
-    RequestOTPResponse,
-    [OTPRequest]
-  >(requestOTP)
+  // --- Use the centralized hook for OTP requests --- 
+  const { 
+    sendOTP: sendOtpRequest, // Rename to avoid conflict 
+    loading: requestOtpLoading,
+    error: requestOtpError,
+    reset: resetRequestOtpError
+  } = useRequestOTP();
+
+  // --- Hooks for Validation and Auth --- 
   const validateOTPApi = useApi<
     ValidateOTPResponse,
     [ValidateOTPRequest]
@@ -39,22 +42,23 @@ export function useOTPVerification() {
     [AuthRequest]
   >(authenticate)
 
-  // Combined raw error from API hooks
-  const rawError = requestOTPApi.error || validateOTPApi.error || authApi.error
+  // Combined raw error from API hooks (now includes requestOtpError)
+  const rawError = requestOtpError || validateOTPApi.error || authApi.error
 
   // Derived state for user-facing error message (includes internalError)
   const errorMessage = useMemo(() => internalError || rawError?.message || '', [rawError, internalError]);
 
-  // Reset API errors when OTP changes (to clear previous validation errors)
+  // Reset API errors AND internal error when OTP changes
   useEffect(() => {
     if (otp) {
+      resetRequestOtpError() // Reset the request error too
       validateOTPApi.reset()
       authApi.reset()
     }
-  }, [otp])
+  }, [otp, validateOTPApi.reset, authApi.reset]); // Add resetRequestOtpError
 
-  // Computed loading state
-  const isLoading = requestOTPApi.loading || validateOTPApi.loading || authApi.loading
+  // Computed loading state (now includes requestOtpLoading)
+  const isLoading = requestOtpLoading || validateOTPApi.loading || authApi.loading
 
   // Timer management
   useEffect(() => {
@@ -68,25 +72,23 @@ export function useOTPVerification() {
   }, [resendCooldown])
 
   // API handlers
-  const sendOTP = useCallback(async () => {
-    if (!email) {
-      console.warn('Cannot send OTP without email')
-      return
-    }
-
-    try {
-      await requestOTPApi.execute({ email })
-      setResendCooldown(COOLDOWN_DURATION)
-    } catch (error) {
-      // Error is caught and processed by the useMemo above
-      console.error('Failed to send OTP:', error)
-    }
-  }, [email, requestOTPApi])
-
   const handleResendOTP = useCallback(async () => {
-    if (resendCooldown > 0) return
-    await sendOTP()
-  }, [resendCooldown, sendOTP])
+    if (resendCooldown > 0 || !email || requestOtpLoading) return; // Add loading check
+    
+    // Reset other errors before resending
+    validateOTPApi.reset();
+    authApi.reset();
+    setInternalError(null);
+    
+    const success = await sendOtpRequest(email);
+    if (success) {
+      console.log('OTP resend request successful.');
+      setResendCooldown(COOLDOWN_DURATION);
+    } else {
+      console.error('OTP resend request failed.');
+      // Error message should be automatically set by useRequestOTP hook
+    }
+  }, [resendCooldown, email, requestOtpLoading, sendOtpRequest, validateOTPApi, authApi]); // Updated dependencies
 
   const handleVerify = useCallback(async () => {
     if (isLoading) {
@@ -99,9 +101,11 @@ export function useOTPVerification() {
       return
     }
     
-    // Reset potential previous errors before trying
-    // Note: User requested not to reset internalError based on OTP change alone
-    setInternalError(null); 
+    // Reset other errors before attempting validation
+    validateOTPApi.reset();
+    authApi.reset();
+    setInternalError(null);
+    resetRequestOtpError();
 
     try {
       // --- Step 1: Validate OTP --- 
@@ -155,7 +159,7 @@ export function useOTPVerification() {
          setInternalError('An unexpected error occurred during verification.');
        }
     }
-  }, [email, otp, isLoading, validateOTPApi, authApi, signIn])
+  }, [email, otp, validateOTPApi.execute, validateOTPApi.reset, authApi.execute, authApi.reset, signIn])
 
   return {
     // Input state
