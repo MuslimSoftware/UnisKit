@@ -21,7 +21,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    // padding: Spacing.layout.screen,
   },
   title: {
     fontSize: 20,

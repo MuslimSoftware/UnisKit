@@ -4,13 +4,17 @@ This file tracks the development tasks, progress, and future plans.
 
 ## Tasks
 
-- [ ] - Continue polishing the front end (structure, base components, minimal page-specific styling) 
+- [X] - Continue polishing the front end (structure, base components, minimal page-specific styling) 
+- [ ] - Implement Row components
+- [ ] - Create README guides for key folders (design, context)
 - [ ] - Implement multi-step onboarding for profile completion
 - [ ] - Rate limit the backend for security
 - [ ] - Implement account recovery flow
 - [ ] - Modify mobile splash screen image
-- [ ] - Create README guides for key folders (design, context)
 - [ ] - Backend: Add specific error message for 422 errors (e.g., invalid email format)
+- [ ] - Frontend: Add specific error message for 422 errors (e.g., invalid email format)
+- [ ] - Test 404 Not Found page functionality
+- [ ] - Implement display/use of auth info (tokens) & test token refresh
 
 ## Implementation Plan
 

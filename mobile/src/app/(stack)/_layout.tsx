@@ -9,17 +9,9 @@ export default function StackLayout() {
       screenOptions={{
         headerShown: false,
         contentStyle: { backgroundColor: theme.colors.layout.background },
-        presentation: 'modal',
-        animation: 'default',
       }}
     >
-      <Stack.Screen
-        name="settings"
-        options={{
-          presentation: 'modal',
-          animation: 'default',
-        }}
-      />
+      <Stack.Screen name="settings/theme" />
     </Stack>
   )
 }
