@@ -7,38 +7,82 @@ import React, {
   useCallback,
 } from 'react'
 import { useColorScheme } from 'react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Theme, lightTheme, darkTheme } from '@/shared/theme/theme'
+import { ThemePreference, ThemeContextType } from '@/shared/types/theme.types'
 
-type ThemeContextType = {
-  theme: Theme
-  isDark: boolean
-  toggleTheme: () => void
+const ASYNC_STORAGE_KEY = 'userThemePreference'
+
+// Default context value
+const defaultContextValue: ThemeContextType = {
+  theme: lightTheme, // Default to light initially
+  isDark: false,
+  themePreference: 'system', // Default preference
+  setThemePreference: () => { console.warn('ThemeProvider not mounted') },
 }
 
-const ThemeContext = createContext<ThemeContextType>({
-  theme: lightTheme,
-  isDark: false,
-  toggleTheme: () => {},
-})
+const ThemeContext = createContext<ThemeContextType>(defaultContextValue)
 
 export const useTheme = () => useContext(ThemeContext)
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const colorScheme = useColorScheme()
-  const [isDark, setIsDark] = useState(colorScheme === 'dark')
+  const systemColorScheme = useColorScheme()
+  const [themePreference, _setThemePreference] = useState<ThemePreference>('system')
+  const [isPreferenceLoaded, setIsPreferenceLoaded] = useState(false)
 
-  const toggleTheme = useCallback(() => {
-    setIsDark(!isDark)
-  }, [isDark])
+  // Load preference from storage on mount
+  useEffect(() => {
+    const loadPreference = async () => {
+      try {
+        const storedPreference = await AsyncStorage.getItem(ASYNC_STORAGE_KEY)
+        if (storedPreference && ['light', 'dark', 'system'].includes(storedPreference)) {
+          _setThemePreference(storedPreference as ThemePreference)
+        }
+      } catch (e) {
+        console.error("Failed to load theme preference:", e)
+      } finally {
+        setIsPreferenceLoaded(true)
+      }
+    }
+    loadPreference()
+  }, [])
 
+  // Function to update preference state and storage
+  const setThemePreference = useCallback(async (preference: ThemePreference) => {
+    _setThemePreference(preference)
+    try {
+      await AsyncStorage.setItem(ASYNC_STORAGE_KEY, preference)
+    } catch (e) {
+      console.error("Failed to save theme preference:", e)
+    }
+  }, [])
+
+  // Determine the effective scheme based on preference and system setting
+  const effectiveColorScheme = useMemo(() => {
+    if (!isPreferenceLoaded) return systemColorScheme ?? 'light' // Use system before loaded
+    return themePreference === 'system' ? systemColorScheme ?? 'light' : themePreference
+  }, [themePreference, systemColorScheme, isPreferenceLoaded])
+
+  // Determine if the effective theme is dark
+  const isDark = effectiveColorScheme === 'dark'
+
+  // Memoize the theme object based on the effective scheme
   const theme = useMemo(() => {
     return isDark ? darkTheme : lightTheme
-  }, [isDark])
+  }, [isDark, themePreference, systemColorScheme]) // Added prefs/system to deps
+
+  // Memoize the context value
+  const contextValue = useMemo(() => ({
+    theme,
+    isDark,
+    themePreference,
+    setThemePreference,
+  }), [theme, isDark, themePreference, setThemePreference])
 
   return (
-    <ThemeContext.Provider value={{ theme, isDark, toggleTheme }}>
+    <ThemeContext.Provider value={contextValue}>
       {children}
     </ThemeContext.Provider>
   )

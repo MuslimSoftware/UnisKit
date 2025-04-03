@@ -34,7 +34,6 @@ export function ThemeCard({ theme, isThemeDark, isSelected, onPress }: ThemeCard
             <View style={[styles.swatch, { backgroundColor: theme.colors.brand.primary }]} />
             <View style={[styles.swatch, { backgroundColor: theme.colors.layout.background }]} />
             <View style={[styles.swatch, { backgroundColor: theme.colors.text.primary }]} />
-            <View style={[styles.swatch, { backgroundColor: theme.colors.indicators.success }]} />
           </View>
 
           {/* Theme Name and Selection Indicator */}
