@@ -4,7 +4,7 @@ import { useTheme } from '@/shared/context/ThemeContext';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { BgView, PageView } from '@/shared/components/layout';
+import { BgView, PageView, SmallRow } from '@/shared/components/layout';
 import { TextHeader } from '@/shared/components/text';
 import { paddings, gaps } from '@/shared/theme/spacing';
 import { iconSizes } from '@/shared/theme/sizes';
@@ -45,7 +45,7 @@ export function SettingsPageLayout({
         {...scrollViewProps} // Spread other scroll view props
       >
         {/* Header */}
-        <View style={styles.header}>
+        <SmallRow style={styles.header}>
           <Pressable
             onPress={() => router.back()}
             style={({ pressed }) => [
@@ -62,7 +62,7 @@ export function SettingsPageLayout({
           </Pressable>
           <TextHeader>{title}</TextHeader>
           <View style={{ width: headerSpacerWidth }} />
-        </View>
+        </SmallRow>
 
         {/* Content passed from child component */}
         {children}
@@ -85,8 +85,6 @@ const styles = StyleSheet.create({
     flexGrow: 1, // Ensure content can grow
   },
   header: {
-    flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'space-between',
   },
   backButton: {

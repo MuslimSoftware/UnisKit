@@ -1,4 +1,4 @@
-import { StyleSheet, ScrollView, Pressable, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { useTheme } from '@/shared/context/ThemeContext'
 import { useRouter, Href } from 'expo-router'
 import * as SecureStore from 'expo-secure-store'
@@ -6,17 +6,15 @@ import {
   FgView,
   BaseColumn,
 } from '@/shared/components/layout'
-import { TextHeader, TextCaption, TextBody, TextHeaderTwo } from '@/shared/components/text'
-import { Ionicons } from '@expo/vector-icons'
+import { TextCaption } from '@/shared/components/text'
 import { paddings, gaps, borderRadii } from '@/shared/theme/spacing'
 import { iconSizes } from '@/shared/theme/sizes'
 import { ListButton } from '@/shared/components/buttons'
-import { SettingItem, SettingsSection } from '@/shared/types/settings.types'
 import { SETTINGS_SECTIONS } from '@/shared/constants/settings'
 import { SettingsPageLayout } from '@/features/settings/components/SettingsPageLayout'
 
 export default function SettingsScreen() {
-  const { theme, toggleTheme } = useTheme()
+  const { theme } = useTheme()
   const router = useRouter()
 
   const handleLogout = async () => {

@@ -12,6 +12,7 @@ import { Ionicons } from '@expo/vector-icons'
 import { TextBody } from '@/shared/components/text'
 import { paddings, gaps } from '@/shared/theme/spacing'
 import { iconSizes } from '@/shared/theme/sizes'
+import { MediumRow, SmallRow } from '@/shared/components/layout'
 
 // Define IoniconName type locally or import if shared
 type IoniconName = keyof typeof Ionicons.glyphMap
@@ -49,53 +50,51 @@ export const ListButton = ({
       style={({ pressed }) => [
         styles.container,
         { opacity: pressed ? 0.7 : 1 },
-        ,
         style, // Apply external styles
       ]}
       onPress={onPress}
       {...props}
     >
-      {/* Left side content: Icon and Label */}
-      <View style={styles.contentLeft}>
-        {icon && (
+      <MediumRow style={styles.content}>
+        {/* Left side content: Icon and Label */}
+        <SmallRow style={styles.leftContent}>
+          {icon && (
+            <Ionicons
+              name={icon}
+              size={iconSizes.small}
+              color={finalIconColor}
+              style={styles.icon}
+            />
+          )}
+          <TextBody style={[styles.label, { color: finalLabelColor }]}>
+            {label}
+          </TextBody>
+        </SmallRow>
+
+        {/* Right side content: Chevron */}
+        {showChevron && (
           <Ionicons
-            name={icon}
-            size={iconSizes.small}
-            color={finalIconColor}
-            style={styles.icon}
+            name="chevron-forward"
+            size={iconSizes.xsmall}
+            color={finalChevronColor}
           />
         )}
-        <TextBody style={[styles.label, { color: finalLabelColor }]}>
-          {label}
-        </TextBody>
-      </View>
-
-      {/* Right side content: Chevron */}
-      {showChevron && (
-        <Ionicons
-          name="chevron-forward"
-          size={iconSizes.xsmall}
-          color={finalChevronColor}
-        />
-      )}
+      </MediumRow>
     </Pressable>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
+    padding: paddings.medium,
+  },
+  content: {
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: paddings.medium,
-    paddingVertical: paddings.medium,
   },
-  contentLeft: {
-    flexDirection: 'row',
+  leftContent: {
     alignItems: 'center',
-    gap: gaps.medium,
     flex: 1,
-    marginRight: gaps.small,
   },
   icon: {
     textAlign: 'center',

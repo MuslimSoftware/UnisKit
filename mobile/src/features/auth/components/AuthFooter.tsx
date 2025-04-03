@@ -1,6 +1,7 @@
 import React from 'react'
 import { StyleSheet, View, TouchableOpacity } from 'react-native'
 import { TextSubtitle, TextCaption, TextLink } from '@/shared/components/text'
+import { MediumRow, SmallRow } from '@/shared/components/layout'
 
 export function AuthFooter({
   navigateToEmail,
@@ -9,14 +10,14 @@ export function AuthFooter({
 }) {
   return (
     <View style={styles.container}>
-      <View style={styles.textContainer}>
+      <MediumRow style={styles.row}>
         <TextSubtitle>Already have an account?</TextSubtitle>
         <TouchableOpacity onPress={navigateToEmail}>
           <TextLink variant="body2">Sign in</TextLink>
         </TouchableOpacity>
-      </View>
+      </MediumRow>
 
-      <View style={styles.termsContainer}>
+      <SmallRow style={styles.termsContainer}>
         <TextCaption>By continuing, you agree to our</TextCaption>
         <TouchableOpacity>
           <TextLink>Terms of Service</TextLink>
@@ -25,7 +26,7 @@ export function AuthFooter({
         <TouchableOpacity>
           <TextLink>Privacy Policy</TextLink>
         </TouchableOpacity>
-      </View>
+      </SmallRow>
     </View>
   )
 }
@@ -35,18 +36,13 @@ const styles = StyleSheet.create({
     gap: 10,
     paddingBottom: 10,
   },
-  textContainer: {
-    flexDirection: 'row',
+  row: {
     justifyContent: 'center',
     alignItems: 'center',
-    gap: 4,
   },
   termsContainer: {
-    flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',
-    alignItems: 'center',
-    gap: 4,
   },
   link: {
     textDecorationLine: 'underline',

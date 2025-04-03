@@ -8,6 +8,8 @@ import {
 } from 'react-native'
 import { useTheme } from '@/shared/context/ThemeContext'
 import { paddings, borderRadii, gaps } from '@/shared/theme/spacing'
+import React from 'react'
+import { MediumRow } from '@/shared/components/layout'
 
 export interface BaseButtonProps
   extends Omit<TouchableOpacityProps, 'children'> {
@@ -32,7 +34,6 @@ export const BaseButton = ({
   const buttonThemeStyles = theme.colors.button[effectiveVariant]
 
   const buttonStyle: StyleProp<ViewStyle> = [
-    styles.button,
     {
       // Use colors from the determined variant (primary, secondary, or disabled)
       backgroundColor: buttonThemeStyles.background as ColorValue,
@@ -51,16 +52,16 @@ export const BaseButton = ({
       activeOpacity={0.8}
       {...props}
     >
-      {children}
+      <MediumRow style={styles.contentContainer}>
+        {children}
+      </MediumRow>
     </TouchableOpacity>
   )
 }
 
 const styles = StyleSheet.create({
-  button: {
-    alignItems: 'center',
+  contentContainer: {
     justifyContent: 'center',
-    flexDirection: 'row',
-    gap: gaps.small,
+    alignItems: 'center',
   },
 })

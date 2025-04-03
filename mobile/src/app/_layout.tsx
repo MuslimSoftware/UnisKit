@@ -41,7 +41,7 @@ function RootLayoutNav() {
             animation: 'none',
           }}
         />
-        <Stack.Screen name="+not-found" options={{ presentation: 'modal' }} />
+        <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar
         style={isDark ? 'light' : 'dark'}

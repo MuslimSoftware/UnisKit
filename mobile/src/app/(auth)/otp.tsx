@@ -4,7 +4,7 @@ import { AuthScreenLayout } from '@/features/auth/components/AuthScreenLayout'
 import { useOTPVerification } from '@/features/auth/hooks/useOTPVerification'
 import { OtpInput } from '@/features/auth/components/OtpInput'
 import { TextCaption, TextLink } from '@/shared/components/text'
-import { Column } from '@/shared/components/layout'
+import { MediumColumn, SmallRow } from '@/shared/components/layout'
 
 export default function OTPScreen() {
   const {
@@ -36,7 +36,7 @@ export default function OTPScreen() {
       onButtonPress={handleVerify}
       buttonDisabled={otp.length !== DIGIT_COUNT || loading || !!errorMessage}
     >
-      <Column style={styles.container}>
+      <MediumColumn style={styles.container}>
         <View style={styles.inputContainer}>
           <OtpInput
             value={otp}
@@ -47,7 +47,7 @@ export default function OTPScreen() {
           />
         </View>
 
-        <View style={styles.footerRow}>
+        <SmallRow style={styles.footerRow}>
           <TextCaption>Didn't receive the code? </TextCaption>
           <TouchableOpacity
             onPress={resendCooldown > 0 ? undefined : handleResendOTP}
@@ -59,8 +59,8 @@ export default function OTPScreen() {
               {resendCooldown > 0 ? `Resend in ${resendCooldown}s` : 'Resend'}
             </TextLink>
           </TouchableOpacity>
-        </View>
-      </Column>
+        </SmallRow>
+      </MediumColumn>
     </AuthScreenLayout>
   )
 }
@@ -74,8 +74,6 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   footerRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'flex-start',
     width: '100%',
   },

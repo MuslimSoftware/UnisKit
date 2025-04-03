@@ -17,11 +17,11 @@ import {
 } from '@/shared/components/text'
 import { Ionicons } from '@expo/vector-icons'
 import {
-  Column,
+  MediumColumn,
   BaseColumn,
   BgView,
   FgView,
-  SmColumn,
+  SmallColumn,
 } from '@/shared/components/layout'
 import { paddings, gaps, borderRadii } from '@/shared/theme/spacing'
 import { iconSizes } from '@/shared/theme/sizes'
@@ -86,7 +86,7 @@ export default function ProfileScreen() {
                     style={styles.avatar}
                   />
                 </View>
-                <SmColumn style={styles.nameContainer}>
+                <SmallColumn style={styles.nameContainer}>
                   <TextHeaderTwo>Younes Benketira</TextHeaderTwo>
                   <TextCaption
                     style={styles.username}
@@ -94,7 +94,7 @@ export default function ProfileScreen() {
                   >
                     @younesbenketira
                   </TextCaption>
-                </SmColumn>
+                </SmallColumn>
               </View>
               <View style={styles.locationContainer}>
                 <Ionicons
@@ -113,7 +113,7 @@ export default function ProfileScreen() {
           </FgView>
 
           <FgView style={styles.section}>
-            <Column>
+            <MediumColumn>
               <View style={styles.sectionHeader}>
                 <TextBody>About</TextBody>
               </View>
@@ -121,11 +121,11 @@ export default function ProfileScreen() {
                 Software developer passionate about creating amazing user
                 experiences. Love building beautiful and functional apps.
               </TextBody>
-            </Column>
+            </MediumColumn>
           </FgView>
 
           <FgView style={styles.section}>
-            <Column>
+            <MediumColumn>
               <View style={styles.sectionHeader}>
                 <TextBody>Contact</TextBody>
               </View>
@@ -157,7 +157,7 @@ export default function ProfileScreen() {
                   </TextCaption>
                 </View>
               </BaseColumn>
-            </Column>
+            </MediumColumn>
           </FgView>
         </BaseColumn>
       </ScrollView>

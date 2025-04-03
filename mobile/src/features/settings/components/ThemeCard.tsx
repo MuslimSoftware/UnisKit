@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, Pressable } from 'react-native';
 import { TextBody } from '@/shared/components/text';
-import { FgView } from '@/shared/components/layout';
+import { FgView, SmallRow } from '@/shared/components/layout';
 import { Theme } from '@/shared/theme/theme';
 import { borderRadii, gaps, paddings } from '@/shared/theme/spacing';
 import { Ionicons } from '@expo/vector-icons';
@@ -30,11 +30,11 @@ export function ThemeCard({ theme, isThemeDark, isSelected, onPress }: ThemeCard
           }}
         >
           {/* Color Swatches */}
-          <View style={styles.swatchContainer}>
+          <SmallRow style={styles.swatchContainer}>
             <View style={[styles.swatch, { backgroundColor: theme.colors.brand.primary }]} />
             <View style={[styles.swatch, { backgroundColor: theme.colors.layout.background }]} />
             <View style={[styles.swatch, { backgroundColor: theme.colors.text.primary }]} />
-          </View>
+          </SmallRow>
 
           {/* Theme Name and Selection Indicator */}
           <View style={styles.footer}>
@@ -65,14 +65,13 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   swatchContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    height: 40, // Fixed height for swatches row
+    height: 40,
+    width: '100%',
   },
   swatch: {
-    flex: 1, // Make swatches share width
+    flex: 1,
     borderRadius: borderRadii.small,
-    marginHorizontal: gaps.xsmall, // Small gap between swatches
+    height: '100%',
   },
   footer: {
     flexDirection: 'row',

@@ -1,4 +1,4 @@
 export { BaseColumn } from './BaseColumn'
-export { Column } from './Column'
-export { SmColumn } from './SmColumn'
+export { SmallColumn } from './SmallColumn'
 export { LargeColumn } from './LargeColumn'
+export { MediumColumn } from './MediumColumn'

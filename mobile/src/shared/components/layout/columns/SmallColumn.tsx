@@ -3,7 +3,8 @@ import { ViewProps } from 'react-native'
 import { BaseColumn } from './BaseColumn'
 import { gaps } from '@/shared/theme/spacing'
 
-export const SmColumn: React.FC<ViewProps> = ({
+// Rename component to SmallColumn
+export const SmallColumn: React.FC<ViewProps> = ({
   children,
   style,
   ...props
@@ -13,4 +14,4 @@ export const SmColumn: React.FC<ViewProps> = ({
       {children}
     </BaseColumn>
   )
-}
+} 

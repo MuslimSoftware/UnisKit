@@ -7,6 +7,7 @@ import {
   TextHeaderThree,
 } from '@/shared/components/text'
 import { gaps, borderRadii } from '@/shared/theme/spacing'
+import { SmallRow } from '@/shared/components/layout'
 
 interface OtpInputProps {
   value: string
@@ -97,10 +98,11 @@ export const OtpInput: React.FC<OtpInputProps> = ({
 
       {/* Display Boxes */}
       <Pressable style={styles.displayContainer} onPress={handlePress}>
-        {digits.map((_, index) => {
-          const digit = value[index] || ''
-          const isCurrentDigit = index === value.length
-          const isActive = isFocused && isCurrentDigit
+        <SmallRow>
+          {digits.map((_, index) => {
+            const digit = value[index] || ''
+            const isCurrentDigit = index === value.length
+            const isActive = isFocused && isCurrentDigit
 
           const boxStyle = [
             styles.box,
@@ -127,7 +129,7 @@ export const OtpInput: React.FC<OtpInputProps> = ({
                     styles.cursor,
                     {
                       opacity: cursorOpacity,
-                      backgroundColor: theme.colors.layout.foreground,
+                      backgroundColor: theme.colors.text.primary,
                     },
                   ]}
                 />
@@ -135,6 +137,7 @@ export const OtpInput: React.FC<OtpInputProps> = ({
             </View>
           )
         })}
+        </SmallRow>
       </Pressable>
 
       {/* Conditionally render the error message */}
@@ -162,10 +165,7 @@ const styles = StyleSheet.create({
     opacity: 0,
   },
   displayContainer: {
-    flexDirection: 'row',
-    gap: gaps.small, // Use gaps constant
     width: '100%',
-    alignItems: 'center',
     justifyContent: 'center', // Center the row of boxes
   },
   box: {
