@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import styles from './Header.module.css';
 import { useTheme } from '@/context/ThemeContext';
 import { FaInstagram, FaLinkedinIn, FaXTwitter } from 'react-icons/fa6'; 
-import { BRAND_NAME } from '@fullstack-template/shared'; // Import brand name
+import Brand from '@/components/common/Brand'; 
 
 // Data from JSON
 const navLinks = [
@@ -33,9 +33,7 @@ const Header = () => {
   return (
     <header className={styles.header}>
       <div className={styles.container}>
-        <div className={styles.logo}>
-          <a href="/">{BRAND_NAME.toUpperCase()}</a> {/* Use brand name constant */}
-        </div>
+        <Brand /> 
 
         {/* Hamburger Button - Controls nav visibility on mobile */}
         <button 

@@ -11,13 +11,8 @@ const heroData = {
    Launch your next business without wasting time writing boilerplate.`,
   cta: {
     text: "Get Started",
-    href: "#features",
+    href: "#value-props",
   },
-  features: [
-    { icon: "📱", label: "React Native Expo" },
-    { icon: "💻", label: "React Vite" },
-    { icon: "🐍", label: "Python FastAPI" },
-  ],
 };
 
 const commandLines = [
@@ -53,7 +48,6 @@ const HeroSection = () => {
     return <>{heroData.headlineMain}</>;
   };
 
-  // Function to render code snippet with basic highlighting
   const renderCodeSnippet = () => {
     const keywords = ["git", "cd", "npm", "./run.sh"];
     const keywordRegex = new RegExp(`\\b(${keywords.join("|")})\\b`, "g");
@@ -93,8 +87,8 @@ const HeroSection = () => {
         <p className={styles.description}>{heroData.description}</p>
 
         <div className={styles.ctaContainer}>
-          <a href={heroData.cta.href} className={styles.ctaLink}> 
-            <Button 
+          <a href={heroData.cta.href} className={styles.ctaLink}>
+            <Button
               variant="primary"
               className={styles.ctaButton}
             >
@@ -106,21 +100,10 @@ const HeroSection = () => {
         <div className={styles.visualPlaceholder}>
           <div className={styles.codeSnippet}>
             <pre><code>
-              {renderCodeSnippet()} 
+              {renderCodeSnippet()}
             </code></pre>
           </div>
         </div>
-      </div>
-
-      {/* Features Bar - simplified labels */} 
-      <div className={styles.featuresBar}>
-        {heroData.features.map((feature, index) => (
-          <div key={index} className={styles.featureItem}>
-            <span className={styles.featureIcon}>{feature.icon}</span>
-            {/* Only show label in the bottom bar */}
-            <span className={styles.featureLabel}>{feature.label}</span> 
-          </div>
-        ))}
       </div>
     </section>
   );

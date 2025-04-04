@@ -124,47 +124,13 @@
   color: #dcdcaa; /* Yellow for function/method names */
 }
 
-/* Features Bar */
-.featuresBar {
-  display: flex;
-  justify-content: space-around; /* Distribute items evenly */
-  align-items: stretch; /* Make items same height */
-  background-color: var(--color-layout-foreground); /* Slightly different background */
-  width: 100vw; /* Full viewport width */
-  margin-left: calc(-50vw + 50%); /* Center trick */
-  padding: var(--padding-large) var(--padding-medium);
-  border-top: 1px solid var(--color-layout-border);
-}
-
-.featureItem {
-  display: flex;
-  align-items: center;
-  gap: var(--gap-medium);
-  color: var(--color-text-secondary);
-  flex: 1; /* Allow items to grow and shrink */
-  justify-content: center; /* Center content within item */
-  padding: 0 var(--padding-small); /* Padding within each item */
-}
-
-.featureIcon {
-  font-size: 1.8rem; /* Adjust icon size */
-  color: var(--color-brand-primary); /* Use accent color for icons */
-}
-
-.featureTextContainer {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start; /* Align text to left */
-}
-
-.featureLabel {
-  font-weight: 500;
-  color: var(--color-text-primary);
-}
-
-.featureSubtext {
-  font-size: 0.85rem;
-}
+/* Features Bar - REMOVED */
+/* .featuresBar { ... } */
+/* .featureItem { ... } */
+/* .featureIcon { ... } */
+/* .featureTextContainer { ... } */
+/* .featureLabel { ... } */
+/* .featureSubtext { ... } */
 
 /* --- Responsive Styles --- */
 
@@ -175,21 +141,7 @@
   .description {
     font-size: 1rem;
   }
-  .featuresBar {
-    padding: var(--padding-medium) var(--padding-small);
-  }
-  .featureItem {
-     gap: var(--gap-small);
-  }
-  .featureIcon {
-     font-size: 1.5rem;
-  }
-  .featureLabel {
-     font-size: 0.9rem;
-  }
-  .featureSubtext {
-     font-size: 0.75rem;
-  }
+  /* Remove featuresBar responsive styles */
 }
 
 @media (max-width: 768px) { /* Mobile devices */
@@ -208,24 +160,8 @@
     min-height: 150px; /* Adjust min-height if needed */
     padding: var(--padding-small); /* Reduce padding */
   }
-  .featuresBar {
-    flex-direction: column; /* Stack features vertically */
-    align-items: center;
-    gap: var(--gap-large);
-    padding: var(--padding-large) var(--padding-medium);
-    width: 100%; /* Reset width */
-    margin-left: 0; /* Reset margin */
-    border-top: none; /* Remove top border if stacked */
-    background-color: transparent; /* Or keep background */
-  }
-  .featureItem {
-    width: 100%;
-    max-width: 300px; /* Limit width on mobile */
-    justify-content: flex-start; /* Align to start */
-    background-color: var(--color-layout-foreground); /* Add background per item */
-    padding: var(--padding-medium);
-    border-radius: var(--border-radius-medium);
-  }
+  /* Remove featuresBar responsive styles */
+  /* Remove featureItem responsive styles */
   .codeSnippet pre {
     padding: var(--padding-xsmall); /* Further reduce internal padding */
   }
@@ -235,33 +171,5 @@
   }
 }
 
-/* Adjustments for very small screens */
-@media (max-width: 375px) {
-  .featuresBar {
-    /* Reduce overall padding for the container */
-    padding: var(--padding-medium) var(--padding-small);
-  }
-
-  .featureItem {
-    /* Remove max-width to allow shrinking */
-    max-width: none; 
-    /* Reduce internal padding */
-    padding: var(--padding-small);
-    /* Reduce gap between icon and text */
-    gap: var(--gap-small);
-  }
-
-  .featureIcon {
-    /* Slightly smaller icon */
-    font-size: 1.3rem;
-  }
-  
-  .featureLabel {
-    /* Slightly smaller text */
-    font-size: 0.85rem;
-  }
-  
-  .featureSubtext {
-    font-size: 0.7rem;
-  }
-} 
+/* Adjustments for very small screens - REMOVED Features Bar */
+/* @media (max-width: 375px) { ... } */ 

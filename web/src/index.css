@@ -20,6 +20,7 @@ body {
 :root {
   /* Light Theme Defaults (will be overridden by JS) */
   --color-brand-primary: #2ecc71;
+  --color-brand-primary-rgb: 46, 204, 113; /* Added RGB */
   --color-brand-secondary: #27ae60;
   --color-layout-background: #ffffff;
   --color-layout-foreground: #f3f4f6;
@@ -28,6 +29,11 @@ body {
   --color-text-primary: #0c0c0c;
   --color-text-secondary: #52525b;
   --color-text-disabled: #a1a1aa;
+
+  /* Aliases for component consistency */
+  --primary-color: var(--color-brand-primary);
+  --primary-color-rgb: var(--color-brand-primary-rgb); /* Added RGB Alias */
+  --primary-dark-color: var(--color-brand-secondary);
 
   --padding-small: 1rem;
   --padding-medium: 1.5rem;
@@ -56,6 +62,7 @@ body {
 /* Dark theme overrides */
 [data-theme='dark'] {
   --color-brand-primary: #27ae60; /* Slightly darker green */
+  --color-brand-primary-rgb: 39, 174, 96; /* Added RGB */
   --color-brand-secondary: #2ecc71;
   --color-layout-background: #18181b; /* Dark Zinc 900 */
   --color-layout-foreground: #27272a; /* Dark Zinc 800 */
@@ -64,6 +71,11 @@ body {
   --color-text-primary: #f4f4f5; /* Light Zinc 100 */
   --color-text-secondary: #a1a1aa; /* Light Zinc 400 */
   --color-text-disabled: #52525b; /* Light Zinc 600 */
+
+  /* Aliases for component consistency */
+  --primary-color: var(--color-brand-primary);
+  --primary-color-rgb: var(--color-brand-primary-rgb); /* Added RGB Alias */
+  --primary-dark-color: var(--color-brand-secondary);
 
   /* Padding, gap, border-radius, icons, font usually stay the same */
 }

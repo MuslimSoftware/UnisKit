@@ -3,7 +3,7 @@ import React from 'react';
 import Header from '@/components/layout/Header';
 import HeroSection from '@/components/sections/HeroSection';
 import FeaturesSection from '@/components/sections/FeaturesSection';
-// import Footer from '@/components/layout/Footer'; // Import later
+import Footer from '@/components/layout/Footer';
 
 function App() {
   return (
@@ -12,11 +12,8 @@ function App() {
       <main>
         <HeroSection />
         <FeaturesSection />
-        {/* Add other page sections here */}
-        {/* e.g., <FeaturesSection /> */} 
-        {/* e.g., <PricingSection /> */} 
       </main>
-      {/* <Footer /> */}
+      <Footer />
     </>
   );
 }
