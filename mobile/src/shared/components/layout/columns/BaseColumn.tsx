@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
-import { BaseLayoutComponentProps } from '@fullstack-template/shared'
+import { BaseLayoutComponentProps } from '@uniskit/shared'
 
 // Use the shared prop type definition
 export interface BaseColumnProps extends BaseLayoutComponentProps {}

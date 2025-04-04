@@ -15,7 +15,7 @@ import { Ionicons } from '@expo/vector-icons'
 import { BgView, MediumColumn, SmallRow } from '@/shared/components/layout'
 import { TextHeader, TextBody, TextLink } from '@/shared/components/text'
 import { PrimaryButton } from '@/shared/components/buttons'
-import { paddings, gaps } from '@fullstack-template/shared'
+import { paddings, gaps } from '@uniskit/shared'
 
 interface AuthScreenLayoutProps {
   title: string

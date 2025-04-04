@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './HeroSection.module.css';
 import Button from '@/components/shared/Button';
-import { BRAND_NAME } from '@fullstack-template/shared';
+import { BRAND_NAME } from '@uniskit/shared';
 
 const heroData = {
   headlineMain: `Build Fast. Launch Faster.`,

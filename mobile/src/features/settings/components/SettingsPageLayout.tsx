@@ -6,7 +6,7 @@ import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { BgView, PageView, SmallRow } from '@/shared/components/layout';
 import { TextHeader } from '@/shared/components/text';
-import { paddings, gaps, iconSizes } from '@fullstack-template/shared';
+import { paddings, gaps, iconSizes } from '@uniskit/shared';
 
 type SettingsPageLayoutProps = {
   title: string;

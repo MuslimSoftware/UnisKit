@@ -12,7 +12,7 @@ import {
   Theme,
   ThemePreference,
   ThemeContextType,
-} from '@fullstack-template/shared';
+} from '@uniskit/shared';
 
 function applyThemeVariables(theme: Theme) {
   const root = document.documentElement;

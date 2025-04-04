@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom'; // Use Link for internal navigation
 import styles from './Brand.module.css';
-import { BRAND_NAME } from '@fullstack-template/shared';
+import { BRAND_NAME } from '@uniskit/shared';
 import { IoHeartCircle } from 'react-icons/io5';
 import { useTheme } from '@/context/ThemeContext';
 interface BrandProps {

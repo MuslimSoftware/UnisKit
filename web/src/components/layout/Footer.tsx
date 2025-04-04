@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './Footer.module.css';
-import { BRAND_NAME } from '@fullstack-template/shared';
+import { BRAND_NAME } from '@uniskit/shared';
 import { FaGithub, FaTwitter, FaLinkedin } from 'react-icons/fa'; // Example icons
 import Brand from '@/components/common/Brand';
 

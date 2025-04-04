@@ -3,7 +3,7 @@ import { StyleSheet, View, Pressable } from 'react-native';
 import { TextBody } from '@/shared/components/text';
 import { FgView, SmallRow } from '@/shared/components/layout';
 import { Ionicons } from '@expo/vector-icons';
-import { iconSizes, Theme, gaps, paddings, borderRadii } from '@fullstack-template/shared';
+import { iconSizes, Theme, gaps, paddings, borderRadii } from '@uniskit/shared';
 
 type ThemeCardProps = {
   theme: Theme;

@@ -1,7 +1,7 @@
 import React from 'react'
 import { useTheme } from '@/shared/context/ThemeContext'
 import { Text, TextProps, TextStyle, StyleProp } from 'react-native'
-import { Typography } from '@fullstack-template/shared'
+import { Typography } from '@uniskit/shared'
 
 // Define the possible variants based on your theme's typography keys
 export type TextVariant = keyof Typography

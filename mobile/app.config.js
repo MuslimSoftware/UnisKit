@@ -8,7 +8,7 @@ dotenv.config({ path: envPath })
 
 module.exports = {
   name: 'FullStackTemplate',
-  slug: 'fullstack-template',
+  slug: 'uniskit',
   version: '1.0.0',
   orientation: 'portrait',
   icon: './assets/images/splash.png',

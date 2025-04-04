@@ -23,7 +23,7 @@ import {
   FgView,
   SmallColumn,
 } from '@/shared/components/layout'
-import { paddings, gaps, borderRadii, iconSizes } from '@fullstack-template/shared'
+import { paddings, gaps, borderRadii, iconSizes } from '@uniskit/shared'
 import { BaseInput } from '@/shared/components/inputs'
 import { PrimaryButton, SecondaryButton } from '@/shared/components/buttons'
 

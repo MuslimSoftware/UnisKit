@@ -1,7 +1,7 @@
 import React from 'react'
 import { ViewProps } from 'react-native'
 import { BaseColumn } from './BaseColumn'
-import { gaps } from '@fullstack-template/shared'
+import { gaps } from '@uniskit/shared'
 
 // Rename component to SmallColumn
 export const SmallColumn: React.FC<ViewProps> = ({

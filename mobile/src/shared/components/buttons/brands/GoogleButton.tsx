@@ -5,7 +5,7 @@ import {
   IconButtonProps,
 } from '@/shared/components/buttons/IconButton'
 import { useTheme } from '@/shared/context/ThemeContext'
-import { iconSizes } from '@fullstack-template/shared'
+import { iconSizes } from '@uniskit/shared'
 import { AntDesign } from '@expo/vector-icons'
 
 // Extend IconButtonProps, omitting things we'll set internally

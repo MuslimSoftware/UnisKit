@@ -16,9 +16,6 @@ importers:
       '@expo/vector-icons':
         specifier: ^14.0.2
         version: 14.0.2
-      '@fullstack-template/shared':
-        specifier: workspace:*
-        version: link:../packages/shared
       '@react-native-async-storage/async-storage':
         specifier: ~1.21.0
         version: 1.21.0(react-native@0.76.7)
@@ -28,6 +25,9 @@ importers:
       '@react-navigation/native':
         specifier: ^7.0.14
         version: 7.0.14(react-native@0.76.7)(react@18.3.1)
+      '@uniskit/shared':
+        specifier: workspace:*
+        version: link:../packages/shared
       dotenv:
         specifier: ^16.4.7
         version: 16.4.7
@@ -155,7 +155,7 @@ importers:
 
   web:
     dependencies:
-      '@fullstack-template/shared':
+      '@uniskit/shared':
         specifier: workspace:*
         version: link:../packages/shared
       react:

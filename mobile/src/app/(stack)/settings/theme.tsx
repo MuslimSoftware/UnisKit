@@ -3,7 +3,7 @@ import { StyleSheet, useColorScheme } from 'react-native';
 import { useTheme } from '@/shared/context/ThemeContext';
 import { FgView, LargeRow, MediumRow } from '@/shared/components/layout';
 import { TextBody } from '@/shared/components/text';
-import { paddings, borderRadii, lightTheme, darkTheme } from '@fullstack-template/shared';
+import { paddings, borderRadii, lightTheme, darkTheme } from '@uniskit/shared';
 import { SettingsPageLayout } from '@/features/settings/components/SettingsPageLayout';
 import { ThemeCard } from '@/features/settings/components/ThemeCard';
 import { Switch } from '@/shared/components/forms/Switch';

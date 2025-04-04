@@ -6,7 +6,7 @@ import {
   TextHeader,
   TextHeaderThree,
 } from '@/shared/components/text'
-import { gaps, borderRadii } from '@fullstack-template/shared'
+import { gaps, borderRadii } from '@uniskit/shared'
 import { SmallRow } from '@/shared/components/layout'
 
 interface OtpInputProps {

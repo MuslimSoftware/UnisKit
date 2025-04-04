@@ -10,7 +10,7 @@ import { TextCaption } from '@/shared/components/text'
 import { ListButton } from '@/shared/components/buttons'
 import { SettingsPageLayout } from '@/features/settings/components/SettingsPageLayout'
 import { SETTINGS_SECTIONS } from '@/shared/constants/settings'
-import { paddings, gaps, borderRadii, iconSizes } from '@fullstack-template/shared'
+import { paddings, gaps, borderRadii, iconSizes } from '@uniskit/shared'
 
 export default function SettingsScreen() {
   const { theme } = useTheme()

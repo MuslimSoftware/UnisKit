@@ -7,7 +7,7 @@ import {
   ColorValue,
 } from 'react-native'
 import { useTheme } from '@/shared/context/ThemeContext'
-import { paddings, borderRadii, gaps } from '@fullstack-template/shared'
+import { paddings, borderRadii, gaps } from '@uniskit/shared'
 import React from 'react'
 import { MediumRow } from '@/shared/components/layout'
 import { TextButtonLabel } from '../text'

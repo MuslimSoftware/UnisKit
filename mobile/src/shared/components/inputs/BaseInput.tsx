@@ -9,8 +9,7 @@ import {
   TextStyle,
 } from 'react-native'
 import { useTheme } from '@/shared/context/ThemeContext'
-import { paddings, borderRadii } from '@fullstack-template/shared'
-import { TextCaption } from '@/shared/components/text'
+import { paddings, borderRadii } from '@uniskit/shared'
 
 interface BaseInputProps extends Omit<TextInputProps, 'style'> {
   inputStyle?: StyleProp<TextStyle>

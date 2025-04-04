@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import { BaseRow, BaseRowProps } from './BaseRow';
-import { gaps } from '@fullstack-template/shared'; // Update import path
+import { gaps } from '@uniskit/shared'; // Update import path
 
 // Extend BaseRowProps if MediumRow needs specific additional props
 export interface MediumRowProps extends BaseRowProps {}

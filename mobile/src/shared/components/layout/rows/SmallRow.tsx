@@ -1,6 +1,6 @@
 import React from 'react';
 import { BaseRow, BaseRowProps } from './BaseRow';
-import { gaps } from '@fullstack-template/shared';
+import { gaps } from '@uniskit/shared';
 
 export interface SmallRowProps extends BaseRowProps {}
 

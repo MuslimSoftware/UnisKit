@@ -10,7 +10,7 @@ import {
   AnimatedLogo,
   INITIAL_POSITION,
 } from '@/features/auth/components/AnimatedLogo'
-import { Brand } from '@fullstack-template/shared'
+import { Brand } from '@uniskit/shared'
 import { router } from 'expo-router'
 import { useTheme } from '@/shared/context/ThemeContext'
 import { TextBody, TextHeader } from '@/shared/components/text'

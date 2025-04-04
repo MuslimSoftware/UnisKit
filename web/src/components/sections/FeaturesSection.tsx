@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './FeaturesSection.module.css';
-import { BRAND_NAME } from '@fullstack-template/shared';
+import { BRAND_NAME } from '@uniskit/shared';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism'; 
 

@@ -4,7 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { TextBody, TextHeader } from '@/shared/components/text'
 import { Ionicons } from '@expo/vector-icons'
 import { LargeColumn, BgView, SmallColumn } from '@/shared/components/layout'
-import { paddings, gaps, borderRadii } from '@fullstack-template/shared'
+import { paddings, gaps, borderRadii } from '@uniskit/shared'
 
 export default function HomeScreen() {
   const { theme } = useTheme()
