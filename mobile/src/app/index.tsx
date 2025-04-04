@@ -1,28 +1,72 @@
-import React from 'react'
-import { StyleSheet, View } from 'react-native'
-import { useFonts } from 'expo-font'
-import { useSplashAnimation } from '@/features/auth/hooks/useSplashAnimation'
-import { AnimatedLogo } from '@/features/auth/components/AnimatedLogo'
-import { BgView } from '@/shared/components/layout'
+import React, { useEffect, useRef } from 'react';
+import { StyleSheet, View, Text } from 'react-native';
+import restartApp from 'react-native-restart';
+import { useFonts } from 'expo-font';
+import { useSplashAnimation } from '@/features/auth/hooks/useSplashAnimation';
+import { AnimatedLogo } from '@/features/auth/components/AnimatedLogo';
+import { BgView } from '@/shared/components/layout';
+import { PrimaryButton } from '@/shared/components/buttons';
 
-export default function SplashScreen() {
-  const [loaded] = useFonts({
+export default function SplashScreenComponent() {
+  const [fontsLoaded, fontError] = useFonts({
+    'Roboto-Regular': require('@/assets/fonts/Roboto-Regular.ttf'),
+    'Roboto-Medium': require('@/assets/fonts/Roboto-Medium.ttf'),
+    'Roboto-Bold': require('@/assets/fonts/Roboto-Bold.ttf'),
+    'Roboto-Light': require('@/assets/fonts/Roboto-Light.ttf'),
     SpaceMono: require('@/assets/fonts/SpaceMono-Regular.ttf'),
-  })
+  });
 
-  const fontsLoadedPromise = new Promise<void>((resolve) => {
-    if (loaded) {
-      resolve()
+  const resolveRef = useRef<(() => void) | null>(null);
+  const rejectRef = useRef<((reason?: any) => void) | null>(null);
+  const promiseResolvedOrRejected = useRef(false);
+
+  const fontsLoadedPromise = React.useMemo(() => {
+      return new Promise<void>((resolve, reject) => {
+          resolveRef.current = resolve;
+          rejectRef.current = reject;
+      });
+  }, []);
+
+  useEffect(() => {
+    if (promiseResolvedOrRejected.current) return;
+
+    if (fontError) {
+      console.error("[Font Loading Error]:", fontError);
+      rejectRef.current?.(fontError);
+      promiseResolvedOrRejected.current = true;
+    } else if (fontsLoaded) {
+      console.log("[Fonts Loaded Successfully]");
+      resolveRef.current?.();
+      promiseResolvedOrRejected.current = true;
     }
-  })
+  }, [fontsLoaded, fontError]);
 
-  const { animatedStyle } = useSplashAnimation(fontsLoadedPromise)
+  const { animatedStyle } = useSplashAnimation(fontsLoadedPromise);
+
+  if (fontError) {
+      const handleRestartApp = () => {
+        restartApp.Restart();
+      }
+
+     return (
+        <BgView style={styles.container}>
+            <Text style={{color: 'red', padding: 20, textAlign: 'center'}}>
+                Error loading essential app resources. Please try restarting the app.
+            </Text>
+
+            <PrimaryButton
+              onPress={handleRestartApp}
+              label="Restart App"
+            />
+        </BgView>
+     );
+  }
 
   return (
     <BgView style={styles.container}>
       <AnimatedLogo animatedStyle={animatedStyle} showTitle={false} />
     </BgView>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -31,4 +75,4 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-})
+});

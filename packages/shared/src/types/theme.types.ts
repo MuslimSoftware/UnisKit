@@ -1,4 +1,4 @@
-import { Theme } from '../theme/theme'; // Adjust import path within shared package
+import { Theme } from '../theme/theme';
 
 // Define the possible preference values
 export type ThemePreference = 'light' | 'dark' | 'system';

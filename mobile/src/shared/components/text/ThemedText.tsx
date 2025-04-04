@@ -1,7 +1,7 @@
 import React from 'react'
 import { useTheme } from '@/shared/context/ThemeContext'
 import { Text, TextProps, TextStyle, StyleProp } from 'react-native'
-import { Typography } from '../../theme/typography'
+import { Typography } from '@fullstack-template/shared'
 
 // Define the possible variants based on your theme's typography keys
 export type TextVariant = keyof Typography
@@ -14,6 +14,20 @@ export interface ThemedTextProps extends TextProps {
   color?: string
 }
 
+const getFontFamilyForWeight = (weight: TextStyle['fontWeight']): string => {
+  switch (weight) {
+    case 500:
+      return 'Roboto-Medium'
+    case 700:
+    case 'bold':
+      return 'Roboto-Bold'
+    case 400:
+    case 'normal':
+    default:
+      return 'Roboto-Regular'
+  }
+}
+
 // Base ThemedText component
 export const ThemedText = ({
   children,
@@ -23,11 +37,11 @@ export const ThemedText = ({
   ...props
 }: ThemedTextProps) => {
   const { theme } = useTheme()
-
   const variantStyle = theme.typography[variant] || theme.typography.body1
+  const fontFamily = getFontFamilyForWeight(variantStyle.fontWeight as TextStyle['fontWeight'])
 
   const textStyle: TextStyle = {
-    fontFamily: variantStyle.fontFamily,
+    fontFamily: fontFamily,
     fontSize: variantStyle.fontSize,
     fontWeight: variantStyle.fontWeight as TextStyle['fontWeight'],
     lineHeight: variantStyle.lineHeight,

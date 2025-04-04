@@ -1,31 +1,24 @@
-import { useEffect } from 'react'
+import { useEffect, useRef, useCallback } from 'react'
 import { Animated } from 'react-native'
 import { router } from 'expo-router'
 import * as SecureStore from 'expo-secure-store'
+import * as SplashScreen from 'expo-splash-screen'
+
 export function useSplashAnimation(onFontsLoaded: Promise<void>) {
-  const scaleAnim = new Animated.Value(0.3)
-  const opacityAnim = new Animated.Value(0)
-  const breatheAnim = new Animated.Value(1)
+  // Refs for animated values
+  const scaleAnim = useRef(new Animated.Value(0.3)).current
+  const opacityAnim = useRef(new Animated.Value(0)).current
+  const breatheAnim = useRef(new Animated.Value(1)).current
 
-  useEffect(() => {
-    // Create breathing animation
-    const createBreathingAnimation = () => {
-      return Animated.sequence([
-        Animated.timing(breatheAnim, {
-          toValue: 1.1,
-          duration: 1000,
-          useNativeDriver: true,
-        }),
-        Animated.timing(breatheAnim, {
-          toValue: 1,
-          duration: 1000,
-          useNativeDriver: true,
-        }),
-      ])
-    }
+  // Refs for controlling flow and state
+  const isMountedRef = useRef(true)
+  const isLoadingCompleteRef = useRef(false)
+  const isAuthenticatedRef = useRef(false)
+  const currentAnimationRef = useRef<Animated.CompositeAnimation | null>(null)
 
-    // Initial fade in and scale up
-    const initialAnimation = Animated.parallel([
+  // Initial fade-in and scale-up animation
+  const initialAnimationRef = useRef(
+    Animated.parallel([
       Animated.spring(scaleAnim, {
         toValue: 1,
         tension: 20,
@@ -38,50 +31,98 @@ export function useSplashAnimation(onFontsLoaded: Promise<void>) {
         useNativeDriver: true,
       }),
     ])
+  ).current
 
-    let breathingLoop: Animated.CompositeAnimation | null = null
-
-    // Start breathing animation loop
-    const startBreathing = () => {
-      breathingLoop = Animated.loop(createBreathingAnimation(), {
-        iterations: -1,
-      })
-      breathingLoop.start()
-    }
-
-    // Start the animation sequence
-    initialAnimation.start(() => {
-      startBreathing()
-      
-      // Wait for fonts to load
-      onFontsLoaded.then(() => {
-        // Simulate API calls with a 2-second delay
-        setTimeout(() => {
-          // Complete current breathing cycle
-          if (breathingLoop) {
-            breathingLoop.stop()
-          }
-          
-          // Do one final complete breath before transitioning
-          createBreathingAnimation().start(async () => {
-            // Login if user is already logged in
-            const refreshToken = await SecureStore.getItemAsync('refresh_token')
-            if (refreshToken) {
-              router.replace('/(main)')
-            } else {
-              router.replace('/(auth)/landing')
-            }
-          })
-        }, 100)
-      })
-    })
-
-    return () => {
-      if (breathingLoop) {
-        breathingLoop.stop()
-      }
+  // Single breathing cycle animation (inhale/exhale)
+  const createBreathingAnimation = useCallback(() => {
+    return Animated.sequence([
+      Animated.timing(breatheAnim, {
+        toValue: 1.1,
+        duration: 1000,
+        useNativeDriver: true,
+      }),
+      Animated.timing(breatheAnim, {
+        toValue: 1,
+        duration: 1000,
+        useNativeDriver: true,
+      }),
+    ])
+  }, [breatheAnim])
+  
+  // Triggers navigation and hides splash screen
+  const triggerFinalNavigation = useCallback(() => {
+    if (!isMountedRef.current) return
+    try {
+      const targetRoute = isAuthenticatedRef.current ? '/(main)' : '/(auth)/landing'
+      router.replace(targetRoute)
+    } catch (error) {
+      router.replace('/(auth)/landing') // Fallback
+    } finally {
+      SplashScreen.hideAsync()
     }
   }, [])
+
+  // Runs a single breathing cycle and decides whether to loop or finish
+  const runBreathingCycle = useCallback(() => {
+    if (!isMountedRef.current) {
+      return
+    }
+    currentAnimationRef.current = createBreathingAnimation()
+    currentAnimationRef.current.start(({ finished }) => {
+      if (!finished || !isMountedRef.current) {
+        return
+      }
+      
+      if (isLoadingCompleteRef.current) {
+        triggerFinalNavigation()
+      } else {
+        runBreathingCycle()
+      }
+    })
+  }, [createBreathingAnimation, triggerFinalNavigation])
+
+  // Checks authentication status using SecureStore
+  const checkAuthStatus = useCallback(async (): Promise<boolean> => {
+    try {
+      const refreshToken = await SecureStore.getItemAsync('refresh_token')
+      const isAuthenticated = !!refreshToken
+      isAuthenticatedRef.current = isAuthenticated
+      return isAuthenticated
+    } catch (error) {
+      console.error("[SplashAnimation] SecureStore error checking auth:", error)
+      isAuthenticatedRef.current = false // Default to false on error
+      return false
+    }
+  }, [])
+
+  // Main effect coordinating the animation and loading
+  useEffect(() => {
+    isMountedRef.current = true
+    initialAnimationRef.start(() => {
+      if (!isMountedRef.current) return
+      runBreathingCycle()
+
+      Promise.all([onFontsLoaded, checkAuthStatus()])
+        .then(() => {
+          if (!isMountedRef.current) return
+          console.log('[SplashAnimation] Fonts loaded and auth checked. Loading complete.')
+          isLoadingCompleteRef.current = true
+        })
+        .catch((error) => {
+          if (!isMountedRef.current) return
+          console.error("[SplashAnimation] Font loading or auth check failed:", error)
+          isLoadingCompleteRef.current = true
+          triggerFinalNavigation()
+        })
+    })
+
+    // Cleanup function
+    return () => {
+      isMountedRef.current = false
+      initialAnimationRef.stop()
+      currentAnimationRef.current?.stop()
+    }
+  }, [onFontsLoaded, initialAnimationRef, runBreathingCycle, checkAuthStatus, triggerFinalNavigation])
 
   return {
     animatedStyle: {

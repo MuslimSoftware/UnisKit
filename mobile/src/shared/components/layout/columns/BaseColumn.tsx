@@ -1,6 +1,5 @@
 import React from 'react'
-import { View, ViewProps, StyleProp, ViewStyle, StyleSheet } from 'react-native'
-// Import the shared type
+import { View, StyleSheet } from 'react-native'
 import { BaseLayoutComponentProps } from '@fullstack-template/shared'
 
 // Use the shared prop type definition
