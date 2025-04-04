@@ -6,11 +6,9 @@ import FeaturesSection from '@/components/sections/FeaturesSection';
 // import Footer from '@/components/layout/Footer'; // Import later
 
 function App() {
-  // Add logic here for theme application, routing etc. later
-
   return (
     <>
-      <Header />
+      <Header /> 
       <main>
         <HeroSection />
         <FeaturesSection />

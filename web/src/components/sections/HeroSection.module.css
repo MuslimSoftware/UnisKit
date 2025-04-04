@@ -21,18 +21,9 @@
   gap: var(--gap-medium);
   max-width: 900px; /* Adjust as needed */
   margin: 0 auto;
+  padding-top: var(--padding-large);
   flex-grow: 1; /* Allow content to take available space */
-  justify-content: center; /* Center content vertically */
-}
-
-/* Badge */
-.badge {
-  display: inline-block;
-  background-color: var(--color-layout-foreground);
-  color: var(--color-text-secondary);
-  padding: var(--padding-small) var(--padding-medium);
-  border-radius: var(--border-radius-round);
-  font-size: 0.9rem;
+  justify-content: flex-start;
 }
 
 /* Headline */
@@ -75,7 +66,7 @@
 .ctaButton {
   /* Inherit Button component styles, add specifics here */
   box-shadow: 0 0 15px 5px var(--color-brand-primary, #facc15); /* Glow effect - uses primary color */
-  padding: var(--padding-medium) var(--padding-large); /* Ensure padding is consistent */
+  padding: var(--padding-medium) var(--padding-small); /* Ensure padding is consistent */
 }
 
 /* Visual Placeholder */

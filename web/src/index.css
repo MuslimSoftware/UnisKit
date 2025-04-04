@@ -13,7 +13,7 @@ body {
   line-height: 1.6;
   background-color: var(--color-layout-background);
   color: var(--color-text-primary);
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: color 0.3s ease;
 }
 
 /* CSS Theme Variables - Populated by ThemeProvider */
@@ -51,4 +51,19 @@ body {
   /* Add all icon sizes */
   
   --font-family-base: 'Roboto'; /* Set base font variable */
+}
+
+/* Dark theme overrides */
+[data-theme='dark'] {
+  --color-brand-primary: #27ae60; /* Slightly darker green */
+  --color-brand-secondary: #2ecc71;
+  --color-layout-background: #18181b; /* Dark Zinc 900 */
+  --color-layout-foreground: #27272a; /* Dark Zinc 800 */
+  --color-layout-border: #3f3f46; /* Dark Zinc 700 */
+  --color-indicators-error: #f87171; /* Lighter red */
+  --color-text-primary: #f4f4f5; /* Light Zinc 100 */
+  --color-text-secondary: #a1a1aa; /* Light Zinc 400 */
+  --color-text-disabled: #52525b; /* Light Zinc 600 */
+
+  /* Padding, gap, border-radius, icons, font usually stay the same */
 }

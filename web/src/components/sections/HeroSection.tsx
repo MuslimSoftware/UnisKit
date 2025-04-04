@@ -1,80 +1,70 @@
 import React from 'react';
 import styles from './HeroSection.module.css';
-import Button from '@/components/shared/Button'; // Keep Button import
+import Button from '@/components/shared/Button';
+import { BRAND_NAME } from '@fullstack-template/shared';
 
-// Data derived from the provided JSON
 const heroData = {
-  badge: "Backed by ✌ AngelList",
-  headlineMain: "Advanced Crypto Trading",
-  headlineHighlight: "Crypto Trading", // Part to highlight
-  headlineSub: "Built for Retail Investors",
-  description: "Smart trading terminal, powered by real-time data and built for clarity, speed, and total control.",
+  headlineMain: `Jumpstart Your Business`,
+  headlineHighlight: "Your Business",
+  headlineSub: `Everything you need to start`,
+  description: `${BRAND_NAME} provides a production-ready monorepo foundation. Launch your next full-stack application with confidence and speed.`,
   cta: {
-    text: "Launch Terminal",
-    href: "#launch",
+    text: "Get Started", 
+    href: "#features", 
   },
   features: [
-    { icon: "💼", label: "Wallet Support" },
-    { icon: "⚙️", label: "Fully Customizable" },
-    { icon: "🛡️", label: "100% Secured", subtext: "All Systems Operational" },
-    { icon: "🏎️", label: "Pro Performance" }
+    { icon: "📱", label: "React Native Expo" },
+    { icon: "💻", label: "React Vite" },
+    { icon: "🐍", label: "Python FastAPI" },
   ],
 };
 
 const HeroSection = () => {
-  // Helper function to render the headline with highlighted part
   const renderHeadline = () => {
     const parts = heroData.headlineMain.split(heroData.headlineHighlight);
-    return (
-      <>
-        {parts[0]}<span className={styles.headlineHighlight}>{heroData.headlineHighlight}</span>{parts[1]}
-      </>
-    );
+    if (parts.length === 2) {
+      return (
+        <>
+          {parts[0]}<span className={styles.headlineHighlight}>{heroData.headlineHighlight}</span>{parts[1]}
+        </>
+      );
+    }
+    return <>{heroData.headlineMain}</>;
   };
 
   return (
     <section className={styles.hero}>
       <div className={styles.content}>
-        {/* Badge */}
-        <div className={styles.badge}>{heroData.badge}</div>
-
-        {/* Headline */}
         <h1 className={styles.headline}>
-          {renderHeadline()} {/* Main headline with highlight */}
-          <span className={styles.headlineSub}>{heroData.headlineSub}</span> {/* Sub headline */} 
+          {renderHeadline()}
+          <span className={styles.headlineSub}>{heroData.headlineSub}</span>
         </h1>
 
-        {/* Description */}
         <p className={styles.description}>{heroData.description}</p>
 
-        {/* CTA Button */} 
         <div className={styles.ctaContainer}>
-          <a href={heroData.cta.href} className={styles.ctaLink}>
+          <a href={heroData.cta.href} className={styles.ctaLink}> 
             <Button 
-              variant="primary" // Assuming primary style matches the visual
-              className={styles.ctaButton} // Add class for specific styles like glow
+              variant="primary"
+              className={styles.ctaButton}
             >
               {heroData.cta.text}
             </Button>
           </a>
         </div>
 
-        {/* Visual Placeholder */} 
         <div className={styles.visualPlaceholder}>
-          {/* Replace with actual image/component later */}
-          <p>Visual Element Placeholder</p>
+          <p>{BRAND_NAME} Visual Placeholder</p>
         </div>
       </div>
 
-      {/* Features Bar */} 
+      {/* Features Bar - simplified labels */} 
       <div className={styles.featuresBar}>
         {heroData.features.map((feature, index) => (
           <div key={index} className={styles.featureItem}>
             <span className={styles.featureIcon}>{feature.icon}</span>
-            <div className={styles.featureTextContainer}>
-                <span className={styles.featureLabel}>{feature.label}</span>
-                {feature.subtext && <span className={styles.featureSubtext}>{feature.subtext}</span>}
-            </div>
+            {/* Only show label in the bottom bar */}
+            <span className={styles.featureLabel}>{feature.label}</span> 
           </div>
         ))}
       </div>

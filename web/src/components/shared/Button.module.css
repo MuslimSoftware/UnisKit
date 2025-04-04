@@ -3,7 +3,7 @@
   align-items: center;
   justify-content: center;
   gap: var(--gap-small); /* Use theme variable */
-  padding: var(--padding-medium) var(--padding-large);
+  padding: var(--padding-small) var(--padding-medium);
   border: 1px solid transparent;
   border-radius: var(--border-radius-round); /* Use theme variable - round default */
   cursor: pointer;

@@ -1,24 +1,25 @@
 import React from 'react';
 import styles from './FeaturesSection.module.css';
+import { BRAND_NAME } from '@fullstack-template/shared';
 // Import icons later (e.g., from react-icons)
 
 // Placeholder data
 const features = [
-  { icon: '📱', title: 'React Native Ready', description: 'Mobile app foundation with Expo.' },
-  { icon: '💻', title: 'React Web Frontend', description: 'Modern landing page/dashboard setup.' },
-  { icon: '⚙️', title: 'Python Backend', description: 'Robust API layer with FastAPI.' },
-  { icon: '🎨', title: 'Shared Theme', description: 'Consistent UI across platforms.' },
-  { icon: '🔒', title: 'Authentication', description: 'Built-in auth flow (OTP + JWT).' },
-  { icon: '⚡', title: 'Monorepo Setup', description: 'Managed with PNPM workspaces.' },
+  { icon: '📱', title: 'React Native Ready', description: 'Cross-platform mobile app foundation with Expo.' },
+  { icon: '💻', title: 'React Web Frontend', description: 'Vite-powered, responsive web interface setup.' },
+  { icon: '🐍', title: 'Python FastAPI Backend', description: 'Async-ready, robust API layer.' },
+  { icon: '🎨', title: 'Shared Theme & Types', description: 'Consistent UI and data structures across platforms.' },
+  { icon: '🔒', title: 'JWT Authentication', description: 'Secure, standard built-in auth flow (adaptable).' },
+  { icon: '🔗', title: 'PNPM Monorepo', description: 'Efficiently managed codebase with shared packages.' },
 ];
 
 const FeaturesSection = () => {
   return (
     <section className={styles.featuresSection}>
       <div className={styles.container}>
-        <h2 className={styles.title}>Everything You Need</h2>
+        <h2 className={styles.title}>The {BRAND_NAME} Advantage</h2>
         <p className={styles.subtitle}>
-          A solid foundation with best practices baked in.
+          A cohesive toolkit designed for rapid development and scalability.
         </p>
         <div className={styles.grid}>
           {features.map((feature) => (

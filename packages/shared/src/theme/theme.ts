@@ -2,6 +2,9 @@ import { typography, Typography } from './typography';
 import { spacing, Spacing } from './spacing';
 import { Colors } from './colors';
 
+// Brand Constant
+export const BRAND_NAME = "UnisKit";
+
 // --- Types (Keep internal definitions or move to theme.types.ts if preferred) --- 
 type ButtonStyle = {
     background: string;

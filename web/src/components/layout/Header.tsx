@@ -1,35 +1,40 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import styles from './Header.module.css';
-// Import Link from react-router-dom later if needed
+import { useTheme } from '@/context/ThemeContext';
+import { FaInstagram, FaLinkedinIn, FaXTwitter } from 'react-icons/fa6'; 
+import { BRAND_NAME } from '@fullstack-template/shared'; // Import brand name
 
 // Data from JSON
 const navLinks = [
-  { label: "Terminal", href: "#terminal" },
-  { label: "Markets", href: "#markets" },
-  { label: "Analytics", href: "#analytics" },
-  { label: "Login", href: "#login" }
+  { label: "Company", href: "#company" },
+  { label: "Features", href: "#features" },
+  { label: "Support", href: "#support" }
 ];
 
 const socialIcons = [
-  // Using text placeholders for icons initially
-  { platform: "Instagram", icon: "Insta", href: "#" }, 
-  { platform: "LinkedIn", icon: "LI", href: "#" },
-  { platform: "X", icon: "X", href: "#" }
+  { platform: "Instagram", icon: <FaInstagram />, href: "#" }, 
+  { platform: "LinkedIn", icon: <FaLinkedinIn />, href: "#" },
+  { platform: "X", icon: <FaXTwitter />, href: "#" }
 ];
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { setThemePreference, isDark } = useTheme(); 
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
+  const handleThemeCycle = useCallback(() => {
+    const nextPreference = isDark ? 'light' : 'dark';
+    setThemePreference(nextPreference);
+  }, [isDark, setThemePreference]);
+
   return (
     <header className={styles.header}>
       <div className={styles.container}>
         <div className={styles.logo}>
-          {/* Replace with actual logo/link */}
-          <a href="/">FLUXON</a> {/* Updated logo text */} 
+          <a href="/">{BRAND_NAME.toUpperCase()}</a> {/* Use brand name constant */}
         </div>
 
         {/* Hamburger Button - Controls nav visibility on mobile */}
@@ -46,7 +51,6 @@ const Header = () => {
         </button>
 
         {/* Navigation container - includes links and social icons */}
-        {/* ID matches aria-controls for accessibility */}
         <nav id="header-nav" className={`${styles.nav} ${isMobileMenuOpen ? styles.navMobileOpen : ''}`}>
           {/* Centered Navigation Links */}
           <div className={styles.navLinks}>
@@ -55,14 +59,27 @@ const Header = () => {
             ))}
           </div>
           
-          {/* Social Icons (Right Aligned on Desktop) */}
+          {/* Social Icons & Theme Toggle (Right Aligned on Desktop) */}
           <div className={styles.socialIcons}>
-            {socialIcons.map(social => (
+            {/* {socialIcons.map(social => (
               <a key={social.platform} href={social.href} aria-label={social.platform} className={styles.socialLink}>
-                {/* Replace text with actual icons/svgs later */} 
                 {social.icon} 
               </a>
-            ))}
+            ))} */}
+            
+            {/* Theme Toggle Switch */} 
+            <label 
+              className={styles.themeSwitch} 
+              title={`Switch to ${isDark ? 'light' : 'dark'} theme`}
+              aria-label={`Switch to ${isDark ? 'light' : 'dark'} theme`}
+            >
+              <input 
+                type="checkbox" 
+                checked={isDark} 
+                onChange={handleThemeCycle} 
+              />
+              <span className={styles.slider}></span> {/* Visual part of the switch */} 
+            </label>
           </div>
         </nav>
 
