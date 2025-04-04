@@ -4,13 +4,14 @@ import Button from '@/components/shared/Button';
 import { BRAND_NAME } from '@fullstack-template/shared';
 
 const heroData = {
-  headlineMain: `Jumpstart Your Business`,
-  headlineHighlight: "Your Business",
-  headlineSub: `Everything you need to start`,
-  description: `${BRAND_NAME} provides a production-ready monorepo foundation. Launch your next full-stack application with confidence and speed.`,
+  headlineMain: `Build Fast. Launch Faster.`,
+  headlineHighlight: "Launch Faster.",
+  headlineSub: `No More Boilerplate.`,
+  description: `${BRAND_NAME} provides a production-ready full-stack monorepo foundation.
+   Launch your next business without wasting time writing boilerplate.`,
   cta: {
-    text: "Get Started", 
-    href: "#features", 
+    text: "Get Started",
+    href: "#features",
   },
   features: [
     { icon: "📱", label: "React Native Expo" },
@@ -18,6 +19,26 @@ const heroData = {
     { icon: "🐍", label: "Python FastAPI" },
   ],
 };
+
+const commandLines = [
+  "# 1. Clone the repository",
+  "git clone <your-repo-url>",
+  "cd <repo-name>",
+  "", // Empty line for spacing
+  "# 2. Run the Backend (Python/FastAPI)",
+  "cd backend",
+  "./run.sh # Or python main.py",
+  "",
+  "# 3. Run the Mobile App (React Native/Expo)",
+  "cd ../mobile",
+  "npm install",
+  "npm run start:dev",
+  "",
+  "# 4. Run the Web App (React/Vite)",
+  "cd ../web",
+  "npm install",
+  "npm run dev",
+];
 
 const HeroSection = () => {
   const renderHeadline = () => {
@@ -30,6 +51,35 @@ const HeroSection = () => {
       );
     }
     return <>{heroData.headlineMain}</>;
+  };
+
+  // Function to render code snippet with basic highlighting
+  const renderCodeSnippet = () => {
+    const keywords = ["git", "cd", "npm", "./run.sh"];
+    const keywordRegex = new RegExp(`\\b(${keywords.join("|")})\\b`, "g");
+
+    return commandLines.map((line, index) => {
+      if (line.trim().startsWith("#")) {
+        const commentText = line.slice(line.indexOf('#'));
+        return <React.Fragment key={index}><span className={styles.comment}>{commentText}</span><br /></React.Fragment>;
+      } else if (line.trim() === "") {
+        return <br key={index} />;
+      } else {
+        const parts = line.split(keywordRegex);
+        return (
+          <React.Fragment key={index}>
+            {parts.map((part, partIndex) => 
+              keywords.includes(part) ? (
+                <span key={partIndex} className={styles.keyword}>{part}</span>
+              ) : (
+                part
+              )
+            )}
+            <br />
+          </React.Fragment>
+        );
+      }
+    });
   };
 
   return (
@@ -54,7 +104,11 @@ const HeroSection = () => {
         </div>
 
         <div className={styles.visualPlaceholder}>
-          <p>{BRAND_NAME} Visual Placeholder</p>
+          <div className={styles.codeSnippet}>
+            <pre><code>
+              {renderCodeSnippet()} 
+            </code></pre>
+          </div>
         </div>
       </div>
 

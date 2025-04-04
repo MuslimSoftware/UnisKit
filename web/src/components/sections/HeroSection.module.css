@@ -72,15 +72,56 @@
 /* Visual Placeholder */
 .visualPlaceholder {
   width: 100%;
-  max-width: 600px; /* Adjust as needed */
-  height: 200px; /* Example height */
-  background-color: var(--color-layout-foreground);
+  max-width: 600px;
+  min-height: 200px;
+  background-color: #2d2d2d;
   border-radius: var(--border-radius-medium);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--color-text-secondary);
   margin-bottom: var(--gap-large);
+  padding: var(--padding-small); 
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--color-layout-border);
+}
+
+/* Code Snippet Styles */
+.codeSnippet {
+  width: 100%;
+  text-align: left;
+  overflow: hidden; /* Hide scrollbars initially if needed */
+}
+
+.codeSnippet pre {
+  margin: 0;
+  padding: var(--padding-small);
+  background-color: transparent; /* Inherit from parent */
+  border-radius: inherit; /* Inherit rounding */
+  overflow-x: auto; /* Allow horizontal scroll if needed */
+}
+
+.codeSnippet code {
+  display: block;
+  font-family: var(--font-family-mono); /* Monospace font */
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #d4d4d4; /* Light text color on dark background */
+  white-space: pre-wrap;   /* Enable text wrapping */
+  word-break: break-word; /* Break words to wrap */
+}
+
+/* Simple syntax highlighting */
+.codeSnippet code .comment {
+  color: #6a9955; /* Green for comments */
+}
+.codeSnippet code .keyword {
+  color: #569cd6; /* Blue for keywords like const, new */
+}
+.codeSnippet code .string {
+  color: #ce9178; /* Orange for strings */
+}
+.codeSnippet code .function {
+  color: #dcdcaa; /* Yellow for function/method names */
 }
 
 /* Features Bar */
@@ -163,7 +204,9 @@
     max-width: 90%;
   }
   .visualPlaceholder {
-    height: 150px;
+    height: auto; /* Allow height to adjust based on wrapped content */
+    min-height: 150px; /* Adjust min-height if needed */
+    padding: var(--padding-small); /* Reduce padding */
   }
   .featuresBar {
     flex-direction: column; /* Stack features vertically */
@@ -182,6 +225,13 @@
     background-color: var(--color-layout-foreground); /* Add background per item */
     padding: var(--padding-medium);
     border-radius: var(--border-radius-medium);
+  }
+  .codeSnippet pre {
+    padding: var(--padding-xsmall); /* Further reduce internal padding */
+  }
+  .codeSnippet code {
+    font-size: 0.8rem; /* Slightly smaller font on mobile */
+    line-height: 1.4;
   }
 }
 
