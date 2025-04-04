@@ -10,7 +10,6 @@ export const FINAL_POSITION = 0.2 // 20% from top
 
 interface AnimatedLogoProps {
   animatedStyle?: any
-  showTitle?: boolean
 }
 
 export function AnimatedLogo({ animatedStyle }: AnimatedLogoProps) {

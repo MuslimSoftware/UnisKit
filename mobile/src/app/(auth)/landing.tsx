@@ -10,7 +10,7 @@ import {
   AnimatedLogo,
   INITIAL_POSITION,
 } from '@/features/auth/components/AnimatedLogo'
-import { Brand } from '@uniskit/shared'
+import { BRAND_NAME } from '@uniskit/shared'
 import { router } from 'expo-router'
 import { useTheme } from '@/shared/context/ThemeContext'
 import { TextBody, TextHeader } from '@/shared/components/text'
@@ -32,7 +32,7 @@ export default function LandingScreen() {
           <AnimatedLogo />
         </View>
         <Animated.View style={[styles.titleContainer, contentStyle]}>
-          <TextHeader style={styles.title}>{Brand.name}</TextHeader>
+          <TextHeader style={styles.title}>{BRAND_NAME}</TextHeader>
         </Animated.View>
       </Animated.View>
 
@@ -77,7 +77,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  titleContainer: {},
+  titleContainer: {
+    width: '50%',
+  },
   bottomContent: {
     position: 'absolute',
     bottom: 0,
@@ -87,6 +89,7 @@ const styles = StyleSheet.create({
   },
   title: {
     textAlign: 'center',
+    textTransform: 'uppercase',
   },
   subtitle: {
     textAlign: 'center',
