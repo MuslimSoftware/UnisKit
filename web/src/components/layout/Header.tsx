@@ -1,7 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import styles from './Header.module.css';
 import { useTheme } from '@/context/ThemeContext';
-import { FaInstagram, FaLinkedinIn, FaXTwitter } from 'react-icons/fa6'; 
 import Brand from '@/components/common/Brand'; 
 
 // Data from JSON
@@ -9,12 +8,6 @@ const navLinks = [
   { label: "Company", href: "#company" },
   { label: "Features", href: "#features" },
   { label: "Support", href: "#support" }
-];
-
-const socialIcons = [
-  { platform: "Instagram", icon: <FaInstagram />, href: "#" }, 
-  { platform: "LinkedIn", icon: <FaLinkedinIn />, href: "#" },
-  { platform: "X", icon: <FaXTwitter />, href: "#" }
 ];
 
 const Header = () => {

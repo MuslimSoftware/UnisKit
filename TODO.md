@@ -5,7 +5,6 @@ This file tracks the development tasks, progress, and future plans.
 ## Tasks
 
 - [X] - Continue polishing the front end (structure, base components, minimal page-specific styling) 
-- [ ] - Implement Row components
 - [ ] - Create README guides for key folders (design, context)
 - [ ] - Implement multi-step onboarding for profile completion
 - [ ] - Rate limit the backend for security

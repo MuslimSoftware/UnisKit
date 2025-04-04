@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, View, Animated, Text } from 'react-native'
+import { StyleSheet, View, Animated } from 'react-native'
 import {
   LOGO_SIZE,
   useLogoAnimation,
@@ -10,11 +10,12 @@ import {
   AnimatedLogo,
   INITIAL_POSITION,
 } from '@/features/auth/components/AnimatedLogo'
-import { Brand } from '@/shared/constants/Brand'
+import { Brand } from '@fullstack-template/shared'
 import { router } from 'expo-router'
 import { useTheme } from '@/shared/context/ThemeContext'
 import { TextBody, TextHeader } from '@/shared/components/text'
 import { BgView } from '@/shared/components/layout'
+
 export default function LandingScreen() {
   const { theme } = useTheme()
   const { logoStyle, contentStyle } = useLogoAnimation()

@@ -13,7 +13,7 @@ const Footer = () => {
         {/* Top Section: Logo/Brand and Social Links */}
         <div className={styles.topSection}>
           <div className={styles.brandInfo}>
-            <Brand showText={false} fontSize="2rem" />
+            <Brand />
             <p className={styles.brandSlogan}>Build faster, together.</p>
           </div>
           <div className={styles.socialLinks}>

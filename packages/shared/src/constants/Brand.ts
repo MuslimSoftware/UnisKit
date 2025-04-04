@@ -1,4 +1,4 @@
 export const Brand = {
-  name: 'Companion',
+  name: 'UnisKit',
   // Add other brand-related constants here as needed
 } 

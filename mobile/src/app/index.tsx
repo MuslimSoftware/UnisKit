@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useMemo } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet } from 'react-native';
 import * as Updates from 'expo-updates';
 import { useFonts } from 'expo-font';
 import { useSplashAnimation } from '@/features/auth/hooks/useSplashAnimation';
