@@ -1,10 +1,7 @@
 import React from 'react';
 import styles from './FeaturesSection.module.css';
 import { BRAND_NAME } from '@fullstack-template/shared';
-// Removed unused icons FaMobileAlt, FaLaptopCode, FaPalette, FaKey, FaLink
-// Import syntax highlighter
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-// Choose a theme (e.g., atomDark, tomorrow, duotoneDark, etc.)
 import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism'; 
 
 // Code snippets for features
@@ -48,10 +45,8 @@ const styles = StyleSheet.create({
 });
 `;
 
-// Refocused features data
 const features = [
   { 
-    // Use SyntaxHighlighter for the backend code
     element: (
       <SyntaxHighlighter language="python" style={atomDark} customStyle={{ margin: 0, fontSize: '0.8rem', borderRadius: 'var(--border-radius-small)' }}>
         {backendCode}
@@ -61,7 +56,6 @@ const features = [
     description: 'Solid Python backend structure ready for your API logic. Skip the boilerplate.' 
   },
   { 
-    // Use SyntaxHighlighter for the web code
     element: (
        <SyntaxHighlighter language="jsx" style={atomDark} customStyle={{ margin: 0, fontSize: '0.8rem', borderRadius: 'var(--border-radius-small)' }}>
          {webCode}
@@ -71,7 +65,6 @@ const features = [
     description: 'Vite-powered React setup with CSS Modules and pre-configured shared theme variables.' 
   },
     { 
-    // Use SyntaxHighlighter for the mobile code
     element: (
        <SyntaxHighlighter language="jsx" style={atomDark} customStyle={{ margin: 0, fontSize: '0.8rem', borderRadius: 'var(--border-radius-small)' }}>
          {mobileCode}
@@ -80,12 +73,6 @@ const features = [
     title: 'React Native Mobile App', 
     description: 'Cross-platform Expo foundation using React Native, structured for scalability and themed.' 
   },
-  // Optional: Could add a feature for Monorepo/Tooling if desired
-  // { 
-  //   element: <pre style={{fontSize: '0.8rem', margin: 0}}>apps/\n web/\n mobile/\npackages/\n shared/\n ui/</pre>, 
-  //   title: 'PNPM Monorepo', 
-  //   description: 'Efficiently managed codebase with shared packages for UI, types, and logic.' 
-  // },
 ];
 
 const FeaturesSection = () => {

@@ -3,7 +3,6 @@ import styles from './Header.module.css';
 import { useTheme } from '@/context/ThemeContext';
 import Brand from '@/components/common/Brand'; 
 
-// Data from JSON
 const navLinks = [
   { label: "Company", href: "#company" },
   { label: "Features", href: "#features" },
@@ -34,7 +33,7 @@ const Header = () => {
           onClick={toggleMobileMenu}
           aria-label="Toggle menu"
           aria-expanded={isMobileMenuOpen}
-          aria-controls="header-nav" // Link button to the nav it controls
+          aria-controls="header-nav"
         >
           <span></span> 
           <span></span>
@@ -52,12 +51,6 @@ const Header = () => {
           
           {/* Social Icons & Theme Toggle (Right Aligned on Desktop) */}
           <div className={styles.socialIcons}>
-            {/* {socialIcons.map(social => (
-              <a key={social.platform} href={social.href} aria-label={social.platform} className={styles.socialLink}>
-                {social.icon} 
-              </a>
-            ))} */}
-            
             {/* Theme Toggle Switch */} 
             <label 
               className={styles.themeSwitch} 
@@ -69,7 +62,7 @@ const Header = () => {
                 checked={isDark} 
                 onChange={handleThemeCycle} 
               />
-              <span className={styles.slider}></span> {/* Visual part of the switch */} 
+              <span className={styles.slider}></span>
             </label>
           </div>
         </nav>
