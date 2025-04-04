@@ -84,5 +84,6 @@ const styles = StyleSheet.create({
   },
   errorText: {
     textAlign: 'center',
+    padding: 20,
   },
 });

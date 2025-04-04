@@ -1,5 +1,5 @@
 import React from 'react';
-// Import components
+
 import Header from '@/components/layout/Header';
 import HeroSection from '@/components/sections/HeroSection';
 import FeaturesSection from '@/components/sections/FeaturesSection';

@@ -62,4 +62,19 @@
   font-size: 1rem;
   color: var(--color-text-secondary);
   line-height: 1.6;
+}
+
+/* Responsive adjustments for the grid */
+@media (max-width: 320px) { /* Target very small screens */
+  .grid {
+    /* Switch to a single column */
+    grid-template-columns: 1fr;
+    /* Optionally reduce gap */
+    gap: var(--gap-medium);
+  }
+
+  .featureCard {
+    /* Optionally reduce padding on very small screens */
+    padding: var(--padding-medium);
+  }
 } 

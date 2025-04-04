@@ -83,7 +83,7 @@ These rules guide AI interactions for building the `web` frontend application (w
 *   **React Best Practices:** Follow standard React best practices.
 *   **CSS Modules:** Maintain clean and scoped CSS within `.module.css` files.
 *   **Imports:** Use configured path aliases (`@/` for `web/src/`). Use `@fullstack-template/shared` for shared library imports.
-*   **Readability & Comments:** Write clear code. Comment only complex or non-obvious parts.
+*   **Readability & Comments:** Write clear code. Comment only complex or non-obvious parts. DO NOT comment every line or have many comments
 
 ## 10. AI Interaction Guidance (Cursor)
 

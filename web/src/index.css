@@ -29,9 +29,9 @@ body {
   --color-text-secondary: #52525b;
   --color-text-disabled: #a1a1aa;
 
-  --padding-small: 8px;
-  --padding-medium: 16px;
-  --padding-large: 24px;
+  --padding-small: 1rem;
+  --padding-medium: 1.5rem;
+  --padding-large: 2rem;
   /* Add all padding values */
 
   --gap-small: 8px;
@@ -51,9 +51,4 @@ body {
   /* Add all icon sizes */
   
   --font-family-base: 'Roboto'; /* Set base font variable */
-  /* Add other typography variables if needed (font sizes, weights) */
 }
-
-/* Dark theme overrides are now handled directly by JS setting variables */
-/* [data-theme='dark'] { ... } selector is still useful if you 
-   need CSS-only overrides not covered by JS variable setting */ 

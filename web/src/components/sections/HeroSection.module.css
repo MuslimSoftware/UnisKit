@@ -1,84 +1,226 @@
+/* Hero Section Styles */
 .hero {
-  position: relative; /* Needed for overlay positioning */
   display: flex;
+  flex-direction: column; /* Stack content and features bar */
   align-items: center;
-  justify-content: center;
-  min-height: 80vh; /* Adjust height as needed */
-  padding: 6rem var(--padding-medium); /* Use theme variables */
-  background: url('/placeholder-hero.jpg') no-repeat center center/cover; /* Placeholder background */
+  justify-content: space-between; /* Push features bar down */
+  min-height: 100vh; /* Full viewport height */
+  /* Reduced top padding since header is no longer absolute */
+  padding: var(--padding-medium) var(--padding-medium) 0; /* Top padding (leave space for absolute header), bottom padding handled by features bar */
+  background-color: var(--color-layout-background);
   text-align: center;
-  color: #fff; /* Default text color on dark background */
-}
-
-/* Optional overlay for better text readability */
-.overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Adjust darkness */
-  z-index: 1;
+  overflow: hidden; /* Prevent potential overflows */
+  /* Remove position relative unless needed for internal absolute elements */
+  /* position: relative; */
 }
 
 .content {
-  position: relative; /* Ensure content is above overlay */
-  z-index: 2;
-  max-width: 800px;
-}
-
-.title {
-  font-size: 3rem; /* Adjust size */
-  font-weight: bold;
-  margin-bottom: var(--gap-medium); /* Use theme variable */
-  color: #fff; /* Ensure title is visible */
-}
-
-.subtitle {
-  font-size: 1.2rem; /* Adjust size */
-  margin-bottom: var(--gap-large); /* Use theme variable */
-  color: rgba(255, 255, 255, 0.85); /* Slightly muted white */
-}
-
-.ctaButtons {
   display: flex;
-  justify-content: center;
-  gap: var(--gap-medium); /* Use theme variable */
-  flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gap-medium);
+  max-width: 900px; /* Adjust as needed */
+  margin: 0 auto;
+  flex-grow: 1; /* Allow content to take available space */
+  justify-content: center; /* Center content vertically */
 }
 
-/* Basic button styling - replace with actual Button component styles later */
-.ctaPrimary,
-.ctaSecondary {
-  padding: var(--padding-medium) var(--padding-large);
-  border: none;
+/* Badge */
+.badge {
+  display: inline-block;
+  background-color: var(--color-layout-foreground);
+  color: var(--color-text-secondary);
+  padding: var(--padding-small) var(--padding-medium);
+  border-radius: var(--border-radius-round);
+  font-size: 0.9rem;
+}
+
+/* Headline */
+.headline {
+  font-size: 3.5rem; /* Large headline */
+  font-weight: 700;
+  color: var(--color-text-primary);
+  line-height: 1.2;
+  margin-bottom: var(--gap-small);
+}
+
+.headlineHighlight {
+  color: var(--color-brand-primary); /* Accent color for highlight */
+}
+
+.headlineSub {
+  display: block; /* Ensure sub-headline is on a new line */
+  font-size: 3.5rem; /* Match main headline size */
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+/* Description */
+.description {
+  font-size: 1.1rem;
+  color: var(--color-text-secondary);
+  max-width: 600px; /* Limit width for readability */
+  margin-bottom: var(--gap-large);
+}
+
+/* CTA */
+.ctaContainer {
+  margin-bottom: var(--gap-large);
+}
+
+.ctaLink {
+  text-decoration: none; /* Remove underline from anchor */
+}
+
+.ctaButton {
+  /* Inherit Button component styles, add specifics here */
+  box-shadow: 0 0 15px 5px var(--color-brand-primary, #facc15); /* Glow effect - uses primary color */
+  padding: var(--padding-medium) var(--padding-large); /* Ensure padding is consistent */
+}
+
+/* Visual Placeholder */
+.visualPlaceholder {
+  width: 100%;
+  max-width: 600px; /* Adjust as needed */
+  height: 200px; /* Example height */
+  background-color: var(--color-layout-foreground);
   border-radius: var(--border-radius-medium);
-  cursor: pointer;
-  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--gap-large);
+}
+
+/* Features Bar */
+.featuresBar {
+  display: flex;
+  justify-content: space-around; /* Distribute items evenly */
+  align-items: stretch; /* Make items same height */
+  background-color: var(--color-layout-foreground); /* Slightly different background */
+  width: 100vw; /* Full viewport width */
+  margin-left: calc(-50vw + 50%); /* Center trick */
+  padding: var(--padding-large) var(--padding-medium);
+  border-top: 1px solid var(--color-layout-border);
+}
+
+.featureItem {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-medium);
+  color: var(--color-text-secondary);
+  flex: 1; /* Allow items to grow and shrink */
+  justify-content: center; /* Center content within item */
+  padding: 0 var(--padding-small); /* Padding within each item */
+}
+
+.featureIcon {
+  font-size: 1.8rem; /* Adjust icon size */
+  color: var(--color-brand-primary); /* Use accent color for icons */
+}
+
+.featureTextContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Align text to left */
+}
+
+.featureLabel {
   font-weight: 500;
-  transition: background-color 0.2s ease, transform 0.1s ease;
+  color: var(--color-text-primary);
 }
 
-.ctaPrimary {
-  background-color: var(--color-primary);
-  color: #fff;
+.featureSubtext {
+  font-size: 0.85rem;
 }
 
-.ctaPrimary:hover {
-  filter: brightness(1.1);
+/* --- Responsive Styles --- */
+
+@media (max-width: 992px) { /* Adjust breakpoint for tablets */
+  .headline, .headlineSub {
+    font-size: 2.8rem;
+  }
+  .description {
+    font-size: 1rem;
+  }
+  .featuresBar {
+    padding: var(--padding-medium) var(--padding-small);
+  }
+  .featureItem {
+     gap: var(--gap-small);
+  }
+  .featureIcon {
+     font-size: 1.5rem;
+  }
+  .featureLabel {
+     font-size: 0.9rem;
+  }
+  .featureSubtext {
+     font-size: 0.75rem;
+  }
 }
 
-.ctaSecondary {
-  background-color: rgba(255, 255, 255, 0.2);
-  color: #fff;
-  border: 1px solid #fff;
+@media (max-width: 768px) { /* Mobile devices */
+  .hero {
+    /* Adjust mobile padding too */
+    padding: var(--padding-medium) var(--padding-small) 0; 
+  }
+  .headline, .headlineSub {
+    font-size: 2.2rem;
+  }
+  .description {
+    max-width: 90%;
+  }
+  .visualPlaceholder {
+    height: 150px;
+  }
+  .featuresBar {
+    flex-direction: column; /* Stack features vertically */
+    align-items: center;
+    gap: var(--gap-large);
+    padding: var(--padding-large) var(--padding-medium);
+    width: 100%; /* Reset width */
+    margin-left: 0; /* Reset margin */
+    border-top: none; /* Remove top border if stacked */
+    background-color: transparent; /* Or keep background */
+  }
+  .featureItem {
+    width: 100%;
+    max-width: 300px; /* Limit width on mobile */
+    justify-content: flex-start; /* Align to start */
+    background-color: var(--color-layout-foreground); /* Add background per item */
+    padding: var(--padding-medium);
+    border-radius: var(--border-radius-medium);
+  }
 }
 
-.ctaSecondary:hover {
-  background-color: rgba(255, 255, 255, 0.3);
-}
+/* Adjustments for very small screens */
+@media (max-width: 375px) {
+  .featuresBar {
+    /* Reduce overall padding for the container */
+    padding: var(--padding-medium) var(--padding-small);
+  }
 
-.ctaPrimary:active,
-.ctaSecondary:active {
-  transform: scale(0.98);
+  .featureItem {
+    /* Remove max-width to allow shrinking */
+    max-width: none; 
+    /* Reduce internal padding */
+    padding: var(--padding-small);
+    /* Reduce gap between icon and text */
+    gap: var(--gap-small);
+  }
+
+  .featureIcon {
+    /* Slightly smaller icon */
+    font-size: 1.3rem;
+  }
+  
+  .featureLabel {
+    /* Slightly smaller text */
+    font-size: 0.85rem;
+  }
+  
+  .featureSubtext {
+    font-size: 0.7rem;
+  }
 } 
