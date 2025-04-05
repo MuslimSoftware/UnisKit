@@ -4,8 +4,58 @@ This directory contains the Python backend API for UnisKit, built using FastAPI.
 
 ## Prerequisites
 
-- Ensure you have completed the root-level setup described in the main [README.md](../../README.md) at the project root, including installing Python and `pnpm`.
-- You have created and activated a Python virtual environment (e.g., `.venv`) and installed dependencies using `pip install -r requirements.txt` within that environment.
+- Ensure you have completed the root-level setup described in the main [README.md](../../README.md), including installing `pnpm`.
+- [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/) (v1.27.0+ or V2) installed.
+- Python 3.10+ (primarily needed for local development/linting/type checking if not using Docker exclusively).
+
+## Running the Application (Recommended: Docker)
+
+The easiest and recommended way to run the backend service along with its Redis dependency is using Docker Compose from the **project root directory**.
+
+1. **Environment Variables:**
+    * Navigate to the `backend` directory: `cd backend`
+    * Create a `.env` file by copying the example: `cp .env.example .env`
+    * **Crucially, edit the `.env` file** and fill in secure values for `SECRET_KEY`, `JWT_SECRET_KEY`, and any other necessary configurations (like `MONGODB_URL` if used).
+    * Return to the project root: `cd ..`
+2. **Start Containers:**
+    From the **project root directory**, run:
+    ```bash
+    docker-compose up -d
+    ```
+    This command will build the backend image (if it doesn't exist) and start the backend and Redis containers in the background.
+3. **Accessing the API:**
+    The API should now be running and accessible, typically at `http://localhost:8000` (or the `PORT` specified in your root `.env` file if you customized the `docker-compose.yml` port mapping). Check the `/docs` endpoint for the Swagger UI: `http://localhost:8000/docs`.
+4. **Stopping Containers:**
+    To stop the containers, run from the **project root directory**:
+    ```bash
+    docker-compose down
+    ```
+
+## Running Locally (Alternative / Debugging)
+
+If you prefer to run the backend directly on your host machine (e.g., for easier debugging with certain IDE setups), follow these steps:
+
+1. **Prerequisites:** Ensure Python 3.10+ and `pip` are installed.
+2. **Virtual Environment:** From within the `backend` directory:
+    ```bash
+    python -m venv .venv # Create virtual environment
+    source .venv/bin/activate # On Windows use `.venv\Scripts\activate`
+    ```
+3. **Install Dependencies:**
+    ```bash
+    pip install -r requirements.txt
+    ```
+4. **Environment Variables:** Create and configure the `.env` file as described in the Docker setup section (copy `.env.example`).
+5. **Run Redis:** You need a separate Redis instance running. If you don't have one installed locally, you can easily start one using Docker:
+    ```bash
+    docker run -d -p 6379:6379 --name local-redis redis:7-alpine
+    ```
+    (Remember to stop/remove this container later: `docker stop local-redis && docker rm local-redis`)
+6. **Run Uvicorn:** From within the `backend` directory (with the virtual environment activated):
+    ```bash
+    uvicorn app.main:app --reload --host 0.0.0.0 --port 8000 
+    ```
+    The `--reload` flag enables hot reloading for development.
 
 ## Architecture: Layered Approach
 

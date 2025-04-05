@@ -45,15 +45,7 @@ Using a monorepo template offers several advantages:
     pnpm install
     ```
 
-3.  **Install Python dependencies (for backend):**
-    Navigate to the backend directory, create and activate a virtual environment (recommended), and install dependencies using `pip`.
-    ```bash
-    cd apps/backend
-    python -m venv .venv # Create virtual environment
-    source .venv/bin/activate # On Windows use `.venv\Scripts\activate`
-    pip install -r requirements.txt # Or your dependency file
-    cd ../.. # Return to the root directory
-    ```
+3.  **Backend Setup:** The backend service (including Python dependencies and Redis) is managed via Docker Compose. See the `backend/README.md` for instructions on configuring and running the backend containers.
 
 ## Technology Stack
 

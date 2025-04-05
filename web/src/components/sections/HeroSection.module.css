@@ -5,13 +5,10 @@
   align-items: center;
   justify-content: space-between; /* Push features bar down */
   min-height: 100vh; /* Full viewport height */
-  /* Reduced top padding since header is no longer absolute */
   padding: var(--padding-medium) var(--padding-medium) 0; /* Top padding (leave space for absolute header), bottom padding handled by features bar */
   background-color: var(--color-layout-background);
   text-align: center;
   overflow: hidden; /* Prevent potential overflows */
-  /* Remove position relative unless needed for internal absolute elements */
-  /* position: relative; */
 }
 
 .content {
@@ -26,7 +23,6 @@
   justify-content: flex-start;
 }
 
-/* Headline */
 .headline {
   font-size: 3.5rem; /* Large headline */
   font-weight: 700;
@@ -64,7 +60,6 @@
 }
 
 .ctaButton {
-  /* Inherit Button component styles, add specifics here */
   box-shadow: 0 0 15px 5px var(--color-brand-primary, #facc15); /* Glow effect - uses primary color */
   padding: var(--padding-medium) var(--padding-small); /* Ensure padding is consistent */
 }
@@ -110,12 +105,15 @@
   word-break: break-word; /* Break words to wrap */
 }
 
-/* Simple syntax highlighting */
 .codeSnippet code .comment {
   color: #6a9955; /* Green for comments */
 }
 .codeSnippet code .keyword {
   color: #569cd6; /* Blue for keywords like const, new */
+}
+.codeSnippet code .gitLink {
+  color: var(--color-brand-primary); /* Different color for git links (e.g., light green) */
+  font-weight: bold; /* Make it stand out more */
 }
 .codeSnippet code .string {
   color: #ce9178; /* Orange for strings */
@@ -124,30 +122,18 @@
   color: #dcdcaa; /* Yellow for function/method names */
 }
 
-/* Features Bar - REMOVED */
-/* .featuresBar { ... } */
-/* .featureItem { ... } */
-/* .featureIcon { ... } */
-/* .featureTextContainer { ... } */
-/* .featureLabel { ... } */
-/* .featureSubtext { ... } */
-
-/* --- Responsive Styles --- */
-
-@media (max-width: 992px) { /* Adjust breakpoint for tablets */
+@media (max-width: 992px) {
   .headline, .headlineSub {
     font-size: 2.8rem;
   }
   .description {
     font-size: 1rem;
   }
-  /* Remove featuresBar responsive styles */
 }
 
-@media (max-width: 768px) { /* Mobile devices */
+@media (max-width: 768px) {
   .hero {
-    /* Adjust mobile padding too */
-    padding: var(--padding-medium) var(--padding-small) 0; 
+    padding: var(--padding-medium) var(--padding-small) 0;
   }
   .headline, .headlineSub {
     font-size: 2.2rem;
@@ -160,8 +146,6 @@
     min-height: 150px; /* Adjust min-height if needed */
     padding: var(--padding-small); /* Reduce padding */
   }
-  /* Remove featuresBar responsive styles */
-  /* Remove featureItem responsive styles */
   .codeSnippet pre {
     padding: var(--padding-xsmall); /* Further reduce internal padding */
   }
@@ -170,6 +154,3 @@
     line-height: 1.4;
   }
 }
-
-/* Adjustments for very small screens - REMOVED Features Bar */
-/* @media (max-width: 375px) { ... } */ 

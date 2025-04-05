@@ -17,20 +17,19 @@ const heroData = {
 
 const commandLines = [
   "# 1. Clone the repository",
-  "git clone <your-repo-url>",
-  "cd <repo-name>",
-  "", // Empty line for spacing
-  "# 2. Run the Backend (Python/FastAPI)",
-  "cd backend",
-  "./run.sh # Or python main.py",
+  "git clone git@github.com:MuslimSoftware/UnisKit.git",
+  "cd UnisKit",
+  "",
+  "# 2. Start Backend & Redis (Docker)",
+  "docker-compose up -d",
   "",
   "# 3. Run the Mobile App (React Native/Expo)",
-  "cd ../mobile",
+  "cd mobile",
   "npm install",
   "npm run start:dev",
   "",
   "# 4. Run the Web App (React/Vite)",
-  "cd ../web",
+  "cd web",
   "npm install",
   "npm run dev",
 ];
@@ -49,8 +48,21 @@ const HeroSection = () => {
   };
 
   const renderCodeSnippet = () => {
-    const keywords = ["git", "cd", "npm", "./run.sh"];
-    const keywordRegex = new RegExp(`\\b(${keywords.join("|")})\\b`, "g");
+    const keywords = ["git", "cd", "npm"];
+    const keywordRegex = /(\b(?:git|cd|npm)\b)/g;
+    const targetGitLink = "git@github.com:MuslimSoftware/UnisKit.git";
+
+    const processSubstring = (text: string, keyPrefix: string): (string | JSX.Element)[] => {
+      if (!text) return [];
+      const parts = text.split(keywordRegex).filter(part => part);
+      return parts.map((part, index) =>
+        keywords.includes(part) ? (
+          <span key={`${keyPrefix}-${index}`} className={styles.keyword}>{part}</span>
+        ) : (
+          part
+        )
+      );
+    };
 
     return commandLines.map((line, index) => {
       if (line.trim().startsWith("#")) {
@@ -59,16 +71,25 @@ const HeroSection = () => {
       } else if (line.trim() === "") {
         return <br key={index} />;
       } else {
-        const parts = line.split(keywordRegex);
+        const linkIndex = line.indexOf(targetGitLink);
+        let elements: (string | JSX.Element)[] = [];
+
+        if (linkIndex !== -1) {
+          const before = line.substring(0, linkIndex);
+          const after = line.substring(linkIndex + targetGitLink.length);
+
+          elements = [
+            ...processSubstring(before, `line-${index}-before`),
+            <span key={`line-${index}-link`} className={styles.gitLink}>{targetGitLink}</span>,
+            ...processSubstring(after, `line-${index}-after`)
+          ];
+        } else {
+          elements = processSubstring(line, `line-${index}-full`);
+        }
+
         return (
           <React.Fragment key={index}>
-            {parts.map((part, partIndex) => 
-              keywords.includes(part) ? (
-                <span key={partIndex} className={styles.keyword}>{part}</span>
-              ) : (
-                part
-              )
-            )}
+            {elements}
             <br />
           </React.Fragment>
         );
