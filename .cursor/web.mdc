@@ -5,7 +5,7 @@ alwaysApply: false
 ---
 # Cursor Rules for /web Directory
 
-These rules guide AI interactions for building the `web` frontend application (website/landing page) within the FullStackTemplate monorepo.
+These rules guide AI interactions for building the `web` frontend application (website/landing page) within the UnisKit monorepo.
 
 ## 1. Project Structure (Assumed for Vite)
 

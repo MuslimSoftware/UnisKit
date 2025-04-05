@@ -2,6 +2,9 @@ from typing import Annotated
 
 from fastapi import Depends
 
+from app.config.redis_config import get_redis_client
+import redis.asyncio as redis
+
 # Repository imports
 from app.features.user.repositories import UserRepository
 
@@ -24,10 +27,11 @@ def get_user_service(
 def get_jwt_service() -> JWTService:
     return JWTService()
 
-def get_otp_service() -> OTPService:
-    return OTPService()
+async def get_otp_service() -> OTPService:
+    redis_client = await get_redis_client()
+    return OTPService(redis_client=redis_client)
 
-def get_auth_service(
+async def get_auth_service(
     user_repository: Annotated[UserRepository, Depends(get_user_repository)],
     jwt_service: Annotated[JWTService, Depends(get_jwt_service)],
     otp_service: Annotated[OTPService, Depends(get_otp_service)]

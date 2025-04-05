@@ -1,15 +1,31 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from app.config.env import settings
 from app.config.db_config import init_db
+from app.config.redis_config import init_redis_pool, close_redis_pool
 from app.features.auth.controllers import auth_controller
 from app.features.common.exceptions import AppException
 from app.middlewares import app_exception_handler, global_exception_handler
 from app.config.logging import setup_logging
+from app.config.rate_limit import limiter 
+from slowapi import _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
+from slowapi.middleware import SlowAPIMiddleware
+import contextlib
 
+# Initialize rate limiter - REMOVED (now imported)
+# limiter = Limiter(key_func=get_remote_address)
+
+# Updated lifespan function
+@contextlib.asynccontextmanager
 async def lifespan(app: FastAPI):
     await init_db()
+    await init_redis_pool() # Initialize Redis pool
+    print("Database and Redis pool initialized.") # Log for confirmation
     yield
+    # Clean up resources
+    await close_redis_pool() # Close Redis pool
+    print("Redis pool closed.") # Log for confirmation
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -18,6 +34,10 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+# Setup rate limiting state
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+
 setup_logging()
 
 # Handler for custom app exceptions
@@ -25,6 +45,9 @@ app.add_exception_handler(AppException, app_exception_handler)
 
 # Handler for all other unhandled exceptions
 app.add_exception_handler(Exception, global_exception_handler)
+
+# Add rate limiting middleware BEFORE other middlewares/routes if you want it applied first
+app.add_middleware(SlowAPIMiddleware)
 
 # Configure CORS
 app.add_middleware(

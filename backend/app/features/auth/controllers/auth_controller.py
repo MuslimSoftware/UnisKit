@@ -1,4 +1,6 @@
 from fastapi import APIRouter
+from fastapi import Request
+from app.config.rate_limit import limiter
 from app.features.auth.schemas import (
     CheckEmailRequest,
     CheckEmailResponse,
@@ -35,9 +37,11 @@ async def check_email_availability(
     )
 
 @router.post("/request-otp", response_model=RequestOTPResponse)
+@limiter.limit("5/minute")
 async def request_otp(
     request: RequestOTPRequest,
-    auth_service: AuthServiceDep
+    auth_service: AuthServiceDep,
+    req: Request
 ) -> RequestOTPResponse:
     """Request OTP using verification token."""
     result: ServiceResult = await auth_service.request_otp(request.email)
@@ -49,9 +53,11 @@ async def request_otp(
     )
 
 @router.post("/validate-otp", response_model=ValidateOTPResponse)
+@limiter.limit("5/minute")
 async def validate_otp(
     request: ValidateOTPRequest,
-    auth_service: AuthServiceDep
+    auth_service: AuthServiceDep,
+    req: Request
 ) -> ValidateOTPResponse:
     """Validate OTP and get completion token."""
     result = await auth_service.validate_otp(

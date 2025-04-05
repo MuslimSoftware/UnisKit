@@ -7,7 +7,7 @@ const envPath = path.resolve(__dirname, `.env.${ENV}`)
 dotenv.config({ path: envPath })
 
 module.exports = {
-  name: 'FullStackTemplate',
+  name: 'UnisKit',
   slug: 'uniskit',
   version: '1.0.0',
   orientation: 'portrait',
@@ -21,7 +21,7 @@ module.exports = {
   assetBundlePatterns: ['**/*'],
   ios: {
     supportsTablet: true,
-    bundleIdentifier: 'com.yourusername.fullstacktemplate',
+    bundleIdentifier: 'com.yourusername.uniskit',
     // Allow cleartext traffic for development
     infoPlist: {
       NSAppTransportSecurity: {
@@ -34,7 +34,7 @@ module.exports = {
       foregroundImage: './assets/images/adaptive-icon.png',
       backgroundColor: '#ffffff'
     },
-    package: 'com.yourusername.fullstacktemplate',
+    package: 'com.yourusername.uniskit',
     // Add network security config
     networkSecurityConfig: ENV === 'development'
   },

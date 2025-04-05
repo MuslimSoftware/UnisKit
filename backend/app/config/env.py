@@ -2,7 +2,7 @@ from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
     """Application settings."""
-    PROJECT_NAME: str = "FastAPI Backend"
+    PROJECT_NAME: str = "UnisKit Backend"
     PROJECT_DESCRIPTION: str = "Backend for the project"
     PROJECT_VERSION: str = "1.0.0"
     PRODUCTION: bool = False
@@ -17,6 +17,11 @@ class Settings(BaseSettings):
     # MongoDB Atlas Settings
     MONGODB_URL: str = "connection_string"
     MONGODB_DB_NAME: str = "DB_NAME"
+
+    # Redis Settings
+    REDIS_HOST: str = "localhost"
+    REDIS_PORT: int = 6379
+    REDIS_DB: int = 0
 
     # Security
     # Generate a secure secret key: `openssl rand -hex 32`

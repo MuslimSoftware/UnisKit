@@ -5,7 +5,7 @@ alwaysApply: false
 ---
 # Cursor Rules for /backend Directory
 
-These rules guide AI interactions with the Python backend application codebase within the FullStackTemplate monorepo.
+These rules guide AI interactions with the Python backend application codebase within the UnisKit monorepo.
 
 ## 1. Project Structure
 

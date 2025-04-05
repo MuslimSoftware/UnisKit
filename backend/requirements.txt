@@ -14,3 +14,5 @@ pytest>=8.0.0
 httpx>=0.26.0
 email-validator==2.1.0.post1
 bcrypt==3.2.2
+redis[hiredis]>=5.0.0
+slowapi>=0.1.9
