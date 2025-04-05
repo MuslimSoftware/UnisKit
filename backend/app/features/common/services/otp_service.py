@@ -1,12 +1,8 @@
 import random
 import string
-# Removed datetime imports as Redis handles TTL
 from app.features.common.schemas import ServiceResult
 from app.features.common.exceptions import AppException
-import redis.asyncio as redis # Import async redis client type hint
-
-# Remove shared storage at module level
-# _GLOBAL_OTP_STORE = {}
+import redis.asyncio as redis
 
 class OTPService:
     """Service for handling OTP operations using Redis."""
@@ -48,6 +44,7 @@ class OTPService:
     async def verify_otp(self, email: str, otp: str) -> ServiceResult: # Made async
         """
         Verify an OTP for the given email from Redis.
+        Only deletes the OTP if verification is successful.
 
         Args:
             email: The email to verify OTP for
@@ -57,21 +54,18 @@ class OTPService:
             ServiceResult with verification status
         """
         redis_key = self._get_redis_key(email)
-        # Use GETDEL to atomically get and delete the OTP if it exists
-        stored_otp = await self._redis.getdel(redis_key)
+        stored_otp = await self._redis.get(redis_key)
 
         if stored_otp is None:
-            # This covers both "not found" and "expired" cases
             raise AppException(message="Verification code not found or expired", error_code="OTP_INVALID_OR_EXPIRED", status_code=400)
 
         if stored_otp == otp:
+            await self._redis.delete(redis_key)
             return ServiceResult(
                 success=True,
                 message="Code verified successfully"
             )
         else:
-            # If GETDEL succeeded but the OTP doesn't match, it's invalid.
-            # Note: The key was already deleted by GETDEL.
             raise AppException(message="Invalid code", error_code="OTP_INVALID", status_code=400)
 
     def _generate_otp(self) -> str:
@@ -81,7 +75,6 @@ class OTPService:
     async def _store_otp(self, email: str, otp: str) -> None: # Made async
         """Store OTP in Redis with expiry time."""
         redis_key = self._get_redis_key(email)
-        # Use SET with EX argument for automatic expiry
         await self._redis.set(redis_key, otp, ex=self._otp_expiry_seconds)
 
     # Removed _is_expired method as Redis handles TTL

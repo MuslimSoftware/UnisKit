@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from fastapi import Request
+from starlette.requests import Request
 from app.config.rate_limit import limiter
 from app.features.auth.schemas import (
     CheckEmailRequest,
@@ -39,12 +39,12 @@ async def check_email_availability(
 @router.post("/request-otp", response_model=RequestOTPResponse)
 @limiter.limit("5/minute")
 async def request_otp(
-    request: RequestOTPRequest,
+    body: RequestOTPRequest,
     auth_service: AuthServiceDep,
-    req: Request
+    request: Request
 ) -> RequestOTPResponse:
     """Request OTP using verification token."""
-    result: ServiceResult = await auth_service.request_otp(request.email)
+    result: ServiceResult = await auth_service.request_otp(body.email)
     
     return RequestOTPResponse(
         success=result.success,
@@ -55,14 +55,14 @@ async def request_otp(
 @router.post("/validate-otp", response_model=ValidateOTPResponse)
 @limiter.limit("5/minute")
 async def validate_otp(
-    request: ValidateOTPRequest,
+    body: ValidateOTPRequest,
     auth_service: AuthServiceDep,
-    req: Request
+    request: Request
 ) -> ValidateOTPResponse:
     """Validate OTP and get completion token."""
     result = await auth_service.validate_otp(
-        request.email,
-        request.otp
+        body.email,
+        body.otp
     )
     
     return ValidateOTPResponse(

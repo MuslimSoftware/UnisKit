@@ -1,10 +1,11 @@
 from pydantic import BaseModel, EmailStr
 from typing import Optional
 
+
 class BaseResponse(BaseModel):
     success: bool
     message: str
-    data: dict
+    data: Optional[dict] = None 
 
 # Email verification
 class CheckEmailRequest(BaseModel):

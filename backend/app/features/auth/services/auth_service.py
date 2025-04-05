@@ -28,7 +28,7 @@ class AuthService:
     
     async def request_otp(self, email: str) -> ServiceResult:
         """Request OTP based on the verification token type."""
-        result = self.otp_service.request_otp(email)
+        result = await self.otp_service.request_otp(email)
 
         if not result.success:
             raise AppException(message=result.message, error_code="OTP_REQUEST_FAILED", status_code=400)
@@ -46,7 +46,7 @@ class AuthService:
     ) -> ServiceResult:
         """Validate OTP and return completion token."""
         # Verify the OTP
-        result = self.otp_service.verify_otp(email, otp)
+        result = await self.otp_service.verify_otp(email, otp)
         token = self.jwt_service.create_auth_flow_token(email)
 
         return ServiceResult(
