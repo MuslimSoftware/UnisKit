@@ -12,6 +12,7 @@ from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 from slowapi.middleware import SlowAPIMiddleware
 import contextlib
+from app.middlewares.redis_middleware import RedisMiddleware
 
 # Initialize rate limiter - REMOVED (now imported)
 # limiter = Limiter(key_func=get_remote_address)
@@ -48,6 +49,9 @@ app.add_exception_handler(Exception, global_exception_handler)
 
 # Add rate limiting middleware BEFORE other middlewares/routes if you want it applied first
 app.add_middleware(SlowAPIMiddleware)
+
+# Add Redis Middleware (doesn't need client instance passed anymore)
+app.add_middleware(RedisMiddleware)
 
 # Configure CORS
 app.add_middleware(

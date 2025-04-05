@@ -13,7 +13,7 @@ from app.features.auth.schemas import (
 )
 from app.features.common.schemas import ServiceResult
 from app.config.dependencies import AuthServiceDep, OTPServiceDep
-
+from app.utils.cache_utils import manual_cache
 prefix = "/auth"
 tags = ["Authentication"]
 
