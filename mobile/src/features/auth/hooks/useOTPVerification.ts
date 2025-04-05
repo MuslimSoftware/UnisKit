@@ -79,6 +79,7 @@ export function useOTPVerification() {
     validateOTPApi.reset();
     authApi.reset();
     setInternalError(null);
+    setOtp('');
     
     const success = await sendOtpRequest(email);
     if (success) {
